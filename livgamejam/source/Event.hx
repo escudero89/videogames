@@ -27,10 +27,12 @@ class Event extends FlxSprite
 	private static var _STR_FONT = "assets/fonts/LondrinaSolid-Regular.ttf";
 	
 	private var _txt_title:FlxText;
+	private var _txt_stats:FlxText;
 	
-	private var _str_title = 'CASARTE';
+	private var _str_titleShort = 'CASARTE';
+	private var _str_titleLarge = 'CASARTE CON LA MUJER DE TU VIDA';
 	private var _str_experience = ' meses';
-	private var _str_duration = ' ptos. de exp.';
+	private var _str_duration = ' exp';
 	
 	public function new(X:Float=0, Y:Float=0) 
 	{
@@ -53,7 +55,7 @@ class Event extends FlxSprite
 		_icono.loadGraphic("assets/images/icon_default.png");
 		
 		_icono.x = this.x + Math.round(this.width / 2) - Math.round(_icono.width / 2);
-		_icono.y = this.y + 61;
+		_icono.y = this.y + 22;
 		
 		return _icono;
 	}
@@ -62,10 +64,9 @@ class Event extends FlxSprite
 	
 	public function setText():FlxText
 	{
-		_txt_title = new FlxText(15 + this.x, 15 + this.y, 150, _str_title, 20, true);
+		_txt_title = new FlxText(15 + this.x, 15 + this.y, 150, null, 20, true);
 		
 		_txt_title.setFormat(_STR_FONT, 36, FlxColor.WHITE, "center", FlxText.BORDER_OUTLINE, FlxColor.BLACK);
-		//_txt_title.setFormat(null, 18, FlxColor.WHITE, "left", FlxText.BORDER_OUTLINE, FlxColor.BLACK);
 		
 		_txt_title.borderQuality = 1;
 		_txt_title.borderSize = 2;
@@ -73,6 +74,21 @@ class Event extends FlxSprite
 		return _txt_title;
 	}
 	
+	public function setTextStats():FlxText
+	{
+		_txt_stats = new FlxText(15 + this.x, 180 + this.y, 150, '+12 meses\n+250 exp', 20, true);
+		
+		var txtLength = _txt_stats.text.length;
+		
+		_txt_stats.setFormat(_STR_FONT, 30, 0xd41b1b, "left");
+		
+		_txt_stats.addFormat(new FlxTextFormat(0xd41b1b, false, false, null, 1, 3));
+		_txt_stats.addFormat(new FlxTextFormat(0x9e0b0b, false, false, null, 4, 9));
+		_txt_stats.addFormat(new FlxTextFormat(0x278bd1, false, false, null, 10, txtLength - 4));
+		_txt_stats.addFormat(new FlxTextFormat(0x114f7a, false, false, null, txtLength - 4, txtLength));
+		
+		return _txt_stats;
+	}
 	
 	// Para el control del mouse en la carta
 	
@@ -81,7 +97,8 @@ class Event extends FlxSprite
 	
 	private function onMouseOver(sprite:FlxSprite)
 	{
-		_txt_title.text = 'CASARTE CON LA MUJER DE TU VIDA';
+		_txt_title.text = _str_titleLarge;
+		_txt_stats.text = ' ';
 		color = FlxColor.BLACK;
 		//scale.x = 1.1;
 		//scale.y = 1.1;
@@ -89,6 +106,8 @@ class Event extends FlxSprite
 	
 	private function onMouseOut(sprite:FlxSprite)
 	{
+		_txt_title.text = ' ';
+		_txt_stats.text = '+12 meses\n+250 exp';
 		color = FlxColor.WHITE;
 	}
 

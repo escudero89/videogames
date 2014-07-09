@@ -60,9 +60,9 @@ class PlayState extends FlxState
 		var tarjeta2 = new Event(231, 128);
 		var tarjeta3 = new Event(431, 128);
 		
-		add(tarjeta1); add(tarjeta1.setIcon()); add(tarjeta1.setText());
-		add(tarjeta2); add(tarjeta2.setIcon()); add(tarjeta2.setText());
-		add(tarjeta3); add(tarjeta3.setIcon()); add(tarjeta3.setText());
+		add(tarjeta1); add(tarjeta1.setIcon()); add(tarjeta1.setText()); add(tarjeta1.setTextStats());
+		add(tarjeta2); add(tarjeta2.setIcon()); add(tarjeta2.setText()); add(tarjeta2.setTextStats());
+		add(tarjeta3); add(tarjeta3.setIcon()); add(tarjeta3.setText()); add(tarjeta3.setTextStats());
 		
 		FlxG.cameras.bgColor = FlxColor.BLUE;
 		
