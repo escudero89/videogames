@@ -28,7 +28,7 @@ class Event extends FlxSprite
 	
 	private var _txt_title:FlxText;
 	
-	private var _str_title = 'CASARTE CON LA MUJER DE TU VIDA';
+	private var _str_title = 'CASARTE';
 	private var _str_experience = ' meses';
 	private var _str_duration = ' ptos. de exp.';
 	
@@ -64,7 +64,7 @@ class Event extends FlxSprite
 	{
 		_txt_title = new FlxText(15 + this.x, 15 + this.y, 150, _str_title, 20, true);
 		
-		_txt_title.setFormat(_STR_FONT, 18, FlxColor.WHITE, "left", FlxText.BORDER_OUTLINE, FlxColor.BLACK);
+		_txt_title.setFormat(_STR_FONT, 36, FlxColor.WHITE, "center", FlxText.BORDER_OUTLINE, FlxColor.BLACK);
 		//_txt_title.setFormat(null, 18, FlxColor.WHITE, "left", FlxText.BORDER_OUTLINE, FlxColor.BLACK);
 		
 		_txt_title.borderQuality = 1;
@@ -81,7 +81,8 @@ class Event extends FlxSprite
 	
 	private function onMouseOver(sprite:FlxSprite)
 	{
-		color = 0x55FF0000;
+		_txt_title.text = 'CASARTE CON LA MUJER DE TU VIDA';
+		color = FlxColor.BLACK;
 		//scale.x = 1.1;
 		//scale.y = 1.1;
 	}
