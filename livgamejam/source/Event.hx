@@ -100,8 +100,6 @@ class Event extends FlxSprite
 		_txt_title.text = _str_titleLarge;
 		_txt_stats.text = ' ';
 		color = FlxColor.BLACK;
-		//scale.x = 1.1;
-		//scale.y = 1.1;
 	}
 	
 	private function onMouseOut(sprite:FlxSprite)
