@@ -5,19 +5,28 @@ import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
+import flixel.util.FlxColor;
 import flixel.util.FlxMath;
+
+import flixel.FlxCamera;
+import flixel.addons.display.FlxBackdrop;
 
 /**
  * A FlxState which can be used for the actual gameplay.
  */
 class PlayState extends FlxState
 {
+	
+	private var _fondoColina:FlxBackdrop;
+	
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
 	override public function create():Void
 	{
 		super.create();
+		
+		setBackground();
 	}
 	
 	/**
@@ -35,5 +44,21 @@ class PlayState extends FlxState
 	override public function update():Void
 	{
 		super.update();
-	}	
+	}
+	
+	public function setBackground() {
+		
+		var _fondoColina = new FlxSprite(0, 960);
+		_fondoColina.loadGraphic("assets/images/colina.png");
+		_fondoColina.y -= _fondoColina.height;
+		
+		add(_fondoColina);
+		
+		FlxG.cameras.bgColor = FlxColor.BLUE;
+		
+		var camera:FlxCamera = new FlxCamera(0, 0, 640, 960);
+		
+		FlxG.cameras.add(camera);
+		
+	}
 }
