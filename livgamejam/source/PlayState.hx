@@ -11,6 +11,8 @@ import flixel.util.FlxMath;
 import flixel.FlxCamera;
 import flixel.addons.display.FlxBackdrop;
 
+import Event;
+
 /**
  * A FlxState which can be used for the actual gameplay.
  */
@@ -53,6 +55,14 @@ class PlayState extends FlxState
 		_fondoColina.y -= _fondoColina.height;
 		
 		add(_fondoColina);
+		
+		var tarjeta1 = new Event(31, 128);
+		var tarjeta2 = new Event(231, 128);
+		var tarjeta3 = new Event(431, 128);
+		
+		add(tarjeta1); add(tarjeta1.setIcon()); add(tarjeta1.setText());
+		add(tarjeta2); add(tarjeta2.setIcon()); add(tarjeta2.setText());
+		add(tarjeta3); add(tarjeta3.setIcon()); add(tarjeta3.setText());
 		
 		FlxG.cameras.bgColor = FlxColor.BLUE;
 		
