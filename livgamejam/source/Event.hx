@@ -89,6 +89,7 @@ class Event extends FlxSprite
 	
 	private function onMouseOut(sprite:FlxSprite)
 	{
+		_txt_title.text = _str_title;
 		color = FlxColor.WHITE;
 	}
 
