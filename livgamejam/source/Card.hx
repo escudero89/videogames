@@ -2,6 +2,7 @@ package ;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.util.FlxPoint;
 import flixel.group.FlxGroup;
 import flixel.group.FlxTypedGroup;
 import flixel.util.FlxColor;
@@ -10,20 +11,22 @@ import flixel.text.FlxText;
 import flixel.plugin.MouseEventManager;
 
 /**
- * ...
+ * Esta clase maneja las tarjetas de forma individual
  * @author 
  */
 class Card extends FlxSprite
 {
 	// Tarjeta
-	
+
+	public static var _CARD_WIDTH:Int = 180;
+	public static var _CARD_HEIGHT:Int = 270;
 	
 	// Mini tarjeta
 	
 	private var _miniCardGroup:FlxTypedGroup<FlxSprite>;
 	
-	private var _MINICARD_WIDTH:Int = 60;
-	private var _MINICARD_HEIGHT:Int = 60;
+	public static var _MINICARD_WIDTH:Int = 60;
+	public static var _MINICARD_HEIGHT:Int = 60;
 	
 	// Icono
 
@@ -149,6 +152,13 @@ class Card extends FlxSprite
 		_txt_title.text = ' ';
 		_txt_stats.text = '+12 meses\n+250 exp';
 		color = FlxColor.WHITE;
+	}
+	
+	/// FUNCIONES GET
+	
+	public function getPosition():FlxPoint
+	{
+		return new FlxPoint(this.x, this.y);
 	}
 
 }
