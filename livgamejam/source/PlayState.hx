@@ -11,7 +11,7 @@ import flixel.util.FlxMath;
 import flixel.FlxCamera;
 import flixel.addons.display.FlxBackdrop;
 
-import Event;
+import Card;
 
 /**
  * A FlxState which can be used for the actual gameplay.
@@ -56,13 +56,13 @@ class PlayState extends FlxState
 		
 		add(_fondoColina);
 		
-		var tarjeta1 = new Event(31, 128);
-		var tarjeta2 = new Event(231, 128);
-		var tarjeta3 = new Event(431, 128);
+		var tarjeta1 = new Card(31, 128);
+		var tarjeta2 = new Card(231, 128);
+		var tarjeta3 = new Card(431, 128);
 		
-		add(tarjeta1); add(tarjeta1.setIcon()); add(tarjeta1.setText()); add(tarjeta1.setTextStats());
-		add(tarjeta2); add(tarjeta2.setIcon()); add(tarjeta2.setText()); add(tarjeta2.setTextStats());
-		add(tarjeta3); add(tarjeta3.setIcon()); add(tarjeta3.setText()); add(tarjeta3.setTextStats());
+		add(tarjeta1); add(tarjeta1.setIcon()); add(tarjeta1.setText()); add(tarjeta1.setTextStats()); add(tarjeta1.getMiniCard(24, 64));
+		add(tarjeta2); add(tarjeta2.setIcon()); add(tarjeta2.setText()); add(tarjeta2.setTextStats()); add(tarjeta2.getMiniCard(86, 64));
+		add(tarjeta3); add(tarjeta3.setIcon()); add(tarjeta3.setText()); add(tarjeta3.setTextStats()); add(tarjeta3.getMiniCard(148, 64));
 		
 		FlxG.cameras.bgColor = FlxColor.BLUE;
 		
