@@ -3,6 +3,7 @@ package ;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.util.FlxPoint;
+import flixel.group.FlxTypedGroup;
 import flixel.group.FlxGroup;
 import flixel.group.FlxTypedGroup;
 import flixel.util.FlxColor;
@@ -14,10 +15,12 @@ import flixel.plugin.MouseEventManager;
  * Esta clase maneja las tarjetas de forma individual
  * @author 
  */
-class Card extends FlxSprite
+class Card extends FlxTypedGroup<FlxSprite>
 {
 	// Tarjeta
 
+	public var _template:FlxSprite;
+	
 	public static var _CARD_WIDTH:Int = 180;
 	public static var _CARD_HEIGHT:Int = 270;
 	
@@ -48,54 +51,59 @@ class Card extends FlxSprite
 	private var _txt_title:FlxText;
 	private var _txt_stats:FlxText;
 	
-	private var _str_titleShort = 'CASARTE';
-	private var _str_titleLarge = 'CASARTE CON LA MUJER DE TU VIDA';
-	private var _str_experience = ' meses';
-	private var _str_duration = ' exp';
+	private var _STR_TITLE = 'CASARTE CON LA MUJER DE TU VIDA';
+	
+	private static var _STR_EXPERIENCE = ' meses';
+	private static var _STR_DURATION = ' exp';
 	
 	public function new(X:Float=0, Y:Float=0) 
 	{
-		super(X, Y);
+		super();
 		
-		loadGraphic("assets/images/template_basic.png");
+		_template = new FlxSprite(X, Y, "assets/images/template_basic.png");
 		
-		MouseEventManager.add(this, onMouseDown, onMouseUp, onMouseOver, onMouseOut);
+		MouseEventManager.add(_template, onMouseDown, onMouseUp, onMouseOver, onMouseOut);
 		
 		_experience = 250;
 		_duration = 12;
 		
+		setIcon();
+		setText();
+		setTextStats();
+		
+		// Combinamos todo
+		add(_template);
+		add(_icono);
+		add(_txt_title);
+		add(_txt_stats);
 	}
 	
 	// Coloca el icono central
 	
-	public function setIcon():FlxSprite
+	public function setIcon()
 	{
 		_icono = new FlxSprite();
 		_icono.loadGraphic(_ICON_PATH_NORMAL + _ICON_NAME);
 		
-		_icono.x = this.x + Math.round(this.width / 2) - Math.round(_icono.width / 2);
-		_icono.y = this.y + 22;
-		
-		return _icono;
+		_icono.x = _template.x + Math.round(_template.width / 2) - Math.round(_icono.width / 2);
+		_icono.y = _template.y + 22;
 	}
 	
 	// Coloca el texto
 	
-	public function setText():FlxText
+	public function setText()
 	{
-		_txt_title = new FlxText(15 + this.x, 15 + this.y, 150, null, 20, true);
+		_txt_title = new FlxText(15 + _template.x, 15 + _template.y, 150, null, 20, true);
 		
 		_txt_title.setFormat(_STR_FONT, 36, FlxColor.WHITE, "center", FlxText.BORDER_OUTLINE, FlxColor.BLACK);
 		
 		_txt_title.borderQuality = 1;
 		_txt_title.borderSize = 2;
-		
-		return _txt_title;
 	}
 	
-	public function setTextStats():FlxText
+	public function setTextStats()
 	{
-		_txt_stats = new FlxText(15 + this.x, 180 + this.y, 150, '+12 meses\n+250 exp', 20, true);
+		_txt_stats = new FlxText(15 + _template.x, 180 + _template.y, 150, '+12 meses\n+250 exp', 20, true);
 		
 		var txtLength = _txt_stats.text.length;
 		
@@ -105,17 +113,18 @@ class Card extends FlxSprite
 		_txt_stats.addFormat(new FlxTextFormat(0x9e0b0b, false, false, null, 4, 9));
 		_txt_stats.addFormat(new FlxTextFormat(0x278bd1, false, false, null, 10, txtLength - 4));
 		_txt_stats.addFormat(new FlxTextFormat(0x114f7a, false, false, null, txtLength - 4, txtLength));
-		
-		return _txt_stats;
 	}
 	
-	// Forma la minitarjeta
-	
-	public function getMiniCard(posX:Int, posY:Int):FlxTypedGroup<FlxSprite>
+	// Forma la minitarjeta	
+		
+	public function getMiniCard(position:FlxPoint):FlxTypedGroup<FlxSprite>
 	{
 		// Va a contener todo lo relacionado a la minicard
 		// FlxGroup itself is nothing but a shortcut for FlxTypedGroup<FlxBasic>
 		_miniCardGroup = new FlxTypedGroup<FlxSprite>();
+
+		var posX:Int = Math.round(position.x);
+		var posY:Int = Math.round(position.y);
 		
 		var miniCard = new FlxSprite(posX, posY);
 		var miniIcon = new FlxSprite(posX + 5, posY + 5);
@@ -130,7 +139,7 @@ class Card extends FlxSprite
 		
 		return _miniCardGroup;
 	}
-	
+
 	// Para el control del mouse en la carta
 	
 	private function onMouseDown(sprite:FlxSprite)
@@ -142,23 +151,23 @@ class Card extends FlxSprite
 	
 	private function onMouseOver(sprite:FlxSprite)
 	{
-		_txt_title.text = _str_titleLarge;
+		_txt_title.text = _STR_TITLE;
 		_txt_stats.text = ' ';
-		color = FlxColor.BLACK;
+		_template.color = FlxColor.BLACK;
 	}
 	
 	private function onMouseOut(sprite:FlxSprite)
 	{
 		_txt_title.text = ' ';
 		_txt_stats.text = '+12 meses\n+250 exp';
-		color = FlxColor.WHITE;
+		_template.color = FlxColor.WHITE;
 	}
 	
 	/// FUNCIONES GET
 	
 	public function getPosition():FlxPoint
 	{
-		return new FlxPoint(this.x, this.y);
+		return new FlxPoint(_template.x, _template.y);
 	}
 
 }
