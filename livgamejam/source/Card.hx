@@ -19,25 +19,32 @@ class Card extends FlxTypedGroup<FlxSprite>
 {
 	// Tarjeta
 
-	public var _template:FlxSprite;
+	private var _template:FlxSprite;
+	private var _cardWidth:Int;
+	private var _cardHeight:Int;
 	
 	public static var _CARD_WIDTH:Int = 180;
 	public static var _CARD_HEIGHT:Int = 270;
 	
+	private var _IS_MINI:Bool;
+	
+	private var _template_current_path:String;
+	private var _TEMPLATE_PATH:String = "assets/images/template_basic.png";
+	private var _TEMPLATE_MINI_PATH:String = "assets/images/template_mini_basic.png";
+	
 	// Mini tarjeta
 	
-	private var _miniCardGroup:FlxTypedGroup<FlxSprite>;
-	
-	public static var _MINICARD_WIDTH:Int = 60;
-	public static var _MINICARD_HEIGHT:Int = 60;
+	public static var _CARD_MINI_WIDTH:Int = 60;
+	public static var _CARD_MINI_HEIGHT:Int = 60;
 	
 	// Icono
 
 	private var _icono:FlxSprite;
 
-	private var _ICON_NAME:String = "icon_default.png";
-	private var _ICON_PATH_NORMAL:String = "assets/images/icons_150/";
-	private var _ICON_PATH_SMALL:String = "assets/images/icons_50/";
+	private var _icon_current_path:String;
+	private var _ICON_NAME:String = "icon_default.png";	
+	private var _ICON_PATH:String = "assets/images/icons_150/";
+	private var _ICON_MINI_PATH:String = "assets/images/icons_50/";
 	
 	// Atributos internos
 	
@@ -56,26 +63,51 @@ class Card extends FlxTypedGroup<FlxSprite>
 	private static var _STR_EXPERIENCE = ' meses';
 	private static var _STR_DURATION = ' exp';
 	
-	public function new(X:Float=0, Y:Float=0) 
+	public function new(posCard:FlxPoint, IS_MINI = false) 
 	{
 		super();
 		
-		_template = new FlxSprite(X, Y, "assets/images/template_basic.png");
-		
-		MouseEventManager.add(_template, onMouseDown, onMouseUp, onMouseOver, onMouseOut);
+		var X:Float = posCard.x;
+		var Y:Float = posCard.y;
 		
 		_experience = 250;
 		_duration = 12;
 		
-		setIcon();
-		setText();
-		setTextStats();
+		_IS_MINI = IS_MINI;
 		
-		// Combinamos todo
+		// Empezamos a asignar variables
+		_template_current_path = _TEMPLATE_PATH;
+		_icon_current_path = _ICON_PATH;
+		_cardWidth = _CARD_WIDTH;
+		_cardHeight = _CARD_HEIGHT;
+		
+		if (_IS_MINI) {
+			_template_current_path = _TEMPLATE_MINI_PATH;
+			_icon_current_path = _ICON_MINI_PATH;
+			_cardWidth = _CARD_MINI_WIDTH;
+			_cardHeight = _CARD_MINI_HEIGHT;
+		}
+		
+		_template = new FlxSprite(X, Y);
+		_template.loadGraphic( _template_current_path, false, _cardWidth, _cardHeight);
+		
+		MouseEventManager.add(_template, onMouseDown, onMouseUp, onMouseOver, onMouseOut);
+		
+		// Diferente tamanho de icono segun el tipo		
+		setIcon();
+		
+		// Combinamos el template con el icono
 		add(_template);
 		add(_icono);
-		add(_txt_title);
-		add(_txt_stats);
+
+		// Si no es la version chica
+		if (!IS_MINI) {
+			setText();
+			setTextStats();
+			add(_txt_title);
+			add(_txt_stats);
+		}
+		
 	}
 	
 	// Coloca el icono central
@@ -83,10 +115,16 @@ class Card extends FlxTypedGroup<FlxSprite>
 	public function setIcon()
 	{
 		_icono = new FlxSprite();
-		_icono.loadGraphic(_ICON_PATH_NORMAL + _ICON_NAME);
+		_icono.loadGraphic(_icon_current_path + _ICON_NAME);
 		
-		_icono.x = _template.x + Math.round(_template.width / 2) - Math.round(_icono.width / 2);
-		_icono.y = _template.y + 22;
+		if (!_IS_MINI) {
+			_icono.x = _template.x + Math.round(_template.width / 2) - Math.round(_icono.width / 2);
+			_icono.y = _template.y + 22;			
+		} else {
+			_icono.x = _template.x + 5;
+			_icono.y = _template.y + 5;
+		}
+
 	}
 	
 	// Coloca el texto
@@ -114,52 +152,36 @@ class Card extends FlxTypedGroup<FlxSprite>
 		_txt_stats.addFormat(new FlxTextFormat(0x278bd1, false, false, null, 10, txtLength - 4));
 		_txt_stats.addFormat(new FlxTextFormat(0x114f7a, false, false, null, txtLength - 4, txtLength));
 	}
-	
-	// Forma la minitarjeta	
-		
-	public function getMiniCard(position:FlxPoint):FlxTypedGroup<FlxSprite>
-	{
-		// Va a contener todo lo relacionado a la minicard
-		// FlxGroup itself is nothing but a shortcut for FlxTypedGroup<FlxBasic>
-		_miniCardGroup = new FlxTypedGroup<FlxSprite>();
-
-		var posX:Int = Math.round(position.x);
-		var posY:Int = Math.round(position.y);
-		
-		var miniCard = new FlxSprite(posX, posY);
-		var miniIcon = new FlxSprite(posX + 5, posY + 5);
-		
-		miniCard.loadGraphic("assets/images/template_minicard_basic.png", false, _MINICARD_WIDTH, _MINICARD_HEIGHT);
-		
-		miniIcon.loadGraphic(_ICON_PATH_SMALL + _ICON_NAME);
-		
-		// Ahora agregamos los graficos
-		_miniCardGroup.add(miniCard);
-		_miniCardGroup.add(miniIcon);
-		
-		return _miniCardGroup;
-	}
 
 	// Para el control del mouse en la carta
 	
 	private function onMouseDown(sprite:FlxSprite)
 	{
-		FlxG.cameras.flash(FlxColor.WHITE, 0.1);
+		if (!_IS_MINI) {
+			FlxG.cameras.flash(FlxColor.WHITE, 0.1);
+		}
 	}
 	
 	private function onMouseUp(sprite:FlxSprite) {}
 	
 	private function onMouseOver(sprite:FlxSprite)
 	{
-		_txt_title.text = _STR_TITLE;
-		_txt_stats.text = ' ';
-		_template.color = FlxColor.BLACK;
+		if (!_IS_MINI) {
+			_txt_title.text = _STR_TITLE;
+			_txt_stats.text = ' ';			
+			_template.color = FlxColor.BLACK;
+		} else {
+			_template.color = FlxColor.GOLDEN;
+		}
 	}
 	
 	private function onMouseOut(sprite:FlxSprite)
 	{
-		_txt_title.text = ' ';
-		_txt_stats.text = '+12 meses\n+250 exp';
+		if (!_IS_MINI) {
+			_txt_title.text = ' ';
+			_txt_stats.text = '+12 meses\n+250 exp';
+		}
+		
 		_template.color = FlxColor.WHITE;
 	}
 	

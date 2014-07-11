@@ -16,38 +16,34 @@ import Card;
 class Handler extends FlxTypedGroup<FlxBasic>
 {
 	
+	// Aqui estan las cartas mostradas
+	private var _cardCurrentCollection:FlxTypedGroup<Card>;
+	
 	// Aqui se va a guardar toda la coleccion de cartas
-	private var _cardGroup:FlxTypedGroup<Card>;
+	private var _cardCollection:FlxTypedGroup<Card>;
 	
 	// Posicion de todas las cartas (ver getInfrastructure)
 	private var _posCardArray:Array<FlxPoint>;
 	
-	public function new(cardGroup:FlxTypedGroup<Card> = null)
+	public function new(cardCollection:FlxTypedGroup<Card> = null)
 	{
 		super();
 		
-		_cardGroup = cardGroup;
+		_cardCollection = cardCollection;
 		_posCardArray = getInfrastructure();
 		
-		var tarjeta1 = new Card(_posCardArray[0].x, _posCardArray[0].y);
-		var tarjeta2 = new Card(_posCardArray[4].x, _posCardArray[4].y);
-		var tarjeta3 = new Card(_posCardArray[8].x, _posCardArray[8].y);
+		_cardCurrentCollection = new FlxTypedGroup<Card>();
+		
+		// Normalcards
+		for (i in 0...3) {
+			add(_cardCurrentCollection.add(new Card(_posCardArray[i + 3 * i]))); // 0 , 4, 8
+			
+			// Minicards
+			for (j in 0...3) {
+				add(_cardCurrentCollection.add(new Card(_posCardArray[i + j + 1 + 3 * i], true))); // 1,2,3,5,6,7,...
+			}
+		}
 
-		add(tarjeta1); 
-		add(tarjeta1.getMiniCard(_posCardArray[1]));
-		add(tarjeta1.getMiniCard(_posCardArray[2]));
-		add(tarjeta1.getMiniCard(_posCardArray[3]));
-		
-		add(tarjeta2);
-		add(tarjeta2.getMiniCard(_posCardArray[5]));
-		add(tarjeta2.getMiniCard(_posCardArray[6]));
-		add(tarjeta2.getMiniCard(_posCardArray[7]));
-		
-		add(tarjeta3);
-		add(tarjeta3.getMiniCard(_posCardArray[9]));
-		add(tarjeta3.getMiniCard(_posCardArray[10]));
-		add(tarjeta3.getMiniCard(_posCardArray[11]));
-		
 	}
 	
 	// Retorna las cartas para la visualizacion adecuada
@@ -90,7 +86,7 @@ class Handler extends FlxTypedGroup<FlxBasic>
 	private function getInfraestructureHelper(miniCardPos:FlxPoint, type:Int):FlxPoint
 	{
 		miniCardPos.y -= 64;
-		miniCardPos.x += Math.round(Card._CARD_WIDTH / 2 - Card._MINICARD_WIDTH / 2);
+		miniCardPos.x += Math.round(Card._CARD_WIDTH / 2 - Card._CARD_MINI_WIDTH / 2);
 		
 		if (type == 0) { // LEFT MINICARD
 			miniCardPos.x -= 64;
