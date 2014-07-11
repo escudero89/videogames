@@ -1,112 +1,83 @@
 package ;
 
-import flixel.FlxSprite;
-import flixel.util.FlxColor;
-import flixel.text.FlxText;
-
-import flixel.plugin.MouseEventManager;
-
 /**
  * ...
  * @author 
  */
-class Event extends FlxSprite
+class Event
 {
-	
-	// Icono
-	
-	private var _icono:FlxSprite;
-	
-	// Atributos internos
-	
-	private var _experience:Int;
-	private var _duration:Int;
-	
-	// Para las strings
-	
-	private static var _STR_FONT = "assets/fonts/LondrinaSolid-Regular.ttf";
-	
-	private var _txt_title:FlxText;
-	private var _txt_stats:FlxText;
-	
-	private var _str_titleShort = 'CASARTE';
-	private var _str_titleLarge = 'CASARTE CON LA MUJER DE TU VIDA';
-	private var _str_experience = ' meses';
-	private var _str_duration = ' exp';
-	
-	public function new(X:Float=0, Y:Float=0) 
-	{
-		super(X, Y);
-		
-		loadGraphic("assets/images/template_basic.png");
-		
-		MouseEventManager.add(this, onMouseDown, onMouseUp, onMouseOver, onMouseOut);
-		
-		_experience = 250;
-		_duration = 12;
-		
-	}
-	
-	// Coloca el icono central
-	
-	public function setIcon():FlxSprite
-	{
-		_icono = new FlxSprite();
-		_icono.loadGraphic("assets/images/icon_default.png");
-		
-		_icono.x = this.x + Math.round(this.width / 2) - Math.round(_icono.width / 2);
-		_icono.y = this.y + 22;
-		
-		return _icono;
-	}
-	
-	// Coloca el texto
-	
-	public function setText():FlxText
-	{
-		_txt_title = new FlxText(15 + this.x, 15 + this.y, 150, null, 20, true);
-		
-		_txt_title.setFormat(_STR_FONT, 36, FlxColor.WHITE, "center", FlxText.BORDER_OUTLINE, FlxColor.BLACK);
-		
-		_txt_title.borderQuality = 1;
-		_txt_title.borderSize = 2;
-		
-		return _txt_title;
-	}
-	
-	public function setTextStats():FlxText
-	{
-		_txt_stats = new FlxText(15 + this.x, 180 + this.y, 150, '+12 meses\n+250 exp', 20, true);
-		
-		var txtLength = _txt_stats.text.length;
-		
-		_txt_stats.setFormat(_STR_FONT, 30, 0xd41b1b, "left");
-		
-		_txt_stats.addFormat(new FlxTextFormat(0xd41b1b, false, false, null, 1, 3));
-		_txt_stats.addFormat(new FlxTextFormat(0x9e0b0b, false, false, null, 4, 9));
-		_txt_stats.addFormat(new FlxTextFormat(0x278bd1, false, false, null, 10, txtLength - 4));
-		_txt_stats.addFormat(new FlxTextFormat(0x114f7a, false, false, null, txtLength - 4, txtLength));
-		
-		return _txt_stats;
-	}
-	
-	// Para el control del mouse en la carta
-	
-	private function onMouseDown(sprite:FlxSprite) {}
-	private function onMouseUp(sprite:FlxSprite) {}
-	
-	private function onMouseOver(sprite:FlxSprite)
-	{
-		_txt_title.text = _str_titleLarge;
-		_txt_stats.text = ' ';
-		color = FlxColor.BLACK;
-	}
-	
-	private function onMouseOut(sprite:FlxSprite)
-	{
-		_txt_title.text = ' ';
-		_txt_stats.text = '+12 meses\n+250 exp';
-		color = FlxColor.WHITE;
-	}
+	public var id_evento:String;
+	public var nombre:String;
+	public var descripcion:String;
+	public var experiencia:Int;
+	public var duracion:Int;
+	public var pi_amor:Int;
+	public var pi_creatividad:Int;
+	public var pi_depresion:Int;
+	public var pi_educacion:Int;
+	public var pi_fama:Int;
+	public var pi_resistencia:Int;
+	public var pi_trabajo:Int;
+	public var pi_viaje:Int;
+	public var riesgo_porciento:Int;
+	public var id_riesgo:String;
+	public var c_amor:Int;
+	public var c_creatividad:Int;
+	public var c_depresion:Int;
+	public var c_educación:Int;
+	public var c_fama:Int;
+	public var c_resistencia:Int;
+	public var c_trabajo:Int;
+	public var c_viaje:Int;
 
+	public function new(
+		_id_evento,
+		_nombre,
+		_descripcion,
+		_experiencia,
+		_duracion,
+		_pi_amor,
+		_pi_creatividad,
+		_pi_depresion,
+		_pi_educacion,
+		_pi_fama,
+		_pi_resistencia,
+		_pi_trabajo,
+		_pi_viaje,
+		_riesgo_porciento,
+		_id_riesgo,
+		_c_amor,
+		_c_creatividad,
+		_c_depresion,
+		_c_educación,
+		_c_fama,
+		_c_resistencia,
+		_c_trabajo,
+		_c_viaje) 
+	{
+		id_evento: = _id_evento;
+		nombre = _nombre;
+		descripcion = _descripcion;
+		experiencia = _experiencia;
+		duracion = _duracion;
+		pi_amor = _pi_amor;
+		pi_creatividad = _pi_creatividad;
+		pi_depresion = _pi_depresion;
+		pi_educacion = _pi_educacion;
+		pi_fama = _pi_fama;
+		pi_resistencia = _pi_resistencia;
+		pi_trabajo = _pi_trabajo;
+		pi_viaje = _pi_viaje;
+		riesgo_porciento = _riesgo_porciento;
+		id_riesgo = _id_riesgo;
+		c_amor = _c_amor;
+		c_creatividad = _c_creatividad;
+		c_depresion = _c_depresion;
+		c_educación = _c_educación;
+		c_fama = _c_fama;
+		c_resistencia = _c_resistencia;
+		c_trabajo = _c_trabajo;
+		c_viaje = _c_viaje;
+	}
+	
 }
