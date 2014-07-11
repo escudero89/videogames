@@ -38,7 +38,10 @@ class Handler extends FlxTypedGroup<FlxBasic>
 		
 		_cardCurrentCollection = new FlxTypedGroup<Card>();
 		
-		var eventoPrueba = new Event('E1', 'Saltar turno', '', 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'R1', 0, 0, 10, 0, 0, 0, 0, 0);
+		//var eventoPrueba = new Event('E1', 'Saltar turno', '', 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'R1', 0, 0, 10, 0, 0, 0, 0, 0);
+		
+		// tomando un evento de la base de datos, para pobar si carga bien
+		var eventoPrueba = _eventCollection[1];
 		
 		// Normalcards
 		for (i in 0...3) {
