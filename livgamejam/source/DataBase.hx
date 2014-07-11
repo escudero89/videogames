@@ -1,11 +1,12 @@
-package ;
+/*package ;
 
 import Std;
+
 /**
  * ...
  * Esta clase carga desde la base de datos, todos los eventos y los agrupa en un Array<Event>
  * @author ...
- */
+ *//*
 class DataBase
 {
 	// Array de eventos
@@ -94,4 +95,4 @@ class DataBase
 		return _eventCollection;
 	}
 	
-}
+}*/

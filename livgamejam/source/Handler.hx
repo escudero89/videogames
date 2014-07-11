@@ -18,7 +18,7 @@ class Handler extends FlxTypedGroup<FlxBasic>
 {
 	
 	// Coleccion de eventos
-	private var _eventCollection:Array<Event>;
+	private var _eventCollection:Map<String, Event>;
 	
 	// Aqui estan las cartas mostradas
 	private var _cardCurrentCollection:FlxTypedGroup<Card>;
@@ -29,7 +29,7 @@ class Handler extends FlxTypedGroup<FlxBasic>
 	// Posicion de todas las cartas (ver getInfrastructure)
 	private var _posCardArray:Array<FlxPoint>;
 	
-	public function new(eventCollection:Array<Event> = null)
+	public function new(eventCollection:Map<String, Event> = null)
 	{
 		super();
 		
@@ -38,10 +38,8 @@ class Handler extends FlxTypedGroup<FlxBasic>
 		
 		_cardCurrentCollection = new FlxTypedGroup<Card>();
 		
-		//var eventoPrueba = new Event('E1', 'Saltar turno', '', 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'R1', 0, 0, 10, 0, 0, 0, 0, 0);
-		
 		// tomando un evento de la base de datos, para pobar si carga bien
-		var eventoPrueba = _eventCollection[1];
+		var eventoPrueba = _eventCollection['E1'];
 		
 		// Normalcards
 		for (i in 0...3) {

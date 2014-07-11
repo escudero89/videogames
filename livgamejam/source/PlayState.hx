@@ -22,7 +22,7 @@ class PlayState extends FlxState
 	
 	private var _fondoColina:FlxBackdrop;
 	private var _Handler:Handler;
-	private var _dataBase:DataBase;
+	//private var _dataBase:DataBase;
 	
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -62,8 +62,8 @@ class PlayState extends FlxState
 		//_Handler = new Handler();
 		
 		// agregando la base de datos
-		_dataBase = new DataBase();
-		_Handler = new Handler(_dataBase.getEventCollection());
+		//_dataBase = new DataBase();
+		_Handler = new Handler(MenuState.eventCollection);
 		
 		add(_Handler);
 		
