@@ -31,29 +31,29 @@ class Event
 	public var c_viaje:Int;
 
 	public function new(
-		_id_evento,
-		_nombre,
-		_descripcion,
-		_experiencia,
-		_duracion,
-		_pi_amor,
-		_pi_creatividad,
-		_pi_depresion,
-		_pi_educacion,
-		_pi_fama,
-		_pi_resistencia,
-		_pi_trabajo,
-		_pi_viaje,
-		_riesgo_porciento,
-		_id_riesgo,
-		_c_amor,
-		_c_creatividad,
-		_c_depresion,
-		_c_educación,
-		_c_fama,
-		_c_resistencia,
-		_c_trabajo,
-		_c_viaje) 
+		_id_evento:String
+		_nombre:String
+		_descripcion:String
+		_experiencia:Int
+		_duracion:Int
+		_pi_amor:Int
+		_pi_creatividad:Int
+		_pi_depresion:Int
+		_pi_educacion:Int
+		_pi_fama:Int
+		_pi_resistencia:Int
+		_pi_trabajo:Int
+		_pi_viaje:Int
+		_riesgo_porciento:Int
+		_id_riesgo:String
+		_c_amor:Int
+		_c_creatividad:Int
+		_c_depresion:Int
+		_c_educación:Int
+		_c_fama:Int
+		_c_resistencia:Int
+		_c_trabajo:Int
+		_c_viaje:Int) 
 	{
 		id_evento: = _id_evento;
 		nombre = _nombre;
