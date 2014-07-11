@@ -8,6 +8,7 @@ import flixel.group.FlxGroup;
 import flixel.util.FlxPoint;
 
 import Card;
+import Event;
 
 /**
  * Esta clase se encarga de manejar las tarjetas a mostrar. Desde las 3 principales a las 9 secundarias
@@ -15,6 +16,9 @@ import Card;
  */
 class Handler extends FlxTypedGroup<FlxBasic>
 {
+	
+	// Coleccion de eventos
+	private var _eventCollection:Array<Event>;
 	
 	// Aqui estan las cartas mostradas
 	private var _cardCurrentCollection:FlxTypedGroup<Card>;
@@ -25,22 +29,24 @@ class Handler extends FlxTypedGroup<FlxBasic>
 	// Posicion de todas las cartas (ver getInfrastructure)
 	private var _posCardArray:Array<FlxPoint>;
 	
-	public function new(cardCollection:FlxTypedGroup<Card> = null)
+	public function new(eventCollection:Array<Event> = null)
 	{
 		super();
 		
-		_cardCollection = cardCollection;
+		_eventCollection = eventCollection;
 		_posCardArray = getInfrastructure();
 		
 		_cardCurrentCollection = new FlxTypedGroup<Card>();
 		
+		var eventoPrueba = new Event('E1', 'Saltar turno', '', 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'R1', 0, 0, 10, 0, 0, 0, 0, 0);
+		
 		// Normalcards
 		for (i in 0...3) {
-			add(_cardCurrentCollection.add(new Card(_posCardArray[i + 3 * i]))); // 0 , 4, 8
+			add(_cardCurrentCollection.add(new Card(eventoPrueba, _posCardArray[i + 3 * i]))); // 0 , 4, 8
 			
 			// Minicards
 			for (j in 0...3) {
-				add(_cardCurrentCollection.add(new Card(_posCardArray[i + j + 1 + 3 * i], true))); // 1,2,3,5,6,7,...
+				add(_cardCurrentCollection.add(new Card(eventoPrueba, _posCardArray[i + j + 1 + 3 * i], true))); // 1,2,3,5,6,7,...
 			}
 		}
 

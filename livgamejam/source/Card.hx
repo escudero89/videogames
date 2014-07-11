@@ -11,6 +11,8 @@ import flixel.text.FlxText;
 
 import flixel.plugin.MouseEventManager;
 
+import Event;
+
 /**
  * Esta clase maneja las tarjetas de forma individual
  * @author 
@@ -58,20 +60,24 @@ class Card extends FlxTypedGroup<FlxSprite>
 	private var _txt_title:FlxText;
 	private var _txt_stats:FlxText;
 	
-	private var _STR_TITLE = 'CASARTE CON LA MUJER DE TU VIDA';
+	private static var _STR_EXPERIENCE = ' exp';
+	private static var _STR_DURATION = ' meses';
 	
-	private static var _STR_EXPERIENCE = ' meses';
-	private static var _STR_DURATION = ' exp';
+	// A partir de la clase Event, obtenemos toda la informacion de la BD
 	
-	public function new(posCard:FlxPoint, IS_MINI = false) 
+	private var _cardEventInfo:Event;
+	
+	public function new(cardEventInfo:Event, posCard:FlxPoint, IS_MINI = false) 
 	{
 		super();
+		
+		_cardEventInfo = cardEventInfo;
 		
 		var X:Float = posCard.x;
 		var Y:Float = posCard.y;
 		
-		_experience = 250;
-		_duration = 12;
+		_experience = _cardEventInfo.experiencia;
+		_duration = _cardEventInfo.duracion;
 		
 		_IS_MINI = IS_MINI;
 		
@@ -141,16 +147,17 @@ class Card extends FlxTypedGroup<FlxSprite>
 	
 	public function setTextStats()
 	{
-		_txt_stats = new FlxText(15 + _template.x, 180 + _template.y, 150, '+12 meses\n+250 exp', 20, true);
-		
-		var txtLength = _txt_stats.text.length;
+		_txt_stats = new FlxText(15 + _template.x, 180 + _template.y, 150, getStringWithMonthsAndExp(), 20, true);
 		
 		_txt_stats.setFormat(_STR_FONT, 30, 0xd41b1b, "left");
 		
-		_txt_stats.addFormat(new FlxTextFormat(0xd41b1b, false, false, null, 1, 3));
-		_txt_stats.addFormat(new FlxTextFormat(0x9e0b0b, false, false, null, 4, 9));
-		_txt_stats.addFormat(new FlxTextFormat(0x278bd1, false, false, null, 10, txtLength - 4));
-		_txt_stats.addFormat(new FlxTextFormat(0x114f7a, false, false, null, txtLength - 4, txtLength));
+		var idxStartMonth = 1 + _txt_stats.text.indexOf(_STR_DURATION);
+		var idxStartExperience = 1 + _txt_stats.text.indexOf(_STR_EXPERIENCE);
+		
+		_txt_stats.addFormat(new FlxTextFormat(0xd41b1b, false, false, null, 1, idxStartMonth));
+		_txt_stats.addFormat(new FlxTextFormat(0x9e0b0b, false, false, null, idxStartMonth, idxStartMonth + _STR_DURATION.length));
+		_txt_stats.addFormat(new FlxTextFormat(0x278bd1, false, false, null, idxStartMonth + _STR_DURATION.length, idxStartExperience));
+		_txt_stats.addFormat(new FlxTextFormat(0x114f7a, false, false, null, idxStartExperience, _txt_stats.text.length));
 	}
 
 	// Para el control del mouse en la carta
@@ -167,7 +174,7 @@ class Card extends FlxTypedGroup<FlxSprite>
 	private function onMouseOver(sprite:FlxSprite)
 	{
 		if (!_IS_MINI) {
-			_txt_title.text = _STR_TITLE;
+			_txt_title.text = _cardEventInfo.nombre;
 			_txt_stats.text = ' ';			
 			_template.color = FlxColor.BLACK;
 		} else {
@@ -179,13 +186,22 @@ class Card extends FlxTypedGroup<FlxSprite>
 	{
 		if (!_IS_MINI) {
 			_txt_title.text = ' ';
-			_txt_stats.text = '+12 meses\n+250 exp';
+			_txt_stats.text = getStringWithMonthsAndExp();
 		}
 		
 		_template.color = FlxColor.WHITE;
 	}
 	
 	/// FUNCIONES GET
+	
+	public function getStringWithMonthsAndExp():String
+	{
+		var monthAndExp:String = '';
+		monthAndExp += '+' + _cardEventInfo.duracion + _STR_DURATION + '\n';
+		monthAndExp += '+' + _cardEventInfo.experiencia + _STR_EXPERIENCE;
+		
+		return monthAndExp;
+	}
 	
 	public function getPosition():FlxPoint
 	{
