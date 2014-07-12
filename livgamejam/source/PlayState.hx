@@ -66,6 +66,8 @@ class PlayState extends FlxState
 		add(_handler);
 		add(_timmy.getInterfaceFront());
 		
+		add(_timmy);
+		
 		FlxG.camera.bgColor = FlxColor.CYAN;		
 		
 	}

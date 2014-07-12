@@ -92,13 +92,11 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 		_interfaceFront.add(_body);
 		_interfaceFront.add(_head);
 		
-		// Agregamos la parte delarenta, y luego la parte trasera
-		add(_interfaceBack);
-		add(_interfaceFront);
 	}
 
 	override public function update():Void
 	{
+		super.update();
 		/*if (_flag_arm == 1) {
 			_flag_arm == -1;
 			var aux:String;
@@ -112,7 +110,6 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 		
 		_body.animation.play("anciano_espalda");
 		
-		super.update();
 	}
 	
 	
