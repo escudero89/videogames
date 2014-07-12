@@ -128,6 +128,7 @@ class Handler extends FlxTypedGroup<FlxBasic>
 			updateEventsWeight();
 			
 			_timmy.newChoice(card.getPositionGallery(), card.getIdEvent());
+			_timmy.setAge(_monthsOldPlayer);
 			
 			// Y destruimos la carta 
 			card.destroy();
