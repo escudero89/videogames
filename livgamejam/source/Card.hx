@@ -197,7 +197,6 @@ class Card extends FlxTypedGroup<FlxSprite>
 	private function onMouseDown(sprite:FlxSprite)
 	{
 		if (!_IS_MINI) {
-			FlxG.cameras.flash(FlxColor.WHITE, 0.1);
 			_choseCard = true;
 		}
 	}

@@ -1,5 +1,6 @@
 package ;
 
+import flixel.util.FlxColor;
 import flixel.FlxSprite;
 import flixel.group.FlxTypedGroup;
 import flixel.tweens.FlxTween;
@@ -15,13 +16,14 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 {
 
 	// Un grupo para la parte delantera, y otro para la trasera
-	private var _interaceFront:FlxTypedGroup<FlxSprite>;
-	private var _interaceBack:FlxTypedGroup<FlxSprite>;
+	private var _interfaceFront:FlxTypedGroup<FlxSprite>;
+	private var _interfaceBack:FlxTypedGroup<FlxSprite>;
 	
 	// para la cabeza y el cuerpo
 	private var _head:FlxSprite;
 	private var _body:FlxSprite;
 	
+	private var _fondoColina:FlxSprite;
 	private var _platform:FlxSprite;
 	private var _blockCollection:FlxTypedGroup<FlxSprite>;
 	
@@ -29,8 +31,18 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 	{
 		super();
 		
-		_interaceFront = new FlxTypedGroup<FlxSprite>();
-		_interaceBack = new FlxTypedGroup<FlxSprite>();
+		_interfaceFront = new FlxTypedGroup<FlxSprite>();
+		_interfaceBack = new FlxTypedGroup<FlxSprite>();
+		
+		// colina
+		
+		_fondoColina = new FlxSprite(0, 960);
+		_fondoColina.loadGraphic("assets/images/colina.png");
+		_fondoColina.y -= _fondoColina.height;
+		
+		_interfaceBack.add(_fondoColina);
+		
+		// Plataforma
 		
 		_platform = new FlxSprite(142, 500, "assets/images/platform.png");
 		
@@ -41,7 +53,9 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 		FlxG.camera.deadzone = rect;
 		FlxG.camera.followLerp = 3;
 		
-		_interaceFront.add(_platform);
+		_interfaceFront.add(_platform);
+		
+		// Resto del cuerpo
 		
 		_head = new FlxSprite(250, 380);
 		_body = new FlxSprite(265, 480);
@@ -72,12 +86,12 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 		_head.animation.add("anciano_frente_1", [10]);
 		_head.animation.add("anciano_frente_2", [11]);
 		
-		_interaceFront.add(_body);
-		_interaceFront.add(_head);
+		_interfaceFront.add(_body);
+		_interfaceFront.add(_head);
 		
 		// Agregamos la parte delarenta, y luego la parte trasera
-		add(_interaceBack);
-		add(_interaceFront);
+		add(_interfaceBack);
+		add(_interfaceFront);
 	}
 
 	override public function update():Void
@@ -106,6 +120,9 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 	// Actualiza el fondo
 	private function updateBackground(cardIdEvento:String) {
 		
+		FlxG.camera.flash(FlxColor.WHITE, 0.1);
+		
+		FlxTween.tween(_fondoColina, { y: (_fondoColina.y - 20) }, 5);
 		FlxTween.tween(_platform, { y: (_platform.y - 180) }, 5);
 		FlxTween.tween(_head, { y: (_head.y - 180) }, 5);
 		FlxTween.tween(_body, { y: (_body.y - 180) }, 5);		
@@ -113,8 +130,19 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 		// Y creamos los bloques
 		var posY = _platform.y + 100;
 		
-		_interaceBack.add(new FlxSprite(230, posY, "assets/images/block.png"));
-		_interaceBack.add(new FlxSprite(245, posY + 37, "assets/images/icons_150/" + cardIdEvento.toLowerCase() + ".png"));
+		_interfaceBack.add(new FlxSprite(230, posY, "assets/images/block.png"));
+		_interfaceBack.add(new FlxSprite(245, posY + 37, "assets/images/icons_150/" + cardIdEvento.toLowerCase() + ".png"));
+	}
+
+	/// FUNCIONES GETS
+	public function getInterfaceBack():FlxTypedGroup<FlxSprite>
+	{
+		return _interfaceBack;
 	}
 	
+	public function getInterfaceFront():FlxTypedGroup<FlxSprite>
+	{
+		return _interfaceFront;
+	}
+		
 }

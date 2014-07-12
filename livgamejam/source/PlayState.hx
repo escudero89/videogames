@@ -21,7 +21,6 @@ import Handler;
 class PlayState extends FlxState
 {
 	
-	private var _fondoColina:FlxBackdrop;
 	private var _handler:Handler;
 	private var _timmy:Timmy;
 	//private var _dataBase:DataBase;
@@ -59,24 +58,13 @@ class PlayState extends FlxState
 	}
 	
 	public function setBackground() {
-		
-		var _fondoColina = new FlxSprite(0, 960);
-		_fondoColina.loadGraphic("assets/images/colina.png");
-		_fondoColina.y -= _fondoColina.height;
-		
-		add(_fondoColina);
-		
-		//_Handler = new Handler();
-		
-		// agregando la base de datos
-		//_dataBase = new DataBase();
+				
 		_timmy = new Timmy();
 		_handler = new Handler(MenuState.eventCollection, _timmy);
 
+		add(_timmy.getInterfaceBack());
 		add(_handler);
-		_timmy.forEachAlive(function (group:FlxTypedGroup<FlxSprite>) {
-			add(group);
-		});
+		add(_timmy.getInterfaceFront());
 		
 		FlxG.camera.bgColor = FlxColor.CYAN;		
 		
