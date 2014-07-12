@@ -122,7 +122,7 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 		
 		FlxG.camera.flash(FlxColor.WHITE, 0.1);
 		
-		FlxTween.tween(_fondoColina, { y: (_fondoColina.y - 20) }, 5);
+		FlxTween.tween(_fondoColina, { y: (_fondoColina.y - 90) }, 5);
 		FlxTween.tween(_platform, { y: (_platform.y - 180) }, 5);
 		FlxTween.tween(_head, { y: (_head.y - 180) }, 5);
 		FlxTween.tween(_body, { y: (_body.y - 180) }, 5);		
