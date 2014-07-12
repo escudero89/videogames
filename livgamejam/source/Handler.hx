@@ -8,6 +8,8 @@ import flixel.group.FlxGroup;
 import flixel.text.FlxText; // << puede borrarse si no se usa
 import flixel.util.FlxPoint;
 
+import haxe.Timer;
+
 import Card;
 import Event;
 import Timmy;
@@ -129,6 +131,9 @@ class Handler extends FlxTypedGroup<FlxBasic>
 			
 			_timmy.newChoice(card.getPositionGallery(), card.getIdEvent());
 			
+			// Generamos un efecto copado
+			card.cardTransform();
+			
 			// Y destruimos la carta 
 			card.destroy();
 			
@@ -143,6 +148,11 @@ class Handler extends FlxTypedGroup<FlxBasic>
 			add(_experienceTitle);
 			add(_monthsOldTitle);
 		}
+	}
+	
+	private function afterCardTransformation():Void
+	{
+		
 	}
 	
 	// Es la ultima carta? => Se va a morir? True si es asi, False sino

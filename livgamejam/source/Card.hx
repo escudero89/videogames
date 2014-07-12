@@ -227,6 +227,17 @@ class Card extends FlxTypedGroup<FlxSprite>
 		_template.color = FlxColor.WHITE;
 	}
 
+	// Efecto de luces
+	
+	public function cardTransform():Void
+	{
+		var transformedCard = new FlxSprite(_template.x, _template.y);
+		transformedCard.loadGraphic("assets/images/cardTransform.png", true, 180, 270);
+		transformedCard.animation.add("magic", [0, 1, 2, 3, 4, 5, 6, 7]);
+		transformedCard.animation.play("magic", false, 8);
+		this.add(transformedCard);
+	}
+	
 	/// FUNCIONES GET
 	
 	public function getStringWithMonthsAndExp():String
