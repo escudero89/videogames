@@ -29,8 +29,8 @@ class SummaryState extends FlxState
 	private var _HeightBlock:Int = 202;
 	private var _WidthBlock:Int = 180;
 	private var _FULLHEIGHT:Int;
-	private var _initialPosCards:Int = 600;
-	private var _separationInCards:Int = 10;
+	private var _initialPosBlocks:Int = 400;
+	private var _separationInBlocks:Int = 0;
 	
 	// Para guardar la posicion anterior en y del mouse, antes de hacer el scroll
 	private var _lastPosY:Float;
@@ -59,7 +59,7 @@ class SummaryState extends FlxState
 		_AGE = Std.string(_recordPlayer.getAgeInYears());
 		_EXP = Std.string(_recordPlayer._experiencePlayer);
 		_historyEventsIDs = _recordPlayer.getEventsIds();
-		_FULLHEIGHT = _initialPosCards + (_HeightBlock + _separationInCards) * _historyEventsIDs.length;
+		_FULLHEIGHT = _initialPosBlocks + (_HeightBlock + _separationInBlocks) * _historyEventsIDs.length + 50;
 		
 		//set_bgColor(FlxColor.FOREST_GREEN);
 		var _fondoColina = new FlxSprite(0, 960);
@@ -76,33 +76,62 @@ class SummaryState extends FlxState
 		add(_txSubTitle);
 		
 		var _txAge:FlxText = new FlxText(0, 260, FlxG.width, "Edad: "+_AGE+" años");
-		_txAge.setFormat(_FONT, 32, FlxColor.WHITE, "right");
+		_txAge.setFormat(_FONT, 32, FlxColor.WHITE, "center");
 		add(_txAge);
 		
 		var _txExp:FlxText = new FlxText(0, 300, FlxG.width, "Exp.: "+_EXP+" puntos");
-		_txExp.setFormat(_FONT, 32, FlxColor.WHITE, "right");
+		_txExp.setFormat(_FONT, 32, FlxColor.WHITE, "center");
 		add(_txExp);
 		
-		// Mostrar los bloques de los eventos anteriores
+		// Mostrar los bloques y textos de los eventos anteriores
 		var _index:Int = 0;
 		while (_index < _historyEventsIDs.length) {
+			
 			var _eventID:String = _historyEventsIDs[_index];
-			//var _eventName:String = formatText(MenuState.eventCollection.get(_eventID).nombre, 25);
-			var _eventName:String = MenuState.eventCollection.get(_eventID).nombre;
-			//var _eventDescription:String = formatText(MenuState.eventCollection.get(_eventID).descripcion, 30);
-			var _eventDescription:String = MenuState.eventCollection.get(_eventID).descripcion;
-			// Centrado en la pantalla en x
-			var _posX:Float = ((FlxG.width / 2) - (_WidthBlock / 2)) - 150;
+			
+			// Ponerlos bloques
+			var _posBlockX:Float = ((FlxG.width / 2) - (_WidthBlock / 2)) - 130;
 			// Un bloque abajo del otro:
 			// posicion inicial + altura de la carta + separacion entre cartas
-			var _posY:Float = _initialPosCards + (_HeightBlock + _separationInCards) * _index;
-			eventBlock(_posX, _posY, _eventID);
-			var _txEventName:FlxText = new FlxText(_posX + _WidthBlock + 10, _posY + 20, FlxG.width, _eventName);
-			_txEventName.setFormat(_FONT, 32, FlxColor.WHITE, "left");
+			var _posBlockY:Float = _initialPosBlocks + (_HeightBlock + _separationInBlocks) * _index;
+			eventBlock(_posBlockX, _posBlockY, _eventID);
+			
+			// Poner los textos
+			var _eventName:String = MenuState.eventCollection.get(_eventID).nombre;
+			var _eventDescription:String = MenuState.eventCollection.get(_eventID).descripcion;
+			// Centrado en la pantalla en x
+			var _posTextsX:Float = _posBlockX + _WidthBlock + 10;
+			var _posTextsY:Float = _posBlockY + 40;
+			var _txEventName:FlxText = new FlxText(_posTextsX, _posTextsY, FlxG.width - _posTextsX, _eventName);
+			_txEventName.setFormat(_FONT, 32, FlxColor.WHITE, "center");
 			add(_txEventName);
-			var _txEventDescription:FlxText = new FlxText(_posX + _WidthBlock + 10, _posY + 55, FlxG.width, _eventDescription);
-			_txEventDescription.setFormat(_FONT, 26, FlxColor.WHITE, "left");
+			var _txEventDescription:FlxText = new FlxText(_posTextsX, _posTextsY + 70, FlxG.width - _posTextsX, _eventDescription);
+			_txEventDescription.setFormat(_FONT, 26, FlxColor.WHITE, "center");
 			add(_txEventDescription);
+			
+			// Armar la linea de tiempo
+			var _eventDuration:Int = MenuState.eventCollection.get(_eventID).duracion;
+			var _eventExperience:Int = MenuState.eventCollection.get(_eventID).experiencia;
+			var _timeLineWidth:Int = 10;
+			var _markerWidth:Int = 10;
+			var _markerHeight:Int = 4;
+			var _posTimeLineX:Float = _posBlockX - (_timeLineWidth * 2);
+			var _posTimeLineY:Float = _posBlockY + (_markerHeight / 2);
+			// Linea base
+			var _timeLineSprite1:FlxSprite = new FlxSprite(_posTimeLineX, _posTimeLineY);
+			_timeLineSprite1.makeGraphic(_timeLineWidth, _HeightBlock, FlxColor.YELLOW);
+			add(_timeLineSprite1);
+			// Marcador negro
+			var _timeLineSprite2:FlxSprite = new FlxSprite(_posTimeLineX - (_markerWidth - _timeLineWidth), _posTimeLineY + _HeightBlock - (_markerHeight / 2));
+			_timeLineSprite2.makeGraphic(_markerWidth, _markerHeight, FlxColor.BLACK);
+			add(_timeLineSprite2);
+			var _fontLineSize:Int = 18;
+			var _txTimeLineDuration:FlxText = new FlxText(0, _posTimeLineY + _HeightBlock - _markerHeight -_fontLineSize, 0, "+"+_eventDuration+" meses"); 
+			_txTimeLineDuration.setFormat(_FONT, _fontLineSize, FlxColor.WHITE, "right");
+			add(_txTimeLineDuration);
+			var _txTimeLineExperience:FlxText = new FlxText(0, _posTimeLineY + _HeightBlock, 0, "+"+_eventExperience+" pts."); 
+			_txTimeLineExperience.setFormat(_FONT, _fontLineSize, FlxColor.WHITE, "right");
+			add(_txTimeLineExperience);
 			_index += 1;
 		}
 		
@@ -138,7 +167,7 @@ class SummaryState extends FlxState
 		// 2) Mover la camara tanto como se movio el mouse
 		// 3) Actualizar la posicion actual de mouse para la proxima llamada de update
 		if (FlxG.mouse.pressed) {
-			FlxG.camera.scroll.y += FlxG.mouse.screenY - _lastPosY;
+			FlxG.camera.scroll.y -= FlxG.mouse.screenY - _lastPosY;
 			_lastPosY = FlxG.mouse.screenY;			
 		}
 		
@@ -158,31 +187,5 @@ class SummaryState extends FlxState
 		add(new FlxSprite(posX, posY, "assets/images/block.png"));
 		add(new FlxSprite(posX + 15, posY + 37, "assets/images/icons_150/" + eventID.toLowerCase() + ".png"));
 	 }
-	 
-	/**
-	 * Esta funcion se llama para verificar que el texto no se salga de la pantalla
-	 * Si es mas largo que el espacio disponible, se agregan saltos de linea.
-	 * 
-	 * @param 	_text	Es el String con el texto
-	 * @param 	maxLarge	Es el tamanio maximo horizontal del texto
-	 */
-	//private function formatText(_text:String, maxLarge:Int):String
-	//{
-		//var formatedText:String = "";
-		//var lenText:Int = _text.length;
-		//if (lenText > maxLarge) {
-			//var index:Int = 0;
-			//while (index < lenText) {
-				//_text.
-				//formatedText += _text.substr(index, maxLarge) + "\n";
-				//index += maxLarge;
-			//}
-		//}
-		//else
-		//{
-			//formatedText = _text;
-		//}
-		//return formatedText;
-	//}
 	
 }
