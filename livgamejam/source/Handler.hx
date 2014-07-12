@@ -130,6 +130,7 @@ class Handler extends FlxTypedGroup<FlxBasic>
 			updateEventsWeight();
 			
 			_timmy.newChoice(card.getPositionGallery(), card.getIdEvent());
+			_timmy.setAge(_monthsOldPlayer);
 			
 			// Generamos un efecto copado
 			card.cardTransform();

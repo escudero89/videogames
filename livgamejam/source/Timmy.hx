@@ -7,6 +7,7 @@ import flixel.tweens.FlxTween;
 import flixel.FlxG;
 import flixel.util.FlxRect;
 import flixel.util.FlxPoint;
+import haxe.Timer;
 
 /**
  * ...
@@ -18,11 +19,14 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 	// Un grupo para la parte delantera, y otro para la trasera
 	private var _interfaceFront:FlxTypedGroup<FlxSprite>;
 	private var _interfaceBack:FlxTypedGroup<FlxSprite>;
+	private var _flag_choice:Bool;
+	private var _valor_ref_old:Float;
+	private var _flag_izq:Bool;
+	private var _timmy_skin:String;
 	
 	// para la cabeza y el cuerpo
 	private var _head:FlxSprite;
 	private var _body:FlxSprite;
-	private var _flag_arm:Int;
 	
 	private var _fondoColina:FlxSprite;
 	private var _ladder:FlxSprite;
@@ -35,7 +39,8 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 		
 		_interfaceFront = new FlxTypedGroup<FlxSprite>();
 		_interfaceBack = new FlxTypedGroup<FlxSprite>();
-		
+		_flag_choice = true;
+		_flag_izq = false;
 		// colina
 		
 		_fondoColina = new FlxSprite(0, 1500, "assets/images/colina.png");
@@ -43,6 +48,10 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 		
 		_interfaceBack.add(_fondoColina);
 		
+//>>>>>>>> HEAD
+		// Plataforma		
+		_platform = new FlxSprite(142, 500, "assets/images/platform.png");
+//=======
 		// Escaleras
 		
 		_ladder = new FlxSprite(0, 720, "assets/images/escaleras.png");
@@ -50,9 +59,9 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 		
 		// Plataforma
 		
-		_flag_arm = -1;
 		
 		_platform = new FlxSprite(142, 495, "assets/images/platform.png");
+//>>>>>>> origin/master
 		
 		// Controlamos la camara que siga a la plataforma
 		FlxG.camera.follow(_platform);
@@ -69,57 +78,56 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 		_body = new FlxSprite(265, 480);
 		
 		_head.loadGraphic("assets/images/timmy/cabezas.png", true, 150);
-		_body.loadGraphic("assets/images/timmy/cuerpos.png", true,142);
+		_body.loadGraphic("assets/images/timmy/cuerpos.png", true, 141);//142);
 		
-		_body.animation.add("joven_frente", [0]);
-		_body.animation.add("joven_espalda", [1]);
+		_body.animation.add("joven_espalda", [0]);
+		_body.animation.add("joven_frente", [1]);
 		_body.animation.add("joven_apuntando", [2]);
-		_body.animation.add("adulto_frente", [3]);
-		_body.animation.add("adulto_espalda", [4]);
+		_body.animation.add("adulto_espalda", [3]);
+		_body.animation.add("adulto_frente", [4]);
 		_body.animation.add("adulto_apuntando", [5]);
-		_body.animation.add("anciano_frente", [6]);
-		_body.animation.add("anciano_espalda", [7]);
+		_body.animation.add("anciano_espalda", [6]);
+		_body.animation.add("anciano_frente", [7]);
 		_body.animation.add("anciano_apuntando", [8]);
 		
 		_head.animation.add("joven_espalda", [0]);
-		_head.animation.add("joven_frente", [1]);
-		_head.animation.add("joven_frente_1", [2]);
-		_head.animation.add("joven_frente_2", [3]);
+		_head.animation.add("joven_pestaneando", [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,3,3]);
+		//_head.animation.add("joven_frente_1", [2]);
+		//_head.animation.add("joven_frente_2", [3]);
 		_head.animation.add("adulto_espalda", [4]);
-		_head.animation.add("adulto_frente", [5]);
-		_head.animation.add("adulto_frente_1", [6]);
-		_head.animation.add("adulto_frente_2", [7]);
+		_head.animation.add("adulto_pestaneando", [5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,6,6,7,7]);
+		//_head.animation.add("adulto_frente_1", [6]);
+		//_head.animation.add("adulto_frente_2", [7]);
 		_head.animation.add("anciano_espalda", [8]);
-		_head.animation.add("anciano_frente", [9]);
-		_head.animation.add("anciano_frente_1", [10]);
-		_head.animation.add("anciano_frente_2", [11]);
+		_head.animation.add("anciano_pestaneando", [9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,10,10,11,11]);
+		//_head.animation.add("anciano_frente_1", [10]);
+		//_head.animation.add("anciano_frente_2", [11]);
 		
 		_interfaceFront.add(_body);
 		_interfaceFront.add(_head);
-		
+		_valor_ref_old = _body.y - 20;
+		_timmy_skin = "joven";
 	}
 
 	override public function update():Void
 	{
 		super.update();
-		/*if (_flag_arm == 1) {
-			_flag_arm == -1;
-			var aux:String;
-			aux = "joven";
-			_body.animation.play(aux + "_apuntando");
-			//_body.flipX = true;
+		
+		if (((_valor_ref_old - 20) >= _body.y) && _flag_choice == false) {
+			_body.flipX = false;
+			_body.animation.play(_timmy_skin + "_frente");
+			_head.animation.play(_timmy_skin + "_pestaneando");
+			if (_flag_izq) {
+				_flag_izq = false;
+				_body.x = _body.x +  24;
+			}
 		}
-		else if (_flag_arm == 2 || _flag_arm == 3) {
-			_flag_arm == -1;
-		}*/
 		
-		_body.animation.play("anciano_espalda");
-		
-	}
-	
-	
-	public function updatePayer():Void
-	{
+		if ((_valor_ref_old - 180) == _body.y) {
+			_flag_choice = true;
+			_body.animation.play(_timmy_skin + "_espalda");
+			_head.animation.play(_timmy_skin + "_espalda");
+		}
 		
 	}
 		
@@ -129,8 +137,25 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 	// Y el ID_EVENTO de la carta elegida, para poder acceder a MenuState.eventCollection[cardIdEvento] y tomar el evento adecuado
 	public function newChoice(choseCard:Int, cardIdEvento:String) {
 		
-		_flag_arm = choseCard;
+		UpdateMoves(choseCard,_body.y);
 		updateBackground(cardIdEvento);
+	}
+	
+	//Actualiza movimientos de timmy
+	public function UpdateMoves(_flag_arm:Int,_val_ref:Float)
+	{
+		_flag_choice = false;
+		_valor_ref_old = _val_ref;
+		
+		if (_flag_arm == 1) {
+			_body.animation.play(_timmy_skin + "_apuntando");
+			_body.flipX = true;
+			_body.x = _body.x - 24;
+			_flag_izq = true;
+		}
+		else{
+			_body.animation.play(_timmy_skin + "_apuntando");
+		}		
 	}
 	
 	// Actualiza el fondo
@@ -148,6 +173,7 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 		
 		_interfaceBack.add(new FlxSprite(230, posY, "assets/images/block.png"));
 		_interfaceBack.add(new FlxSprite(245, posY + 37, "assets/images/icons_150/" + cardIdEvento.toLowerCase() + ".png"));
+
 	}
 
 	/// FUNCIONES GETS
@@ -161,4 +187,23 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 		return _interfaceFront;
 	}
 		
+	public function getEsaBandera() {
+		return _flag_choice;
+	}
+	
+	public function setAge(_age:Int) {
+		
+		if (_age <= 25*12) {
+			_timmy_skin = "joven";
+		}
+		if (_age > 25*12 && _age < 65*12) {
+			_timmy_skin = "adulto";
+		}
+		if(_age > 65*12){
+			_timmy_skin = "anciano";
+		}
+		
+	}
+	
+	
 }
