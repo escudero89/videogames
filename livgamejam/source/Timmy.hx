@@ -22,6 +22,7 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 	// para la cabeza y el cuerpo
 	private var _head:FlxSprite;
 	private var _body:FlxSprite;
+	private var _flag_arm:Int;
 	
 	private var _fondoColina:FlxSprite;
 	private var _platform:FlxSprite;
@@ -43,6 +44,8 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 		_interfaceBack.add(_fondoColina);
 		
 		// Plataforma
+		
+		_flag_arm = -1;
 		
 		_platform = new FlxSprite(142, 500, "assets/images/platform.png");
 		
@@ -96,7 +99,18 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 
 	override public function update():Void
 	{
-		_body.animation.play("joven_apuntando");
+		/*if (_flag_arm == 1) {
+			_flag_arm == -1;
+			var aux:String;
+			aux = "joven";
+			_body.animation.play(aux + "_apuntando");
+			//_body.flipX = true;
+		}
+		else if (_flag_arm == 2 || _flag_arm == 3) {
+			_flag_arm == -1;
+		}*/
+		
+		_body.animation.play("anciano_espalda");
 		
 		super.update();
 	}
@@ -113,7 +127,7 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 	// Y el ID_EVENTO de la carta elegida, para poder acceder a MenuState.eventCollection[cardIdEvento] y tomar el evento adecuado
 	public function newChoice(choseCard:Int, cardIdEvento:String) {
 		
-
+		_flag_arm = choseCard;
 		updateBackground(cardIdEvento);
 	}
 	
