@@ -25,6 +25,7 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 	private var _flag_arm:Int;
 	
 	private var _fondoColina:FlxSprite;
+	private var _ladder:FlxSprite;
 	private var _platform:FlxSprite;
 	private var _blockCollection:FlxTypedGroup<FlxSprite>;
 	
@@ -37,17 +38,21 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 		
 		// colina
 		
-		_fondoColina = new FlxSprite(0, 960);
-		_fondoColina.loadGraphic("assets/images/colina.png");
+		_fondoColina = new FlxSprite(0, 1500, "assets/images/colina.png");
 		_fondoColina.y -= _fondoColina.height;
 		
 		_interfaceBack.add(_fondoColina);
+		
+		// Escaleras
+		
+		_ladder = new FlxSprite(0, 720, "assets/images/escaleras.png");
+		_interfaceBack.add(_ladder);
 		
 		// Plataforma
 		
 		_flag_arm = -1;
 		
-		_platform = new FlxSprite(142, 500, "assets/images/platform.png");
+		_platform = new FlxSprite(142, 495, "assets/images/platform.png");
 		
 		// Controlamos la camara que siga a la plataforma
 		FlxG.camera.follow(_platform);
