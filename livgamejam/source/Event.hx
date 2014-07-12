@@ -25,6 +25,8 @@ class Event
 	
 	// Todos los pesos, por defecto, valen 1, al iniciar
 	public var peso:Int = 1;
+	private var _MAX_WEIGHT:Int = 5; // maximo peso posible
+	
 	// si el numero que sale esta en este rango, esta es el evento elegido
 	public var rango_i:Int = 0; 
 	public var rango_f:Int = 0; 
@@ -86,19 +88,18 @@ class Event
 		c_atributes.set('trabajo', _c_trabajo);
 		c_atributes.set('viaje', _c_viaje);
 		
-		setWeight();
 	}
 	
 	// Inicializa el peso, es 1 para los normales y 0 para los que tienen requerimientos
 	public function setWeight(atributesPlayer:Map<String, Int> = null):Void
 	{
-		
 		var requirementWeight = getRequirementTotalWeight(atributesPlayer);
 			
 		peso = Math.round(Math.max(0, peso - requirementWeight));
+		peso = Math.round(Math.min(peso, _MAX_WEIGHT));
 		
-		// Caso especial para morirse
-		if (id_evento == "X") {
+		// Estos son casos especiales (recluirse por ejemplo)
+		if (id_evento.indexOf("X") != -1) {
 			peso = -1;
 		}
 	}

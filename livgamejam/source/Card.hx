@@ -31,10 +31,13 @@ class Card extends FlxTypedGroup<FlxSprite>
 	public static var _CARD_WIDTH:Int = 180;
 	public static var _CARD_HEIGHT:Int = 270;
 	
-	private var _IS_MINI:Bool;
+	// Banderas para cartas especiales
+	private var _IS_DEAD_CARD:Bool = false;
+	private var _IS_MINI:Bool = false;
 	
 	private var _template_current_path:String;
 	private var _TEMPLATE_PATH:String = "assets/images/template_basic.png";
+	private var _TEMPLATE_PATH_RISK:String = "assets/images/template_risk.png";
 	private var _TEMPLATE_MINI_PATH:String = "assets/images/template_mini_basic.png";
 	
 	// Mini tarjeta
@@ -70,7 +73,7 @@ class Card extends FlxTypedGroup<FlxSprite>
 	
 	private var _cardEventInfo:Event;
 	
-	public function new(cardEventInfo:Event, posCard:FlxPoint, newPosGallery:Int = 0,  IS_MINI:Bool = false) 
+	public function new(cardEventInfo:Event, posCard:FlxPoint, newPosGallery:Int = 0,  IS_MINI:Bool = false, deathFromRisk:Bool = false) 
 	{
 		super();
 		
@@ -95,6 +98,14 @@ class Card extends FlxTypedGroup<FlxSprite>
 			_cardHeight = _CARD_MINI_HEIGHT;
 		}
 		
+		if (deathFromRisk) {
+			_template_current_path = _TEMPLATE_PATH_RISK;
+			_IS_DEAD_CARD = true;
+			
+			// Reemplazo el nombre por el riesgo concretado del suceso
+			_cardEventInfo.nombre = MenuState.riskCollection[_cardEventInfo.id_riesgo].content["nombre"];
+		}
+		
 		_template = new FlxSprite(posCard.x, posCard.y);
 		_template.loadGraphic( _template_current_path, false, _cardWidth, _cardHeight);
 		
@@ -112,7 +123,11 @@ class Card extends FlxTypedGroup<FlxSprite>
 			setText();
 			setTextStats();
 			add(_txt_title);
-			add(_txt_stats);
+			
+			// No hay stats si te moris
+			if (!_IS_DEAD_CARD) {
+				add(_txt_stats);	
+			}
 		}
 		
 	}
@@ -123,18 +138,21 @@ class Card extends FlxTypedGroup<FlxSprite>
 	{
 		_icono = new FlxSprite();
 		
-		_ICON_NAME = _cardEventInfo.id_evento + ".png";
+		_ICON_NAME = _cardEventInfo.id_evento.toLowerCase() + ".png";
 		
 		_icono.loadGraphic(_icon_current_path + _ICON_NAME);
 		
 		if (!_IS_MINI) {
 			_icono.x = _template.x + Math.round(_template.width / 2) - Math.round(_icono.width / 2);
-			_icono.y = _template.y + 22;			
+			_icono.y = _template.y + 22;
+			
+			if (_IS_DEAD_CARD) {
+				_icono.color = 0x00CCCCCC;
+			}
 		} else {
 			_icono.x = _template.x + 5;
 			_icono.y = _template.y + 5;
 		}
-
 	}
 	
 	// Coloca el texto
@@ -179,9 +197,12 @@ class Card extends FlxTypedGroup<FlxSprite>
 	private function onMouseOver(sprite:FlxSprite)
 	{
 		if (!_IS_MINI) {
-			_txt_title.text = _cardEventInfo.nombre.toUpperCase();
-			_txt_stats.text = ' ';			
-			_template.color = FlxColor.BLACK;
+			_txt_title.text = _cardEventInfo.nombre;
+			_txt_stats.text = ' ';
+			
+			if (!_IS_DEAD_CARD) { // ya es negra, no necesita ser mas negra
+				_template.color = FlxColor.BLACK;
+			}
 		} else {
 			_template.color = FlxColor.GOLDEN;
 		}
@@ -228,6 +249,11 @@ class Card extends FlxTypedGroup<FlxSprite>
 		return _cardEventInfo.id_evento;
 	}
 	
+	public function getDeadStatus():Bool
+	{
+		return _IS_DEAD_CARD;
+	}
+	
 	/// DESTROY
 	
 	override public function destroy()
@@ -244,5 +270,4 @@ class Card extends FlxTypedGroup<FlxSprite>
 	{
 		member.destroy();
 	}
-
 }

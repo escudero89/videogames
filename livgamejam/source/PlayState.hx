@@ -49,6 +49,10 @@ class PlayState extends FlxState
 	override public function update():Void
 	{
 		super.update();
+		
+		if (_Handler._end_of_game) {
+			FlxG.resetState();
+		}
 	}
 	
 	public function setBackground() {

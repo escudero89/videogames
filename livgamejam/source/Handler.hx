@@ -5,6 +5,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxTypedGroup;
 import flixel.group.FlxGroup;
+import flixel.text.FlxText; // << puede borrarse si no se usa
 import flixel.util.FlxPoint;
 
 import Card;
@@ -17,6 +18,9 @@ import Event;
 class Handler extends FlxTypedGroup<FlxBasic>
 {
 	
+	// Bandera de fin de partida
+	public var _end_of_game:Bool = false;
+	
 	// Coleccion de eventos
 	private var _eventCollection:Map<String, Event>;
 	private var _eventCollectionIdsAvailable:Array<String>; // guarda todos los eventos con peso > 0
@@ -24,6 +28,12 @@ class Handler extends FlxTypedGroup<FlxBasic>
 	
 	// Los atributos del protagonista iran aqui
 	private var _atributes:Map<String, Int>;
+	
+	private var _experiencePlayer:Int = 0;
+	private var _monthsOldPlayer:Int = 13 * 12;
+	
+	private var _experienceTitle:FlxText;
+	private var _monthsOldTitle:FlxText;
 	
 	// Aqui estan las cartas mostradas
 	private var _cardCurrentCollection:FlxTypedGroup<Card>;
@@ -58,17 +68,8 @@ class Handler extends FlxTypedGroup<FlxBasic>
 		_atributes.set('trabajo', 0);
 		_atributes.set('viaje', 0);
 		
-		// Sumamos los pesos de todos los eventos
-		for (keyEvent in _eventCollection.keys()) {
-			_eventCollectionTotalWeight += _eventCollection[keyEvent].peso;
-			var asdas = _eventCollection[keyEvent].peso;
-			if (_eventCollection[keyEvent].peso > 0) {
-				_eventCollectionIdsAvailable.push(keyEvent);
-			}
-		}
-		
-		// Y seteamos las probabilidades
-		setEventProbabilities();
+		// Actualizamos pesos
+		updateEventsWeight();
 		
 		/// RELACIONADO A LA INTERFAZ
 		
@@ -77,32 +78,106 @@ class Handler extends FlxTypedGroup<FlxBasic>
 		_cardCurrentCollection = new FlxTypedGroup<Card>();
 		
 		getNewHand();
-
+		
+		// @@@ BORRABLE
+		_experienceTitle = new FlxText(50, 600, 500, "Experiencia: " + _experiencePlayer, 40);
+		_monthsOldTitle = new FlxText(50, 700, 500, "Edad: " + Math.round(_monthsOldPlayer / 12), 40);
+		add(_experienceTitle);
+		add(_monthsOldTitle);
+		
 	}
 	
 	// Llamamos esta funcion cada frame
 	
 	override public function update():Void
 	{
-		super.update();
+		super.update();		
 		
 		_cardCurrentCollection.forEachAlive(getCurrentCardsState);
 	}
 	
-	// Retorna las cartas para la visualizacion adecuada
+	// A partir de la carta elegida, actua en consecuencia (reparte nueva mano, ajusta atributos)
 	
 	public function getCurrentCardsState(card:Card):Void
 	{
 		if (card.getChosedCard()) {
+			// Revisamos que no sea una carta de muerte
+			if (card.getDeadStatus()) {
+				_end_of_game = true;
+			}
+			
+			// Obtengo los atributos de contribucion
+			var atributesChoseCard = _eventCollection[card.getIdEvent()].c_atributes;
+			
+			for (keyAtribute in atributesChoseCard.keys()) {
+				_atributes[keyAtribute] += atributesChoseCard[keyAtribute];
+			}	
+
+			// Actualizamos los valores de experiencia y meses de vida respectivamente
+			_experiencePlayer += _eventCollection[card.getIdEvent()].experiencia;
+			_monthsOldPlayer += _eventCollection[card.getIdEvent()].duracion;
+			
+			// Actualizamos los pesos
+			updateEventsWeight();
+			
+			// Y destruimos la carta 
 			card.destroy();
 			
-			getNewHand(card.getPositionGallery());
+			// y pedimos una nueva mano (pero antes revisamos que este vivo)
+			var isGoingToDie = isLastBreath(_eventCollection[card.getIdEvent()]);
+			
+			getNewHand(card.getPositionGallery(), card.getIdEvent(), isGoingToDie);
+			
+			// @@@ BORRABLE
+			_experienceTitle = new FlxText(50, 600, 500, "Experiencia: " + _experiencePlayer, 40);
+			_monthsOldTitle = new FlxText(50, 700, 500, "Edad: " + Math.round(_monthsOldPlayer / 12), 40);
+			add(_experienceTitle);
+			add(_monthsOldTitle);
 		}
 	}
 	
+	// Es la ultima carta? => Se va a morir? True si es asi, False sino
+	private function isLastBreath(currentEvent:Event):Bool
+	{
+		var agePlayer:Float = Math.floor(_monthsOldPlayer / 12);
+		var riskNaturalDeathPercent:Float = ( 0.00009 * agePlayer - 0.0045 ) * agePlayer + 0.065;
+		var isGoingToDie = false;
+		
+		// Le sumamoso el riesgo por la actividad
+		riskNaturalDeathPercent += currentEvent.riesgo_porciento / 100;
+		
+		// Porcentaje de riesgo por muerte natural (cambia cuadraticamente con la edad)
+		if (Math.random() < (riskNaturalDeathPercent)) {
+			isGoingToDie = true;
+		}
+		
+		return isGoingToDie;
+	}
+	
+	
+	// Sumamos y recalcumos los pesos de todos los eventos
+	private function updateEventsWeight() {
+		
+		// Lo vaciamos y limpiamos
+		_eventCollectionIdsAvailable = new Array<String>();
+		_eventCollectionTotalWeight = 0;
+		
+		for (keyEvent in _eventCollection.keys()) {
+			_eventCollection[keyEvent].setWeight(_atributes);
+			_eventCollectionTotalWeight += _eventCollection[keyEvent].peso;
+			
+			if (_eventCollection[keyEvent].peso > 0) {
+				_eventCollectionIdsAvailable.push(keyEvent);
+			}
+		}
+		
+		// Y seteamos las probabilidades
+		setEventProbabilities();
+	}
+
 	// Retorna una nueva mano de cartas (a partir de la eleccion sabe que 3 cartas primarias mostrar)
 	// 1, 2, o 3 (cada una en una posicion
-	public function getNewHand(chose:Int = 0):Void
+	private function getNewHand(chose:Int = 0, previousIdEvent:String = "", isGoingToDie:Bool = false):Void
 	{
 		var cardKeepFromChoice = new Array<String>();
 		
@@ -120,13 +195,22 @@ class Handler extends FlxTypedGroup<FlxBasic>
 		_cardCurrentCollection.clear();
 		this.clear();
 		
-		// Definimos algunas variables
+		// Si vamos a morir no nos molestamos en elegir otras cartas
+		if (isGoingToDie) {
+			add(_cardCurrentCollection.add(new Card(_eventCollection[previousIdEvent], _posCardArray[4], 2, false, true))); 
+		} else {
+			getNewHandHelper(cardKeepFromChoice);
+		}
+
+	}
+	
+	private function getNewHandHelper(cardKeepFromChoice:Array<String>):Void
+	{
 		var chosenEvent:Event;
-		
-		var nextThreeEvents:Array<String> = getNextThreeEvents();
-		
 		var nextThreeFutureEvents:Array<String>;
 		
+		var nextThreeEvents:Array<String> = getNextThreeEvents();
+				
 		// Normalcards
 		for (i in 0...3) {
 			
@@ -138,20 +222,13 @@ class Handler extends FlxTypedGroup<FlxBasic>
 			
 			add(_cardCurrentCollection.add(new Card(chosenEvent, _posCardArray[i + 3 * i], i + 1))); // 0 , 4, 8
 			
-			nextThreeFutureEvents = getNextThreeEvents();
-			
 			// Minicards
+			nextThreeFutureEvents = getNextThreeEvents();
 			for (j in 0...3) {
-				chosenEvent = _eventCollection[nextThreeFutureEvents[j]];
+				chosenEvent = _eventCollection[nextThreeFutureEvents[j]];				
 				add(_cardCurrentCollection.add(new Card(chosenEvent, _posCardArray[i + j + 1 + 3 * i], 3 * (i + 1) + j + 1, true))); // 1,2,3,5,6,7,...
 			}
 		}
-	}
-	
-	// Mantiene las 3 cartas elegidas y destruye el resto
-	private function keepChosenCards(card:Card):Void
-	{
-		
 	}
 	
 	// Calcula las tres proximas cartas a tocar desde el mismo estado de vida

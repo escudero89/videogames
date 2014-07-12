@@ -32,7 +32,9 @@ class Timmy extends FlxTypedGroup<FlxSprite>
 	
 	// Esta funcion se llama cada vez que se elige una nueva carta
 	// Como argumento se le pasa el valor 1, 2, o 3, dependiendo la posicion de la carta (izq, centro y der respectivamente)
-	public function newChoice(choseCard:Int) {
+	// Y el ID_EVENTO de la carta elegida, para poder acceder a MenuState.eventCollection[cardIdEvento] y tomar el evento adecuado
+	public function newChoice(choseCard:Int, cardIdEvento:String) {
+		
 		
 	}
 	
