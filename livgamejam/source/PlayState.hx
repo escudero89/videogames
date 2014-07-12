@@ -69,18 +69,13 @@ class PlayState extends FlxState
 		
 		// agregando la base de datos
 		//_dataBase = new DataBase();
-		_handler = new Handler(MenuState.eventCollection);
-		
-		add(_handler);
-		
 		_timmy = new Timmy();
+		_handler = new Handler(MenuState.eventCollection, _timmy);
+
+		add(_handler);
 		add(_timmy);
 		
-		FlxG.cameras.bgColor = FlxColor.BLUE;
-		
-		var camera:FlxCamera = new FlxCamera(0, 0, 640, 960);
-		
-		FlxG.cameras.add(camera);
+		FlxG.camera.bgColor = FlxColor.CYAN;		
 		
 	}
 }

@@ -10,6 +10,7 @@ import flixel.util.FlxPoint;
 
 import Card;
 import Event;
+import Timmy;
 
 /**
  * Esta clase se encarga de manejar las tarjetas a mostrar. Desde las 3 principales a las 9 secundarias
@@ -17,6 +18,9 @@ import Event;
  */
 class Handler extends FlxTypedGroup<FlxBasic>
 {
+	
+	// Timmy
+	private var _timmy:Timmy;
 	
 	// Bandera de fin de partida
 	public var _end_of_game:Bool = false;
@@ -46,9 +50,11 @@ class Handler extends FlxTypedGroup<FlxBasic>
 	
 	//////////////////////////////////////////////////////////////
 	
-	public function new(eventCollection:Map<String, Event> = null)
+	public function new(eventCollection:Map<String, Event> = null, timmy:Timmy = null)
 	{
 		super();
+		
+		_timmy = timmy;
 		
 		/// RELACIONADO AL EVENT COLLECTION
 		
@@ -101,6 +107,7 @@ class Handler extends FlxTypedGroup<FlxBasic>
 	public function getCurrentCardsState(card:Card):Void
 	{
 		if (card.getChosedCard()) {
+			
 			// Revisamos que no sea una carta de muerte
 			if (card.getDeadStatus()) {
 				_end_of_game = true;
@@ -119,6 +126,8 @@ class Handler extends FlxTypedGroup<FlxBasic>
 			
 			// Actualizamos los pesos
 			updateEventsWeight();
+			
+			_timmy.newChoice(card.getPositionGallery(), card.getIdEvent());
 			
 			// Y destruimos la carta 
 			card.destroy();

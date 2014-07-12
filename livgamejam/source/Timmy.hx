@@ -2,6 +2,10 @@ package ;
 
 import flixel.FlxSprite;
 import flixel.group.FlxTypedGroup;
+import flixel.tweens.FlxTween;
+import flixel.FlxG;
+import flixel.util.FlxRect;
+import flixel.util.FlxPoint;
 
 /**
  * ...
@@ -24,6 +28,14 @@ class Timmy extends FlxTypedGroup<FlxSprite>
 		_blockCollection = new FlxTypedGroup<FlxSprite>();
 		
 		_platform = new FlxSprite(142, 500, "assets/images/platform.png");
+		
+		// Controlamos la camara que siga a la plataforma
+		FlxG.camera.follow(_platform);
+		FlxG.camera.setBounds(0, -20000, 640, 20960);
+		var rect = new FlxRect(0, _platform.y, 640, _platform.height);
+		FlxG.camera.deadzone = rect;
+		FlxG.camera.followLerp = 3;
+		
 		add(_platform);
 		
 		_head = new FlxSprite(250, 380);
@@ -62,6 +74,7 @@ class Timmy extends FlxTypedGroup<FlxSprite>
 	override public function update():Void
 	{
 		_body.animation.play("joven_apuntando");
+		
 		super.update();
 	}
 	
@@ -77,7 +90,14 @@ class Timmy extends FlxTypedGroup<FlxSprite>
 	// Y el ID_EVENTO de la carta elegida, para poder acceder a MenuState.eventCollection[cardIdEvento] y tomar el evento adecuado
 	public function newChoice(choseCard:Int, cardIdEvento:String) {
 		
-		
+
+		updateBackground();
 	}
 	
+	// Actualiza el fondo
+	private function updateBackground() {
+		FlxTween.tween(_platform, { y: (_platform.y - 180) }, 5);
+		FlxTween.tween(_head, { y: (_head.y - 180) }, 5);
+		FlxTween.tween(_body, { y: (_body.y - 180) }, 5);		
+	}
 }

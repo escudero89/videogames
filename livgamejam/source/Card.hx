@@ -77,6 +77,8 @@ class Card extends FlxTypedGroup<FlxSprite>
 	{
 		super();
 		
+		// Variables respecto a las cartas mostradas en la interfaz
+		
 		_cardEventInfo = cardEventInfo;
 		
 		_positionGallery = newPosGallery;
@@ -130,6 +132,14 @@ class Card extends FlxTypedGroup<FlxSprite>
 			}
 		}
 		
+		// No voy a scrollear ninguna carta
+		this.forEachAlive(setFixedCamera);
+		
+	}
+	
+	private function setFixedCamera(sprite:FlxSprite):Void
+	{
+		sprite.scrollFactor.set(0, 0);
 	}
 	
 	// Coloca el icono central
