@@ -26,6 +26,7 @@ class Card extends FlxTypedGroup<FlxSprite>
 	private var _cardHeight:Int;
 	
 	private var _choseCard:Bool = false;
+	private var _positionGallery:Int = 0; // posicion como carta (1 izq, 2 cent, 3 der ; 4 5 6 = las 3 superiores izq , ...)
 	
 	public static var _CARD_WIDTH:Int = 180;
 	public static var _CARD_HEIGHT:Int = 270;
@@ -69,15 +70,13 @@ class Card extends FlxTypedGroup<FlxSprite>
 	
 	private var _cardEventInfo:Event;
 	
-	public function new(cardEventInfo:Event, posCard:FlxPoint, IS_MINI = false) 
+	public function new(cardEventInfo:Event, posCard:FlxPoint, newPosGallery:Int = 0,  IS_MINI:Bool = false) 
 	{
 		super();
 		
 		_cardEventInfo = cardEventInfo;
 		
-		var X:Float = posCard.x;
-		var Y:Float = posCard.y;
-		
+		_positionGallery = newPosGallery;
 		_experience = _cardEventInfo.experiencia;
 		_duration = _cardEventInfo.duracion;
 		
@@ -96,7 +95,7 @@ class Card extends FlxTypedGroup<FlxSprite>
 			_cardHeight = _CARD_MINI_HEIGHT;
 		}
 		
-		_template = new FlxSprite(X, Y);
+		_template = new FlxSprite(posCard.x, posCard.y);
 		_template.loadGraphic( _template_current_path, false, _cardWidth, _cardHeight);
 		
 		MouseEventManager.add(_template, onMouseDown, onMouseUp, onMouseOver, onMouseOut);
@@ -197,7 +196,7 @@ class Card extends FlxTypedGroup<FlxSprite>
 		
 		_template.color = FlxColor.WHITE;
 	}
-	
+
 	/// FUNCIONES GET
 	
 	public function getStringWithMonthsAndExp():String
@@ -217,6 +216,16 @@ class Card extends FlxTypedGroup<FlxSprite>
 	public function getChosedCard():Bool
 	{
 		return _choseCard;
+	}
+	
+	public function getPositionGallery():Int
+	{
+		return _positionGallery;
+	}
+	
+	public function getIdEvent():String
+	{
+		return _cardEventInfo.id_evento;
 	}
 	
 	/// DESTROY

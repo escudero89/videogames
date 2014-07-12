@@ -89,14 +89,39 @@ class Handler extends FlxTypedGroup<FlxBasic>
 		_cardCurrentCollection.forEachAlive(getCurrentCardsState);
 	}
 	
-	// Retorna una nueva mano de cartas
-	public function getNewHand():Void
+	// Retorna las cartas para la visualizacion adecuada
+	
+	public function getCurrentCardsState(card:Card):Void
 	{
-		// Vaciamos las cartas actuales
-		_cardCurrentCollection.clear();
+		if (card.getChosedCard()) {
+			card.destroy();
+			
+			getNewHand(card.getPositionGallery());
+		}
+	}
+	
+	// Retorna una nueva mano de cartas (a partir de la eleccion sabe que 3 cartas primarias mostrar)
+	// 1, 2, o 3 (cada una en una posicion
+	public function getNewHand(chose:Int = 0):Void
+	{
+		var cardKeepFromChoice = new Array<String>();
 		
-		// tomando un evento de la base de datos, para pobar si carga bien
-		var eventoPrueba:Event;
+		// Si tenemos cartas futuras, las colocamos adelante
+		if (chose != 0) {
+			for (card in _cardCurrentCollection) {
+				// Basicamente, se juega con los indices para que seleccione las 3 cartas de arriba
+				if	(Math.ceil(card.getPositionGallery() / 3) - 1 == chose) {
+					cardKeepFromChoice.push(card.getIdEvent());
+				}
+			}
+		}
+		
+		// Vaciamos las cartas actuales y las que estaban guardadas en el Handler
+		_cardCurrentCollection.clear();
+		this.clear();
+		
+		// Definimos algunas variables
+		var chosenEvent:Event;
 		
 		var nextThreeEvents:Array<String> = getNextThreeEvents();
 		
@@ -104,28 +129,29 @@ class Handler extends FlxTypedGroup<FlxBasic>
 		
 		// Normalcards
 		for (i in 0...3) {
-			eventoPrueba = _eventCollection[nextThreeEvents[i]];
 			
-			add(_cardCurrentCollection.add(new Card(eventoPrueba, _posCardArray[i + 3 * i]))); // 0 , 4, 8
+			if (cardKeepFromChoice.length > 0) {
+				chosenEvent = _eventCollection[cardKeepFromChoice[i]];
+			} else {
+				chosenEvent = _eventCollection[nextThreeEvents[i]];
+			}
+			
+			add(_cardCurrentCollection.add(new Card(chosenEvent, _posCardArray[i + 3 * i], i + 1))); // 0 , 4, 8
 			
 			nextThreeFutureEvents = getNextThreeEvents();
 			
 			// Minicards
 			for (j in 0...3) {
-				eventoPrueba = _eventCollection[nextThreeFutureEvents[j]];
-				add(_cardCurrentCollection.add(new Card(eventoPrueba, _posCardArray[i + j + 1 + 3 * i], true))); // 1,2,3,5,6,7,...
+				chosenEvent = _eventCollection[nextThreeFutureEvents[j]];
+				add(_cardCurrentCollection.add(new Card(chosenEvent, _posCardArray[i + j + 1 + 3 * i], 3 * (i + 1) + j + 1, true))); // 1,2,3,5,6,7,...
 			}
 		}
 	}
 	
-	// Retorna las cartas para la visualizacion adecuada
-	
-	public function getCurrentCardsState(card:Card):Void
+	// Mantiene las 3 cartas elegidas y destruye el resto
+	private function keepChosenCards(card:Card):Void
 	{
-		if (card.getChosedCard()) {
-			card.destroy();
-			getNewHand();
-		}
+		
 	}
 	
 	// Calcula las tres proximas cartas a tocar desde el mismo estado de vida
