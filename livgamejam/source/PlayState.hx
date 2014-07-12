@@ -1,5 +1,6 @@
 package;
 
+import flixel.group.FlxTypedGroup;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -73,7 +74,9 @@ class PlayState extends FlxState
 		_handler = new Handler(MenuState.eventCollection, _timmy);
 
 		add(_handler);
-		add(_timmy);
+		_timmy.forEachAlive(function (group:FlxTypedGroup<FlxSprite>) {
+			add(group);
+		});
 		
 		FlxG.camera.bgColor = FlxColor.CYAN;		
 		

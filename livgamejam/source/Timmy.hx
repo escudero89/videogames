@@ -11,9 +11,13 @@ import flixel.util.FlxPoint;
  * ...
  * @author 
  */
-class Timmy extends FlxTypedGroup<FlxSprite>
+class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 {
 
+	// Un grupo para la parte delantera, y otro para la trasera
+	private var _interaceFront:FlxTypedGroup<FlxSprite>;
+	private var _interaceBack:FlxTypedGroup<FlxSprite>;
+	
 	// para la cabeza y el cuerpo
 	private var _head:FlxSprite;
 	private var _body:FlxSprite;
@@ -25,7 +29,8 @@ class Timmy extends FlxTypedGroup<FlxSprite>
 	{
 		super();
 		
-		_blockCollection = new FlxTypedGroup<FlxSprite>();
+		_interaceFront = new FlxTypedGroup<FlxSprite>();
+		_interaceBack = new FlxTypedGroup<FlxSprite>();
 		
 		_platform = new FlxSprite(142, 500, "assets/images/platform.png");
 		
@@ -36,7 +41,7 @@ class Timmy extends FlxTypedGroup<FlxSprite>
 		FlxG.camera.deadzone = rect;
 		FlxG.camera.followLerp = 3;
 		
-		add(_platform);
+		_interaceFront.add(_platform);
 		
 		_head = new FlxSprite(250, 380);
 		_body = new FlxSprite(265, 480);
@@ -67,8 +72,12 @@ class Timmy extends FlxTypedGroup<FlxSprite>
 		_head.animation.add("anciano_frente_1", [10]);
 		_head.animation.add("anciano_frente_2", [11]);
 		
-		add(_body);
-		add(_head);
+		_interaceFront.add(_body);
+		_interaceFront.add(_head);
+		
+		// Agregamos la parte delarenta, y luego la parte trasera
+		add(_interaceBack);
+		add(_interaceFront);
 	}
 
 	override public function update():Void
@@ -91,13 +100,21 @@ class Timmy extends FlxTypedGroup<FlxSprite>
 	public function newChoice(choseCard:Int, cardIdEvento:String) {
 		
 
-		updateBackground();
+		updateBackground(cardIdEvento);
 	}
 	
 	// Actualiza el fondo
-	private function updateBackground() {
+	private function updateBackground(cardIdEvento:String) {
+		
 		FlxTween.tween(_platform, { y: (_platform.y - 180) }, 5);
 		FlxTween.tween(_head, { y: (_head.y - 180) }, 5);
 		FlxTween.tween(_body, { y: (_body.y - 180) }, 5);		
+		
+		// Y creamos los bloques
+		var posY = _platform.y + 100;
+		
+		_interaceBack.add(new FlxSprite(230, posY, "assets/images/block.png"));
+		_interaceBack.add(new FlxSprite(245, posY + 37, "assets/images/icons_150/" + cardIdEvento.toLowerCase() + ".png"));
 	}
+	
 }
