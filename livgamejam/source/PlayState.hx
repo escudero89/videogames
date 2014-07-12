@@ -21,7 +21,8 @@ class PlayState extends FlxState
 {
 	
 	private var _fondoColina:FlxBackdrop;
-	private var _Handler:Handler;
+	private var _handler:Handler;
+	private var _timmy:Timmy;
 	//private var _dataBase:DataBase;
 	
 	/**
@@ -50,7 +51,8 @@ class PlayState extends FlxState
 	{
 		super.update();
 		
-		if (_Handler._end_of_game) {
+		if (_handler._end_of_game) {
+			_handler.destroy();
 			FlxG.resetState();
 		}
 	}
@@ -67,9 +69,12 @@ class PlayState extends FlxState
 		
 		// agregando la base de datos
 		//_dataBase = new DataBase();
-		_Handler = new Handler(MenuState.eventCollection);
+		_handler = new Handler(MenuState.eventCollection);
 		
-		add(_Handler);
+		add(_handler);
+		
+		_timmy = new Timmy();
+		add(_timmy);
 		
 		FlxG.cameras.bgColor = FlxColor.BLUE;
 		

@@ -14,15 +14,21 @@ class Timmy extends FlxTypedGroup<FlxSprite>
 	private var _head:FlxSprite;
 	private var _body:FlxSprite;
 	
+	private var _platform:FlxSprite;
+	private var _blockCollection:FlxTypedGroup<FlxSprite>;
+	
 	public function new() 
 	{
-		super(MaxSize);
+		super();
 		
+		_platform = new FlxSprite(142, 400, "assets/images/platform.png");
+		add(_platform);
+		/*
 		_head = new FlxSprite();
 		_body = new FlxSprite();
 		
 		add(_head);
-		add(_body);
+		add(_body);*/
 	}
 
 	override public function update():Void
