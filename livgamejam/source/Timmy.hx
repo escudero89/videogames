@@ -21,6 +21,8 @@ class Timmy extends FlxTypedGroup<FlxSprite>
 	{
 		super();
 		
+		_blockCollection = new FlxTypedGroup<FlxSprite>();
+		
 		_platform = new FlxSprite(142, 400, "assets/images/platform.png");
 		add(_platform);
 		/*
