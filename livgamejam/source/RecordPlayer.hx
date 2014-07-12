@@ -7,45 +7,47 @@ package ;
 class RecordPlayer
 {
 	public var _eventsIDs:Array<String>;
-	public var _age:Int;// en meses
-	public var _experience:Int;
-	public var _amor:Int;
-	public var _creatividad:Int;
-	public var _depresion:Int;
-	public var _educacion:Int;
-	public var _fama:Int;
-	public var _resistencia:Int;
-	public var _trabajo:Int;
-	public var _viaje:Int;
-
+	public var _monthsOldPlayer:Int;// en meses
+	public var _experiencePlayer:Int;
+	public var _atributes:Map<String, Int>;
+	
 	public function new() 
 	{
 		_eventsIDs = new Array<String>();
-		_age = 13*12;//13 años * 12 meses = 156 meses
-		_experience = 0;
-		_amor = 0;
-		_creatividad = 0;
-		_depresion = 0;
-		_educacion = 0;
-		_fama = 0;
-		_resistencia = 0;
-		_trabajo = 0;
-		_viaje = 0;
+		_monthsOldPlayer = 13*12;//13 años * 12 meses = 156 meses
+		_experiencePlayer = 0;
+		_atributes = new Map<String,Int>();
+		_atributes.set("amor", 0);
+		_atributes.set("creatividad", 0);
+		_atributes.set("depresion", 0);
+		_atributes.set("educacion", 0);
+		_atributes.set("fama", 0);
+		_atributes.set("resistencia", 0);
+		_atributes.set("trabajo", 0);
+		_atributes.set("viaje", 0);
 	}
 	
 	public function update(_event:Event):Void
 	{
 		_eventsIDs.push(_event.id_evento);
-		_age += _event.duracion;
-		_experience += _event.experiencia;
-		_amor += _event.c_atributes.get("amor");
-		_creatividad += _event.c_atributes.get("creatividad");
-		_depresion += _event.c_atributes.get("depresion");
-		_educacion += _event.c_atributes.get("educacion");
-		_fama += _event.c_atributes.get("fama");
-		_resistencia += _event.c_atributes.get("resistencia");
-		_trabajo += _event.c_atributes.get("trabajo");
-		_viaje += _event.c_atributes.get("viaje");
+		_monthsOldPlayer += _event.duracion;
+		_experiencePlayer += _event.experiencia;
+		var amor:Int = _atributes.get("amor") + _event.c_atributes.get("amor");
+		_atributes.set("amor", amor);
+		var creatividad:Int = _atributes.get("creatividad") + _event.c_atributes.get("creatividad");
+		_atributes.set("creatividad", creatividad);
+		var depresion:Int = _atributes.get("depresion") + _event.c_atributes.get("depresion");
+		_atributes.set("depresion", depresion);
+		var educacion:Int = _atributes.get("educacion") + _event.c_atributes.get("educacion");
+		_atributes.set("educacion", educacion);
+		var fama:Int = _atributes.get("fama") + _event.c_atributes.get("fama");
+		_atributes.set("fama", fama);
+		var resistencia:Int = _atributes.get("resistencia") + _event.c_atributes.get("resistencia");
+		_atributes.set("resistencia", resistencia);
+		var trabajo:Int = _atributes.get("trabajo") + _event.c_atributes.get("trabajo");
+		_atributes.set("trabajo", trabajo);
+		var viaje:Int = _atributes.get("viaje") + _event.c_atributes.get("viaje");
+		_atributes.set("viaje", viaje);
 	}
 	
 	public function getEventsIds():Array<String>
@@ -55,7 +57,7 @@ class RecordPlayer
 	
 	public function getAgeInYears():Int
 	{
-		return Math.floor(_age / 12);
+		return Math.floor(_monthsOldPlayer / 12);
 	}
 	
 }
