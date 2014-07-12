@@ -19,6 +19,11 @@ class Handler extends FlxTypedGroup<FlxBasic>
 	
 	// Coleccion de eventos
 	private var _eventCollection:Map<String, Event>;
+	private var _eventCollectionIdsAvailable:Array<String>; // guarda todos los eventos con peso > 0
+	private var _eventCollectionTotalWeight:Int = 0;
+	
+	// Los atributos del protagonista iran aqui
+	private var _atributes:Map<String, Int>;
 	
 	// Aqui estan las cartas mostradas
 	private var _cardCurrentCollection:FlxTypedGroup<Card>;
@@ -29,36 +34,153 @@ class Handler extends FlxTypedGroup<FlxBasic>
 	// Posicion de todas las cartas (ver getInfrastructure)
 	private var _posCardArray:Array<FlxPoint>;
 	
+	//////////////////////////////////////////////////////////////
+	
 	public function new(eventCollection:Map<String, Event> = null)
 	{
 		super();
 		
+		/// RELACIONADO AL EVENT COLLECTION
+		
 		_eventCollection = eventCollection;
+		
+		_eventCollectionIdsAvailable = new Array<String>();
+		
+		// Inicializamos los atributos disponibles
+		_atributes = new Map<String, Int>();
+		
+		_atributes.set('amor', 0);
+		_atributes.set('creatividad', 0);
+		_atributes.set('depresion', 0);
+		_atributes.set('educacion', 0);
+		_atributes.set('fama', 0);
+		_atributes.set('resistencia', 0);
+		_atributes.set('trabajo', 0);
+		_atributes.set('viaje', 0);
+		
+		// Sumamos los pesos de todos los eventos
+		for (keyEvent in _eventCollection.keys()) {
+			_eventCollectionTotalWeight += _eventCollection[keyEvent].peso;
+			var asdas = _eventCollection[keyEvent].peso;
+			if (_eventCollection[keyEvent].peso > 0) {
+				_eventCollectionIdsAvailable.push(keyEvent);
+			}
+		}
+		
+		// Y seteamos las probabilidades
+		setEventProbabilities();
+		
+		/// RELACIONADO A LA INTERFAZ
+		
 		_posCardArray = getInfrastructure();
 		
 		_cardCurrentCollection = new FlxTypedGroup<Card>();
 		
+		getNewHand();
+
+	}
+	
+	// Llamamos esta funcion cada frame
+	
+	override public function update():Void
+	{
+		super.update();
+		
+		_cardCurrentCollection.forEachAlive(getCurrentCardsState);
+	}
+	
+	// Retorna una nueva mano de cartas
+	public function getNewHand():Void
+	{
+		// Vaciamos las cartas actuales
+		_cardCurrentCollection.clear();
+		
 		// tomando un evento de la base de datos, para pobar si carga bien
-		var eventoPrueba = _eventCollection['E1'];
+		var eventoPrueba:Event;
+		
+		var nextThreeEvents:Array<String> = getNextThreeEvents();
+		
+		var nextThreeFutureEvents:Array<String>;
 		
 		// Normalcards
 		for (i in 0...3) {
+			eventoPrueba = _eventCollection[nextThreeEvents[i]];
+			
 			add(_cardCurrentCollection.add(new Card(eventoPrueba, _posCardArray[i + 3 * i]))); // 0 , 4, 8
+			
+			nextThreeFutureEvents = getNextThreeEvents();
 			
 			// Minicards
 			for (j in 0...3) {
+				eventoPrueba = _eventCollection[nextThreeFutureEvents[j]];
 				add(_cardCurrentCollection.add(new Card(eventoPrueba, _posCardArray[i + j + 1 + 3 * i], true))); // 1,2,3,5,6,7,...
 			}
 		}
-
 	}
 	
 	// Retorna las cartas para la visualizacion adecuada
 	
-	public function getCurrentCards()
+	public function getCurrentCardsState(card:Card):Void
 	{
-		
+		if (card.getChosedCard()) {
+			card.destroy();
+			getNewHand();
+		}
 	}
+	
+	// Calcula las tres proximas cartas a tocar desde el mismo estado de vida
+	private function getNextThreeEvents():Array<String>
+	{
+		var amountCards = 3;
+		var rangoNextEvent:Int;
+		
+		var keyEvent:String;
+		var keyRetornada:Array<String> = new Array<String>();
+		
+		while (amountCards > 0) {
+			
+			// Arroja un numero entre 0 al peso total de la coleccion
+			rangoNextEvent = Math.round(Math.random() * _eventCollectionTotalWeight);
+			
+			for (i in 0..._eventCollectionIdsAvailable.length) {
+				keyEvent = _eventCollectionIdsAvailable[i];
+				
+				if (rangoNextEvent >= _eventCollection[keyEvent].rango_i  &&
+					rangoNextEvent <= _eventCollection[keyEvent].rango_f) {
+					
+					keyRetornada.push(keyEvent);
+					break;
+				}
+			}
+			
+			amountCards--;
+		}
+		
+		return keyRetornada;
+	}
+	
+	// Setea las probabilidades de todas las cartas
+	private function setEventProbabilities():Void
+	{
+		var keyEvent:String;
+		
+		var rangoActual_i:Int = 0;
+		var rangoActual_f:Int = 0;
+		
+		// Calculamos todas las probabilidades y las guardamos
+		for (i in 0..._eventCollectionIdsAvailable.length) {
+			keyEvent = _eventCollectionIdsAvailable[i];
+			
+			rangoActual_f += _eventCollection[keyEvent].peso;
+			
+			_eventCollection[keyEvent].rango_i = rangoActual_i;
+			_eventCollection[keyEvent].rango_f = rangoActual_f;
+			
+			// Luego actualizamos el inicial
+			rangoActual_i += _eventCollection[keyEvent].peso;
+		}
+	}
+	
 	
 	// Obtiene la infraestructura (las posiciones de cada carta)
 	// El formato es [ posCard1 , posMiniCard1, posMiniCard2, posMiniCard3, posCard2, ...] => array.length = 12

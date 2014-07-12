@@ -14,29 +14,20 @@ class Event
 	public var descripcion:String;
 	public var experiencia:Int;
 	public var duracion:Int;
-	public var rpi_amor:Int;
-	public var rpi_creatividad:Int;
-	public var rpi_depresion:Int;
-	public var rpi_educacion:Int;
-	public var rpi_fama:Int;
-	public var rpi_resistencia:Int;
-	public var rpi_trabajo:Int;
-	public var rpi_viaje:Int;
+	
+	public var rpi_atributes:Map<String, Int>;
+	public var c_atributes:Map<String, Int>;
+
 	public var riesgo_porciento:Int;
 	public var id_riesgo:String;
-	public var c_amor:Int;
-	public var c_creatividad:Int;
-	public var c_depresion:Int;
-	public var c_educacion:Int;
-	public var c_fama:Int;
-	public var c_resistencia:Int;
-	public var c_trabajo:Int;
-	public var c_viaje:Int;
 	
 	// Atributos extras (que no figuran en la BD)
 	
 	// Todos los pesos, por defecto, valen 1, al iniciar
 	public var peso:Int = 1;
+	// si el numero que sale esta en este rango, esta es el evento elegido
+	public var rango_i:Int = 0; 
+	public var rango_f:Int = 0; 
 
 	public function new(
 		_id_evento:String,
@@ -68,24 +59,67 @@ class Event
 		descripcion = _descripcion;
 		experiencia = _experiencia;
 		duracion = _duracion;
-		rpi_amor = _rpi_amor;
-		rpi_creatividad = _rpi_creatividad;
-		rpi_depresion = _rpi_depresion;
-		rpi_educacion = _rpi_educacion;
-		rpi_fama = _rpi_fama;
-		rpi_resistencia = _rpi_resistencia;
-		rpi_trabajo = _rpi_trabajo;
-		rpi_viaje = _rpi_viaje;
+		
 		riesgo_porciento = _riesgo_porciento;
 		id_riesgo = _id_riesgo;
-		c_amor = _c_amor;
-		c_creatividad = _c_creatividad;
-		c_depresion = _c_depresion;
-		c_educacion = _c_educacion;
-		c_fama = _c_fama;
-		c_resistencia = _c_resistencia;
-		c_trabajo = _c_trabajo;
-		c_viaje = _c_viaje;
+
+		
+		rpi_atributes = new Map<String, Int>();
+		
+		rpi_atributes.set('amor', _rpi_amor);
+		rpi_atributes.set('creatividad', _rpi_creatividad);
+		rpi_atributes.set('depresion', _rpi_depresion);
+		rpi_atributes.set('educacion', _rpi_educacion);
+		rpi_atributes.set('fama', _rpi_fama);
+		rpi_atributes.set('resistencia', _rpi_resistencia);
+		rpi_atributes.set('trabajo', _rpi_trabajo);
+		rpi_atributes.set('viaje', _rpi_viaje);
+		
+		c_atributes = new Map<String, Int>();
+		
+		c_atributes.set('amor', _c_amor);
+		c_atributes.set('creatividad', _c_creatividad);
+		c_atributes.set('depresion', _c_depresion);
+		c_atributes.set('educacion', _c_educacion);
+		c_atributes.set('fama', _c_fama);
+		c_atributes.set('resistencia', _c_resistencia);
+		c_atributes.set('trabajo', _c_trabajo);
+		c_atributes.set('viaje', _c_viaje);
+		
+		setWeight();
+	}
+	
+	// Inicializa el peso, es 1 para los normales y 0 para los que tienen requerimientos
+	public function setWeight(atributesPlayer:Map<String, Int> = null):Void
+	{
+		
+		var requirementWeight = getRequirementTotalWeight(atributesPlayer);
+			
+		peso = Math.round(Math.max(0, peso - requirementWeight));
+		
+		// Caso especial para morirse
+		if (id_evento == "X") {
+			peso = -1;
+		}
+	}
+	
+	// Hace la diferencia con los requerimientos. Si el requerimiento es mayor qeu el atributo, retorna positivo
+	private function getRequirementTotalWeight(atributesPlayer:Map<String, Int>):Int
+	{
+		var weightReturn = 0;
+		var weightDifference:Int;
+		
+		for (key in rpi_atributes.keys()) {
+			weightDifference = rpi_atributes[key];
+			
+			if (atributesPlayer != null) {
+				weightDifference -= atributesPlayer[key];
+			}
+			
+			weightReturn += weightDifference;
+		}
+	
+		return weightReturn;
 	}
 	
 }

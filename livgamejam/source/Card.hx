@@ -25,6 +25,8 @@ class Card extends FlxTypedGroup<FlxSprite>
 	private var _cardWidth:Int;
 	private var _cardHeight:Int;
 	
+	private var _choseCard:Bool = false;
+	
 	public static var _CARD_WIDTH:Int = 180;
 	public static var _CARD_HEIGHT:Int = 270;
 	
@@ -121,6 +123,9 @@ class Card extends FlxTypedGroup<FlxSprite>
 	public function setIcon()
 	{
 		_icono = new FlxSprite();
+		
+		_ICON_NAME = _cardEventInfo.id_evento + ".png";
+		
 		_icono.loadGraphic(_icon_current_path + _ICON_NAME);
 		
 		if (!_IS_MINI) {
@@ -166,6 +171,7 @@ class Card extends FlxTypedGroup<FlxSprite>
 	{
 		if (!_IS_MINI) {
 			FlxG.cameras.flash(FlxColor.WHITE, 0.1);
+			_choseCard = true;
 		}
 	}
 	
@@ -174,7 +180,7 @@ class Card extends FlxTypedGroup<FlxSprite>
 	private function onMouseOver(sprite:FlxSprite)
 	{
 		if (!_IS_MINI) {
-			_txt_title.text = _cardEventInfo.nombre;
+			_txt_title.text = _cardEventInfo.nombre.toUpperCase();
 			_txt_stats.text = ' ';			
 			_template.color = FlxColor.BLACK;
 		} else {
@@ -206,6 +212,28 @@ class Card extends FlxTypedGroup<FlxSprite>
 	public function getPosition():FlxPoint
 	{
 		return new FlxPoint(_template.x, _template.y);
+	}
+	
+	public function getChosedCard():Bool
+	{
+		return _choseCard;
+	}
+	
+	/// DESTROY
+	
+	override public function destroy()
+	{
+		this.forEachExists(memberGroupDestroy);
+		
+		// Make sure that this object is removed from the MouseEventManager for GC
+		MouseEventManager.remove(_template);
+		
+		super.destroy();
+	}
+	
+	private function memberGroupDestroy(member:FlxSprite):Void
+	{
+		member.destroy();
 	}
 
 }
