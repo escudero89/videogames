@@ -18,11 +18,13 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 	// Un grupo para la parte delantera, y otro para la trasera
 	private var _interfaceFront:FlxTypedGroup<FlxSprite>;
 	private var _interfaceBack:FlxTypedGroup<FlxSprite>;
+	private var _flag_choice:Bool;
+	private var _valor_ref_old:Float;
+	private var _flag_izq:Bool;
 	
 	// para la cabeza y el cuerpo
 	private var _head:FlxSprite;
 	private var _body:FlxSprite;
-	private var _flag_arm:Int;
 	
 	private var _fondoColina:FlxSprite;
 	private var _platform:FlxSprite;
@@ -34,7 +36,8 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 		
 		_interfaceFront = new FlxTypedGroup<FlxSprite>();
 		_interfaceBack = new FlxTypedGroup<FlxSprite>();
-		
+		_flag_choice = true;
+		_flag_izq = false;
 		// colina
 		
 		_fondoColina = new FlxSprite(0, 960);
@@ -43,10 +46,7 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 		
 		_interfaceBack.add(_fondoColina);
 		
-		// Plataforma
-		
-		_flag_arm = -1;
-		
+		// Plataforma		
 		_platform = new FlxSprite(142, 500, "assets/images/platform.png");
 		
 		// Controlamos la camara que siga a la plataforma
@@ -91,41 +91,52 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 		
 		_interfaceFront.add(_body);
 		_interfaceFront.add(_head);
-		
+		_valor_ref_old = _body.y - 180;
 	}
 
 	override public function update():Void
 	{
 		super.update();
-		/*if (_flag_arm == 1) {
-			_flag_arm == -1;
-			var aux:String;
-			aux = "joven";
-			_body.animation.play(aux + "_apuntando");
-			//_body.flipX = true;
+		
+		if (((_valor_ref_old - 180) == _body.y) && _flag_choice == false) {
+			_flag_choice = true;
+			_body.flipX = false;
+			_body.animation.play("joven_frente");
+			if (_flag_izq) {
+				_flag_izq = false;
+				_body.x = _body.x +  26;
+			}
 		}
-		else if (_flag_arm == 2 || _flag_arm == 3) {
-			_flag_arm == -1;
-		}*/
-		
-		_body.animation.play("anciano_espalda");
 		
 	}
 	
-	
-	public function updatePayer():Void
-	{
-		
-	}
-		
 	
 	// Esta funcion se llama cada vez que se elige una nueva carta
 	// Como argumento se le pasa el valor 1, 2, o 3, dependiendo la posicion de la carta (izq, centro y der respectivamente)
 	// Y el ID_EVENTO de la carta elegida, para poder acceder a MenuState.eventCollection[cardIdEvento] y tomar el evento adecuado
 	public function newChoice(choseCard:Int, cardIdEvento:String) {
 		
-		_flag_arm = choseCard;
+		UpdateMoves(choseCard,_body.y);
 		updateBackground(cardIdEvento);
+	}
+	
+	//Actualiza movimientos de timmy
+	public function UpdateMoves(_flag_arm:Int,_val_ref:Float)
+	{
+		_flag_choice = false;
+		_valor_ref_old = _val_ref;
+		
+		if (_flag_arm == 1) {
+			var aux:String;
+			aux = "joven";
+			_body.animation.play(aux + "_apuntando");
+			_body.flipX = true;
+			_body.x = _body.x - 26;
+			_flag_izq = true;
+		}
+		else{
+			_body.animation.play("joven_apuntando");
+		}		
 	}
 	
 	// Actualiza el fondo
@@ -143,6 +154,7 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 		
 		_interfaceBack.add(new FlxSprite(230, posY, "assets/images/block.png"));
 		_interfaceBack.add(new FlxSprite(245, posY + 37, "assets/images/icons_150/" + cardIdEvento.toLowerCase() + ".png"));
+
 	}
 
 	/// FUNCIONES GETS
@@ -156,4 +168,9 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 		return _interfaceFront;
 	}
 		
+	public function getEsaBandera() {
+		return _flag_choice;
+	}
+	
+	
 }
