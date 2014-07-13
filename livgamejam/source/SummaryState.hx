@@ -19,14 +19,14 @@ import Std.*;
 class SummaryState extends FlxState
 {
 	
-	public static var _recordPlayer:RecordPlayer;
+	public static var _recordPlayer:RecordPlayer = new RecordPlayer();
+	public static var _recordGame:Array<RecordPlayer> = new Array<RecordPlayer>();
 	
 	private var _FONT:String = "assets/fonts/LondrinaSolid-Regular.ttf";
 	private var _TITLE:String = "Sumario";
 	//private var _SUBTITLE:String = "El camino recorrido";
 	private var _AGE:Int;
 	private var _EXP:Int;
-	private var _historyEventsIDs:Array<String>;
 	private var _HeightBlock:Int = 202;
 	private var _WidthBlock:Int = 180;
 	private var _FULLHEIGHT:Int;
@@ -36,7 +36,7 @@ class SummaryState extends FlxState
 	// Para guardar la posicion anterior en y del mouse, antes de hacer el scroll
 	private var _lastPosY:Float;
 	
-	var _closeButton:FlxButton;
+	private var _closeButton:FlxButton;
 	
 	var _camera:FlxCamera;	
 	
@@ -49,23 +49,27 @@ class SummaryState extends FlxState
 		
 		FlxG.plugins.add(new MouseEventManager());
 		
+		//// Para probar sin tener que jugarlo
+		//_recordPlayer = new RecordPlayer();
+		//_recordPlayer.update("E1");
+		//_recordPlayer.update("E9");
+		//_recordPlayer.update("E7");
+		//_recordPlayer.update("E18");
+		//_recordPlayer.update("E12");
+		//_recordPlayer.update("E21");
+		//_recordPlayer.update("E15");
+		//_recordPlayer.update("E15");
+		//_recordPlayer.update("E15");
+		//_recordPlayer.update("E15");
+		//_recordPlayer.update("E15");
+		//_recordPlayer.update("X1");
+		
 		_recordPlayer = PlayState._recordPlayer;
-		// Cargar algunos eventos para probarlo
-		/*_recordPlayer = new RecordPlayer();
-		_recordPlayer.update(MenuState.eventCollection.get("E2"));
-		_recordPlayer.update(MenuState.eventCollection.get("E8"));
-		_recordPlayer.update(MenuState.eventCollection.get("E7"));
-		_recordPlayer.update(MenuState.eventCollection.get("E12"));
-		_recordPlayer.update(MenuState.eventCollection.get("E18"));
-		_recordPlayer.update(MenuState.eventCollection.get("E27"));
-		_recordPlayer.update(MenuState.eventCollection.get("E28"));
-		_recordPlayer.update(MenuState.eventCollection.get("X1"));
-		**/
+		_recordGame.push(_recordPlayer);
+		
 		// setear valores generales
 		_AGE = _recordPlayer.getAgeInYears();
 		_EXP = _recordPlayer._experiencePlayer;
-		_historyEventsIDs = _recordPlayer.getEventsIds();
-		_FULLHEIGHT = _initialPosBlocks + (_HeightBlock + _separationInBlocks) * _historyEventsIDs.length + 50;
 		
 		var _fondoColina:FlxSprite = new FlxSprite(0, 0, "assets/images/colinaSumario.png");
 		add(_fondoColina);
@@ -89,72 +93,13 @@ class SummaryState extends FlxState
 		_txExp.setFormat(_FONT, 32, FlxColor.WHITE, "center");
 		add(_txExp);
 		
-		// Mostrar los bloques y textos de los eventos anteriores
-		var _index:Int = _historyEventsIDs.length - 1;
-		while (_index >= 0) {
-			
-			var _eventID:String = _historyEventsIDs[_index];
-						
-			// Poner los textos (si es el ultimo, hacemos una consideracion especial)
-			var _eventName:String = MenuState.eventCollection.get(_eventID).nombre;
-			var _eventDescription:String = MenuState.eventCollection.get(_eventID).descripcion;
-			
-			var idRiesgo:String = null;
-			
-			if (_index == _historyEventsIDs.length - 1) {
-				idRiesgo = MenuState.eventCollection[_eventID].id_riesgo;
-				
-				_eventName = MenuState.riskCollection[idRiesgo].content["nombre"];
-				_eventDescription = MenuState.riskCollection[idRiesgo].content["descripcion"];
-			}
-			
-			// Ponerlos bloques
-			var _posBlockX:Float = ((FlxG.width / 2) - (_WidthBlock / 2)) - 130;
-			// Un bloque abajo del otro:
-			// posicion inicial + altura de la carta + separacion entre cartas
-			var _posBlockY:Float = _initialPosBlocks + (_HeightBlock + _separationInBlocks) * _index;
-			eventBlock(_posBlockX, _posBlockY, _eventID, 0, idRiesgo);
-			
-			// Centrado en la pantalla en x
-			var _posTextsX:Float = _posBlockX + _WidthBlock + 10;
-			var _posTextsY:Float = _posBlockY + 40;
-			var _txEventName:FlxText = new FlxText(_posTextsX, _posTextsY, FlxG.width - _posTextsX, _eventName);
-			_txEventName.setFormat(_FONT, 32, FlxColor.WHITE, "left");
-			add(_txEventName);
-			var _txEventDescription:FlxText = new FlxText(_posTextsX, _posTextsY + 70, FlxG.width - _posTextsX, _eventDescription);
-			_txEventDescription.setFormat(_FONT, 26, FlxColor.WHITE, "left");
-			add(_txEventDescription);
-			
-			_index -= 1;
-		}
+		// Dibujar los bloques y textos de los eventos anteriores
+		// Ademas obtener el tamaño que ocupan en pantalla
+		var _heightEvents:Int;
+		_heightEvents = drawEventsPlayer(_initialPosBlocks, _WidthBlock, _HeightBlock, _separationInBlocks, _recordPlayer.getEventsIds());
 		
 		// Armar una linea del tiempo vertical
-		var _timeLineWidth:Int = 10;
-		var _timeLineHeight:Int = _FULLHEIGHT - _initialPosBlocks - 50;
-		var _posTimeLineX:Float = 65;
-		var _posTimeLineY:Float = _initialPosBlocks;
-		var _timeLine:FlxSprite = new FlxSprite(_posTimeLineX, _posTimeLineY);
-		_timeLine.makeGraphic(_timeLineWidth, _timeLineHeight, FlxColor.BLACK);
-		add(_timeLine);
-		
-		var _timeLineHeightYear:Float = _timeLineHeight / (_AGE - 13);
-		var _timeLineYear:Int = 14;
-		
-		var _markerWidth:Int = _timeLineWidth;
-		var _markerHeight:Int = 4;
-		var _posMarkerX:Float = _posTimeLineX;
-		var _posMarkerY:Float = _initialPosBlocks + _timeLineHeightYear;
-		while (_posMarkerY < _FULLHEIGHT) {
-			var _timeLineMarker:FlxSprite = new FlxSprite(_posMarkerX, _posMarkerY);
-			_timeLineMarker.makeGraphic(_markerWidth, _markerHeight, FlxColor.BLACK);
-			add(_timeLineMarker);
-			var _txTLFontSize:Int = 16;
-			var _txTimeLineMarker:FlxText = new FlxText(0, _posMarkerY - (_txTLFontSize / 2), _posMarkerX, "" + _timeLineYear + " años");
-			_txTimeLineMarker.setFormat(_FONT, _txTLFontSize, FlxColor.WHITE, "center");
-			add(_txTimeLineMarker);
-			_timeLineYear += 1;
-			_posMarkerY += _timeLineHeightYear;
-		}
+		drawTimeLine(65, _initialPosBlocks + 22, 10, _heightEvents, FlxColor.BLACK, FlxColor.WHITE, _AGE);
 		
 		// Crear boton para salir del State
 		var _closeButtonWidth:Int = 50;
@@ -164,6 +109,7 @@ class SummaryState extends FlxState
 		add(_closeButton);
 		
 		// Setear los limites de la camara, para que le scroll no se salga de "pantalla"
+		_FULLHEIGHT = _heightEvents + _initialPosBlocks + 50;
 		FlxG.camera.setBounds(0, 0, FlxG.width, _FULLHEIGHT);
 		
 	}
@@ -202,6 +148,60 @@ class SummaryState extends FlxState
 	}
 	
 	/**
+	 * Funcion que se encarga de ubicar la lista completa de eventos
+	 * del jugador y devolver la altura en pantalla de la misma
+	 * 
+	 * @param 	posInitialY	Int. Altura inicial, en la pantalla, donde se dibujara
+	 * @param 	widthBlock	Int. Ancho de los bloques
+	 * @param 	heightBlock	Int. Altura de los bloques
+	 * @param 	separationBlocks	Int. Separacion entre los bloques
+	 * @param 	historyEventsIDs	Array<String>. Listado de IDs de los eventos
+	 */ 	
+	private function drawEventsPlayer(posInitialY:Int, widthBlock:Int, heightBlock:Int, separationBlocks:Int, historyEventsIDs:Array<String>):Int
+	{
+		// Mostrar los bloques y textos de los eventos anteriores
+		var _index:Int = historyEventsIDs.length - 1;
+		while (_index >= 0) {
+			
+			var _eventID:String = historyEventsIDs[_index];
+						
+			// Poner los textos (si es el ultimo, hacemos una consideracion especial)
+			var _eventName:String = MenuState.eventCollection.get(_eventID).nombre;
+			var _eventDescription:String = MenuState.eventCollection.get(_eventID).descripcion;
+			
+			var idRiesgo:String = null;
+			
+			if (_index == historyEventsIDs.length - 1) {
+				idRiesgo = MenuState.eventCollection.get(_eventID).id_riesgo;
+				
+				_eventName = MenuState.riskCollection[idRiesgo].content["nombre"];
+				_eventDescription = MenuState.riskCollection[idRiesgo].content["descripcion"];
+			}
+			
+			// Ponerlos bloques
+			var _posBlockX:Float = ((FlxG.width / 2) - (widthBlock / 2)) - 130;
+			// Un bloque abajo del otro:
+			// posicion inicial + altura de la carta + separacion entre cartas
+			var _posBlockY:Float = posInitialY + ((heightBlock + separationBlocks) * _index);
+			eventBlock(_posBlockX, _posBlockY, _eventID, 0, idRiesgo);
+			
+			// Centrado en la pantalla en x
+			var _posTextsX:Float = _posBlockX + widthBlock + 10;
+			var _posTextsY:Float = _posBlockY + 40;
+			var _txEventName:FlxText = new FlxText(_posTextsX, _posTextsY, FlxG.width - _posTextsX, _eventName);
+			_txEventName.setFormat(_FONT, 32, FlxColor.WHITE, "left");
+			add(_txEventName);
+			var _txEventDescription:FlxText = new FlxText(_posTextsX, _posTextsY + 70, FlxG.width - _posTextsX, _eventDescription);
+			_txEventDescription.setFormat(_FONT, 26, FlxColor.WHITE, "left");
+			add(_txEventDescription);
+			
+			_index -= 1;
+		}
+		
+		return (heightBlock + separationBlocks) * historyEventsIDs.length;
+	}
+	
+	/**
 	 * Esta funcion se llama cuando se tienen que ubicar los bloques de evento en
 	 * la pantalla
 	 * 
@@ -210,8 +210,8 @@ class SummaryState extends FlxState
 	 * @param 	eventID	El ID del evento a mostrar
 	 * @param 	typeEvent	El tipo de evento (normal, dorado)
 	 */ 
-	 private function eventBlock(posX:Float, posY:Float, eventID:String, typeEvent:Int = 0, idRiesgo:String = null):Void
-	 {
+	private function eventBlock(posX:Float, posY:Float, eventID:String, typeEvent:Int = 0, idRiesgo:String = null):Void
+	{
 		var iconoBloque = new FlxSprite(posX + 15, posY + 37, "assets/images/icons_150/" + eventID.toLowerCase() + ".png");
 		 
 		if (idRiesgo != null) {
@@ -222,8 +222,46 @@ class SummaryState extends FlxState
 		}
 		
 		add(iconoBloque);
-	 }
-	 
+	}
+	
+	/**
+	 * Esta funcion se encarga de dibujar la linea de tiempo
+	 * 
+	 * @param 	posX	Posicion inicial en x (en coordenadas de pantalla)
+	 * @param 	posY	Posicion inicial en y (en coordenadas de pantalla)
+	 * @param 	width	Ancho de la linea
+	 * @param 	height	Largo de la linea
+	 * @param 	colorLine	Color de la linea
+	 * @param 	colorMarker	Color de los marcadores de anio
+	 * @param 	maxYear	Anio maximo a incluir
+	 * @param 	minYear	Anio minimo a incluir. Por defecto es 13
+	 */
+	private function drawTimeLine(posX:Int, posY:Int, width:Int, height:Int, colorLine:Int, colorMarker:Int, maxYear:Int, minYear:Int = 13):Void
+	{
+		var _timeLine:FlxSprite = new FlxSprite(posX, posY);
+		_timeLine.makeGraphic(width, height, colorLine);
+		add(_timeLine);
+		
+		var _timeLineHeightYear:Float = height / (maxYear - minYear);
+		var _timeLineYear:Int = minYear;
+		
+		var _markerWidth:Int = width;
+		var _markerHeight:Int = 4;
+		var _posMarkerX:Float = posX;
+		var _posMarkerY:Float = posY;
+		while (_timeLineYear <= maxYear) {
+			_posMarkerY = posY + (_timeLineHeightYear * (_timeLineYear - minYear));
+			var _timeLineMarker:FlxSprite = new FlxSprite(_posMarkerX, _posMarkerY);
+			_timeLineMarker.makeGraphic(_markerWidth, _markerHeight, colorMarker);
+			add(_timeLineMarker);
+			var _txTLFontSize:Int = 16;
+			var _txTimeLineMarker:FlxText = new FlxText(0, _posMarkerY - (_txTLFontSize / 2), _posMarkerX, "" + _timeLineYear + " años");
+			_txTimeLineMarker.setFormat(_FONT, _txTLFontSize, FlxColor.WHITE, "center");
+			add(_txTimeLineMarker);
+			_timeLineYear += 1;
+		}
+	}
+	
 	private function goMenuState():Void
 	{
 		FlxG.switchState(new MenuState());

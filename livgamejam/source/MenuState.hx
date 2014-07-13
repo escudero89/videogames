@@ -86,7 +86,7 @@ class MenuState extends FlxState
 		
 		MouseEventManager.add(_botonResultados, 
 			function(sprite:FlxSprite) { // mouse down
-				//FlxG.camera.fade(FlxColor.WHITE, 2, false, function() { FlxG.switchState(new OverallState()); } );
+				FlxG.camera.fade(FlxColor.WHITE, 2, false, function() { FlxG.switchState(new OverallState()); } );
 			}, null, 
 			function(sprite:FlxSprite) { // mouse over
 				sprite.loadGraphic("assets/images/menu/" + _botonResultadosString + "Hover.png");
