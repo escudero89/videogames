@@ -275,6 +275,8 @@ class Handler extends FlxTypedGroup<Card>
 				add(_cardCurrentCollection.add(new Card(chosenEvent, _posCardArray[i + j + 1 + 3 * i], 3 * (i + 1) + j + 1, true))); // 1,2,3,5,6,7,...
 			}
 		}
+		
+		
 	}
 	
 	// Calcula las tres proximas cartas a tocar desde el mismo estado de vida
