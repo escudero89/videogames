@@ -121,6 +121,11 @@ class Handler extends FlxTypedGroup<Card>
 			
 			for (keyAtribute in atributesChoseCard.keys()) {
 				_atributes[keyAtribute] += atributesChoseCard[keyAtribute];
+				
+				// Y le resto uno a todos si no es negativo (el paso del tiempo)
+				if (_atributes[keyAtribute] > 0 && atributesChoseCard[keyAtribute] == 0) {
+					_atributes[keyAtribute] -= 1;
+				}
 			}	
 
 			// Actualizamos los valores de experiencia y meses de vida respectivamente

@@ -114,7 +114,7 @@ class Event
 			weightDifference = rpi_atributes[key];
 			
 			if (atributesPlayer != null && rpi_atributes[key] > 0) {
-				weightDifference -= atributesPlayer[key];
+				weightDifference -= atributesPlayer[key] + 1; // le sumo uno (req 30 sino con atributo 30 no alcanza)
 			}
 			
 			weightReturn += weightDifference;
