@@ -14,6 +14,7 @@ import flixel.addons.display.FlxBackdrop;
 
 import Card;
 import Handler;
+import RecordPlayer;
 
 /**
  * A FlxState which can be used for the actual gameplay.
@@ -23,6 +24,9 @@ class PlayState extends FlxState
 	
 	private var _handler:Handler;
 	private var _timmy:Timmy;
+	
+	public static var _recordPlayer:RecordPlayer;
+	
 	//private var _dataBase:DataBase;
 	private var atributos:String = "";
 	private var atributosDebugger:FlxText;
@@ -53,8 +57,8 @@ class PlayState extends FlxState
 		super.update();
 		
 		if (_handler._end_of_game) {
+			FlxG.switchState(new SummaryState());
 			_handler.destroy();
-			FlxG.resetGame();
 		}
 		
 		atributos = "";
@@ -66,8 +70,9 @@ class PlayState extends FlxState
 	}
 	
 	public function setBackground() {
-				
+
 		_timmy = new Timmy();
+		_recordPlayer = new RecordPlayer();
 		_handler = new Handler(MenuState.eventCollection, _timmy);
 
 		add(_timmy.getInterfaceBack());

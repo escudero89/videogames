@@ -44,8 +44,9 @@ class SummaryState extends FlxState
 	{
 		super.create();
 		
+		_recordPlayer = PlayState._recordPlayer;
 		// Cargar algunos eventos para probarlo
-		_recordPlayer = new RecordPlayer();
+		/*_recordPlayer = new RecordPlayer();
 		_recordPlayer.update(MenuState.eventCollection.get("E2"));
 		_recordPlayer.update(MenuState.eventCollection.get("E8"));
 		_recordPlayer.update(MenuState.eventCollection.get("E7"));
@@ -54,7 +55,7 @@ class SummaryState extends FlxState
 		_recordPlayer.update(MenuState.eventCollection.get("E27"));
 		_recordPlayer.update(MenuState.eventCollection.get("E28"));
 		_recordPlayer.update(MenuState.eventCollection.get("X1"));
-		
+		**/
 		// setear valores generales
 		_AGE = _recordPlayer.getAgeInYears();
 		_EXP = _recordPlayer._experiencePlayer;
@@ -63,6 +64,8 @@ class SummaryState extends FlxState
 		
 		var _fondoColina:FlxSprite = new FlxSprite(0, 0, "assets/images/colinaSumario.png");
 		add(_fondoColina);
+		
+		FlxG.camera.bgColor = FlxColor.BLUE;
 		
 		var _txTitle:FlxText = new FlxText(0, 0, FlxG.width, _TITLE);
 		_txTitle.setFormat(_FONT, 128, FlxColor.WHITE, "center");

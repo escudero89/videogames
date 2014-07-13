@@ -262,8 +262,8 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 	
 	override public function destroy():Void
 	{
-		this.forEachExists(function(group:FlxTypedGroup<FlxSprite>) {
-			group.forEachExists(function(sprite:FlxSprite) { sprite.destroy(); } );
+		this.forEach(function(group:FlxTypedGroup<FlxSprite>) {
+			group.forEach(function(sprite:FlxSprite) { sprite.destroy(); } );
 			} );
 			
 		super.destroy();

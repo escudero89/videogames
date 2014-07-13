@@ -66,6 +66,8 @@ class Card extends FlxTypedGroup<FlxSprite>
 	
 	private static var _STR_FONT:String = "assets/fonts/LondrinaSolid-Regular.ttf";
 	
+	private var _txt_title_text:String = "";
+	
 	private var _txt_title:FlxText;
 	private var _txt_stats:FlxText;
 	
@@ -108,7 +110,7 @@ class Card extends FlxTypedGroup<FlxSprite>
 			_IS_DEAD_CARD = true;
 			
 			// Reemplazo el nombre por el riesgo concretado del suceso
-			_cardEventInfo.nombre = MenuState.riskCollection[_cardEventInfo.id_riesgo].content["nombre"];
+			_txt_title_text = MenuState.riskCollection[_cardEventInfo.id_riesgo].content["nombre"];
 		}
 		
 		_template = new FlxSprite(posCard.x, posCard.y);
@@ -209,7 +211,7 @@ class Card extends FlxTypedGroup<FlxSprite>
 	private function onMouseOver(sprite:FlxSprite)
 	{
 		if (!_IS_MINI) {
-			_txt_title.text = _cardEventInfo.nombre;
+			_txt_title.text = (_txt_title_text != "") ? _txt_title_text : _cardEventInfo.nombre;
 			_txt_stats.text = ' ';
 			
 			if (!_IS_DEAD_CARD) { // ya es negra, no necesita ser mas negra
@@ -294,7 +296,7 @@ class Card extends FlxTypedGroup<FlxSprite>
 	
 	override public function destroy()
 	{
-		this.forEachExists(memberGroupDestroy);
+		this.clear();
 		
 		// Make sure that this object is removed from the MouseEventManager for GC
 		MouseEventManager.remove(_template);
@@ -302,8 +304,4 @@ class Card extends FlxTypedGroup<FlxSprite>
 		super.destroy();
 	}
 	
-	private function memberGroupDestroy(member:FlxSprite):Void
-	{
-		member.destroy();
-	}
 }

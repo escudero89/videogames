@@ -27,15 +27,17 @@ class RecordPlayer
 		_atributes.set("viaje", 0);
 	}
 	
-	public function update(_event:Event):Void
+	public function update(_eventId:String):Void
 	{
-		_eventsIDs.push(_event.id_evento);
-		_monthsOldPlayer += _event.duracion;
-		_experiencePlayer += _event.experiencia;
+		_eventsIDs.push(_eventId);
+		_monthsOldPlayer += MenuState.eventCollection[_eventId].duracion;
+		_experiencePlayer += MenuState.eventCollection[_eventId].experiencia;
+		
 		var atribute:Int;
+		
 		for (key in _atributes.keys()) {
 			atribute = _atributes.get(key);
-			atribute += _event.c_atributes.get(key);
+			atribute += MenuState.eventCollection[_eventId].c_atributes.get(key);
 			_atributes.set(key, atribute);
 		}
 	}

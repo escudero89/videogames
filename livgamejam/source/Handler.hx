@@ -13,6 +13,7 @@ import haxe.Timer;
 import Card;
 import Event;
 import Timmy;
+import RecordPlayer;
 
 /**
  * Esta clase se encarga de manejar las tarjetas a mostrar. Desde las 3 principales a las 9 secundarias
@@ -32,13 +33,13 @@ class Handler extends FlxTypedGroup<Card>
 	// Coleccion de eventos
 	private var _eventCollection:Map<String, Event>;
 	private var _eventCollectionIdsAvailable:Array<String>; // guarda todos los eventos con peso > 0
-	private var _eventCollectionTotalWeight:Int = 0;
+	private var _eventCollectionTotalWeight:Int = 0;	
 	
 	// Los atributos del protagonista iran aqui (transformar luego a privado) @@@TODO
 	public var _atributes:Map<String, Int>;
 	
 	private var _experiencePlayer:Int = 0;
-	private var _monthsOldPlayer:Int = 13 * 12;
+	private var _monthsOldPlayer:Int = 50 * 12;
 	
 	private var _experienceTitle:FlxText;
 	private var _monthsOldTitle:FlxText;
@@ -111,6 +112,9 @@ class Handler extends FlxTypedGroup<Card>
 		
 		if (card.getChosedCard() && !_magic_activated) {
 			
+			// Agregamos el evento al record
+			PlayState._recordPlayer.update(card.getIdEvent());
+			
 			// Revisamos que no sea una carta de muerte
 			if (card.getDeadStatus()) {
 				_end_of_game = true;
@@ -124,7 +128,10 @@ class Handler extends FlxTypedGroup<Card>
 				
 				// Y le resto uno a todos si no es negativo (el paso del tiempo)
 				if (_atributes[keyAtribute] > 0 && atributesChoseCard[keyAtribute] == 0) {
-					_atributes[keyAtribute] -= 1;
+					// Le resto si se da una cierta probabilidad
+					if (Math.random() < 0.3) {
+						_atributes[keyAtribute] -= 1;
+					}
 				}
 			}	
 
@@ -207,6 +214,8 @@ class Handler extends FlxTypedGroup<Card>
 		setEventProbabilities();
 	}
 
+	/// GETS
+	
 	// Retorna una nueva mano de cartas (a partir de la eleccion sabe que 3 cartas primarias mostrar)
 	// 1, 2, o 3 (cada una en una posicion
 	private function getNewHand(chose:Int = 0, previousIdEvent:String = "", isGoingToDie:Bool = false):Void
@@ -294,28 +303,6 @@ class Handler extends FlxTypedGroup<Card>
 		return keyRetornada;
 	}
 	
-	// Setea las probabilidades de todas las cartas
-	private function setEventProbabilities():Void
-	{
-		var keyEvent:String;
-		
-		var rangoActual_i:Int = 0;
-		var rangoActual_f:Int = 0;
-		
-		// Calculamos todas las probabilidades y las guardamos
-		for (i in 0..._eventCollectionIdsAvailable.length) {
-			keyEvent = _eventCollectionIdsAvailable[i];
-			
-			rangoActual_f += _eventCollection[keyEvent].peso;
-			
-			_eventCollection[keyEvent].rango_i = rangoActual_i;
-			_eventCollection[keyEvent].rango_f = rangoActual_f;
-			
-			// Luego actualizamos el inicial
-			rangoActual_i += _eventCollection[keyEvent].peso;
-		}
-	}
-	
 	
 	// Obtiene la infraestructura (las posiciones de cada carta)
 	// El formato es [ posCard1 , posMiniCard1, posMiniCard2, posMiniCard3, posCard2, ...] => array.length = 12
@@ -361,7 +348,31 @@ class Handler extends FlxTypedGroup<Card>
 		
 		return miniCardPos;
 	}
+	
+	/// SETS
 
+	// Setea las probabilidades de todas las cartas
+	private function setEventProbabilities():Void
+	{
+		var keyEvent:String;
+		
+		var rangoActual_i:Int = 0;
+		var rangoActual_f:Int = 0;
+		
+		// Calculamos todas las probabilidades y las guardamos
+		for (i in 0..._eventCollectionIdsAvailable.length) {
+			keyEvent = _eventCollectionIdsAvailable[i];
+			
+			rangoActual_f += _eventCollection[keyEvent].peso;
+			
+			_eventCollection[keyEvent].rango_i = rangoActual_i;
+			_eventCollection[keyEvent].rango_f = rangoActual_f;
+			
+			// Luego actualizamos el inicial
+			rangoActual_i += _eventCollection[keyEvent].peso;
+		}
+	}
+	
 	public function setVisibility(exists:Bool = false):Void
 	{
 		this.forEach(function(basic:Card) {
@@ -382,7 +393,8 @@ class Handler extends FlxTypedGroup<Card>
 	
 	override public function destroy():Void
 	{
-		this.forEachExists(function(card:Card) { card.destroy(); } );
+		this.clear();
+		
 		super.destroy();
 	}
 }
