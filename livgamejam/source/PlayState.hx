@@ -68,8 +68,9 @@ class PlayState extends FlxState
 		super.update();
 		
 		if (_handler._end_of_game) {
+			_musicaFondo.fadeOut(1.5);
 			FlxG.camera.fade(FlxColor.BLACK, 2, false, function() {
-				_musicaFondo.fadeOut(1.5);
+				_musicaFondo.stop();
 				FlxG.switchState(new SummaryState());
 				_handler.destroy();
 			});
@@ -84,8 +85,9 @@ class PlayState extends FlxState
 		
 		// Si tocamos escape
 		if (FlxG.keys.justPressed.ESCAPE) {
+			_musicaFondo.fadeOut(1.5);
 			FlxG.camera.fade(FlxColor.WHITE, 2, false, function() {
-				_musicaFondo.fadeOut(1.5);
+				_musicaFondo.stop();
 				FlxG.switchState(new MenuState());
 				_handler.destroy();
 			});

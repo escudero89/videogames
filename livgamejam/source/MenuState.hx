@@ -103,6 +103,7 @@ class MenuState extends FlxState
 		
 		MouseEventManager.add(_botonResultados, 
 			function(sprite:FlxSprite) { // mouse down
+				_musicaFondo.fadeOut(1.5);
 				FlxG.camera.fade(FlxColor.WHITE, 2, false, function() { FlxG.switchState(new OverallState()); } );
 				playSound('menuclick');
 			}, null, 
@@ -116,6 +117,7 @@ class MenuState extends FlxState
 		
 		MouseEventManager.add(_botonCreditos, 
 			function(sprite:FlxSprite) { // mouse down
+				_musicaFondo.fadeOut(1.5);
 				//FlxG.camera.fade(FlxColor.WHITE, 2, false, function() { FlxG.switchState(new CreditsState()); } );
 				playSound('menuclick');
 			}, null, 

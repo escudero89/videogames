@@ -3,6 +3,7 @@ import flixel.FlxG;
 import flixel.FlxCamera;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.system.FlxSound;
 import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
 import flixel.text.FlxText;
@@ -26,6 +27,8 @@ class OverallState extends FlxState
 	private var _initialPosBlocks:Int = 200;
 	private var _separationInBlocks:Int = -22;
 	
+	private var _musicaFondo:FlxSound;
+	
 	// Para guardar la posicion anterior en y del mouse, antes de hacer el scroll
 	private var _lastPosY:Float;
 	
@@ -35,22 +38,6 @@ class OverallState extends FlxState
 	{
 		
 		super.create();
-		
-		//// Cargar algunos eventos para probarlo
-		//var _recordPlayer = new RecordPlayer();
-		//_recordPlayer.update("E2");
-		//_recordPlayer.update("E8");
-		//_recordPlayer.update("E13");
-		//_recordPlayer.update("E19");
-		//_recordPlayer.update("E4");
-		//_recordPlayer.update("E2");
-		//_recordPlayer.update("E2");
-		//_recordPlayer.update("X1");
-		//
-		//_recordGame = new Array<RecordPlayer>();
-		//_recordGame.push(_recordPlayer);
-		//_recordGame.push(_recordPlayer);
-		//_recordGame.push(_recordPlayer);
 		
 		_recordGame = SummaryState._recordGame;
 		
@@ -110,6 +97,9 @@ class OverallState extends FlxState
 		FlxG.camera.bgColor = 0xff171200;
 		FlxG.camera.setBounds(0, 0, FlxG.width, _FULLHEIGHT);
 		
+		_musicaFondo = new FlxSound();
+		_musicaFondo.loadEmbedded(PathTo._MUSIC_BACKGROUND_SAD, true, false);
+		_musicaFondo.play();
 	}
 	
 	/**
@@ -262,6 +252,10 @@ class OverallState extends FlxState
 	
 	private function goMenuState():Void
 	{
-		FlxG.switchState(new MenuState());
+		_musicaFondo.fadeOut(1.5);
+		FlxG.camera.fade(FlxColor.WHITE, 2, false, function() {
+			_musicaFondo.stop();
+			FlxG.switchState(new MenuState());
+		});
 	}	
 }
