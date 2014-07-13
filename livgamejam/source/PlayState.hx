@@ -53,7 +53,7 @@ class PlayState extends FlxState
 		
 		if (_handler._end_of_game) {
 			_handler.destroy();
-			FlxG.resetState();
+			FlxG.resetGame();
 		}
 	}
 	

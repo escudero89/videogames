@@ -18,11 +18,13 @@ import Timmy;
  * Esta clase se encarga de manejar las tarjetas a mostrar. Desde las 3 principales a las 9 secundarias
  * @author 
  */
-class Handler extends FlxTypedGroup<FlxBasic>
+class Handler extends FlxTypedGroup<Card>
 {
 	
 	// Timmy
 	private var _timmy:Timmy;
+	
+	private var _magic_activated:Bool = false;
 	
 	// Bandera de fin de partida
 	public var _end_of_game:Bool = false;
@@ -86,12 +88,7 @@ class Handler extends FlxTypedGroup<FlxBasic>
 		_cardCurrentCollection = new FlxTypedGroup<Card>();
 		
 		getNewHand();
-		
-		// @@@ BORRABLE
-		_experienceTitle = new FlxText(50, 600, 500, "Experiencia: " + _experiencePlayer, 40);
-		_monthsOldTitle = new FlxText(50, 700, 500, "Edad: " + Math.round(_monthsOldPlayer / 12), 40);
-		add(_experienceTitle);
-		add(_monthsOldTitle);
+		setAvailability();
 		
 	}
 	
@@ -108,7 +105,11 @@ class Handler extends FlxTypedGroup<FlxBasic>
 	
 	public function getCurrentCardsState(card:Card):Void
 	{
-		if (card.getChosedCard()) {
+		
+		var magic:FlxSprite = new FlxSprite();
+		var magic_id_event:String = "";
+		
+		if (card.getChosedCard() && !_magic_activated) {
 			
 			// Revisamos que no sea una carta de muerte
 			if (card.getDeadStatus()) {
@@ -131,11 +132,12 @@ class Handler extends FlxTypedGroup<FlxBasic>
 			
 			_timmy.newChoice(card.getPositionGallery(), card.getIdEvent());
 			_timmy.setAge(_monthsOldPlayer);
-			
-			// Generamos un efecto copado
-			card.cardTransform();
-			
-			// Y destruimos la carta 
+
+			// Generamos un efecto copado que destruye la carta al terminar
+			magic_id_event = card.getIdEvent();
+			magic = card.cardTransform();
+			_magic_activated = true;
+	
 			card.destroy();
 			
 			// y pedimos una nueva mano (pero antes revisamos que este vivo)
@@ -143,16 +145,18 @@ class Handler extends FlxTypedGroup<FlxBasic>
 			
 			getNewHand(card.getPositionGallery(), card.getIdEvent(), isGoingToDie);
 			
-			// @@@ BORRABLE
-			_experienceTitle = new FlxText(50, 600, 500, "Experiencia: " + _experiencePlayer, 40);
-			_monthsOldTitle = new FlxText(50, 700, 500, "Edad: " + Math.round(_monthsOldPlayer / 12), 40);
-			add(_experienceTitle);
-			add(_monthsOldTitle);
+			// Hace o no visible la mano
+			setVisibility();
+
 		}
-	}
-	
-	private function afterCardTransformation():Void
-	{
+		
+		if (_magic_activated == true) {
+			_magic_activated = false;
+			
+			_timmy.moveMagic(magic_id_event, magic);
+			
+			Timer.delay(function() { setVisibility(true); }, 5200 );
+		}
 		
 	}
 	
@@ -349,5 +353,22 @@ class Handler extends FlxTypedGroup<FlxBasic>
 		
 		return miniCardPos;
 	}
+
+	public function setVisibility(exists:Bool = false):Void
+	{
+		this.forEach(function(basic:Card) {
+			basic.set_exists(exists);
+		});
+		
+		if (exists) {
+			setAvailability();
+		}
+	}
 	
+	public function setAvailability(available:Bool = true):Void
+	{
+		this.forEach(function(basic:Card) {
+			basic.setAvailability(available);
+		});
+	}
 }

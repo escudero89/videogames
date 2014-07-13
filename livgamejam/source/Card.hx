@@ -9,6 +9,8 @@ import flixel.group.FlxTypedGroup;
 import flixel.util.FlxColor;
 import flixel.text.FlxText;
 
+import haxe.Timer;
+
 import flixel.plugin.MouseEventManager;
 
 import Event;
@@ -20,7 +22,8 @@ import Event;
 class Card extends FlxTypedGroup<FlxSprite>
 {
 	// Tarjeta
-
+	private var _isAvailable:Bool = false;
+	
 	private var _template:FlxSprite;
 	private var _cardWidth:Int;
 	private var _cardHeight:Int;
@@ -196,7 +199,7 @@ class Card extends FlxTypedGroup<FlxSprite>
 	
 	private function onMouseDown(sprite:FlxSprite)
 	{
-		if (!_IS_MINI) {
+		if (!_IS_MINI && _isAvailable) {
 			_choseCard = true;
 		}
 	}
@@ -229,13 +232,24 @@ class Card extends FlxTypedGroup<FlxSprite>
 
 	// Efecto de luces
 	
-	public function cardTransform():Void
+	public function cardTransform():FlxSprite
 	{
 		var transformedCard = new FlxSprite(_template.x, _template.y);
 		transformedCard.loadGraphic("assets/images/cardTransform.png", true, 180, 270);
-		transformedCard.animation.add("magic", [0, 1, 2, 3, 4, 5, 6, 7]);
-		transformedCard.animation.play("magic", false, 8);
-		this.add(transformedCard);
+		transformedCard.animation.add("magic", [0, 1, 2, 3, 4, 5, 6, 7], 30, false);
+		transformedCard.animation.add("sphere", [7, 8, 9], 9, true);
+		
+		transformedCard.animation.play("magic");
+		
+		// Borramos lo que quede
+		this.clear();
+
+		return transformedCard;
+	}
+	
+	public function setAvailability(available:Bool = true):Void
+	{
+		_isAvailable = available;
 	}
 	
 	/// FUNCIONES GET
@@ -256,7 +270,9 @@ class Card extends FlxTypedGroup<FlxSprite>
 	
 	public function getChosedCard():Bool
 	{
-		return _choseCard;
+		var chose = _choseCard;
+		_choseCard = false;
+		return chose;
 	}
 	
 	public function getPositionGallery():Int

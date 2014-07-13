@@ -28,6 +28,9 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 	private var _head:FlxSprite;
 	private var _body:FlxSprite;
 	
+	private var _currentOffset:Int = 0;
+	private var _currentBlock:FlxSprite;
+	
 	private var _fondoColina:FlxSprite;
 	private var _ladder:FlxSprite;
 	private var _platform:FlxSprite;
@@ -136,13 +139,12 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 	// Como argumento se le pasa el valor 1, 2, o 3, dependiendo la posicion de la carta (izq, centro y der respectivamente)
 	// Y el ID_EVENTO de la carta elegida, para poder acceder a MenuState.eventCollection[cardIdEvento] y tomar el evento adecuado
 	public function newChoice(choseCard:Int, cardIdEvento:String) {
-		
-		UpdateMoves(choseCard,_body.y);
+		updateMoves(choseCard,_body.y);
 		updateBackground(cardIdEvento);
 	}
 	
 	//Actualiza movimientos de timmy
-	public function UpdateMoves(_flag_arm:Int,_val_ref:Float)
+	public function updateMoves(_flag_arm:Int,_val_ref:Float)
 	{
 		_flag_choice = false;
 		_valor_ref_old = _val_ref;
@@ -159,7 +161,8 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 	}
 	
 	// Actualiza el fondo
-	private function updateBackground(cardIdEvento:String) {
+	private function updateBackground(cardIdEvento:String):Void
+	{
 		
 		FlxG.camera.flash(FlxColor.WHITE, 0.1);
 		
@@ -168,12 +171,33 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 		FlxTween.tween(_head, { y: (_head.y - 180) }, 5);
 		FlxTween.tween(_body, { y: (_body.y - 180) }, 5);		
 		
-		// Y creamos los bloques
-		var posY = _platform.y + 100;
-		
-		_interfaceBack.add(new FlxSprite(230, posY, "assets/images/block.png"));
-		_interfaceBack.add(new FlxSprite(245, posY + 37, "assets/images/icons_150/" + cardIdEvento.toLowerCase() + ".png"));
+		// Y creamos los bloques, aunque aun no le agregamos el evento
+		_currentBlock = new FlxSprite(230, _platform.y + 100, "assets/images/block.png");
+		_interfaceBack.add(_currentBlock);
 
+	}
+	
+	// Hace la magia del movimiento
+	public function moveMagic(cardIdEvento:String, magic:FlxSprite):Void
+	{
+		// Esto no anda :c (el magic se define en Card)
+		if (magic.animation.finished) {
+			magic.animation.play("sphere");	
+		}
+		
+		magic.y -= _currentOffset;
+		
+		_interfaceFront.add(magic);
+		
+		FlxTween.tween(magic, { x : 320 - magic.width / 2 , y: _platform.y + _platform.height / 2 }, 3);
+		
+		Timer.delay(function() {
+			magic.destroy();
+			_interfaceBack.add(new FlxSprite(245, _currentBlock.y + 37, "assets/images/icons_150/" + cardIdEvento.toLowerCase() + ".png"));
+			
+			// Esto es para informarle al resto cuanto estamos desplazados
+			_currentOffset += 180;
+		}, 3000);
 	}
 
 	/// FUNCIONES GETS
