@@ -170,6 +170,9 @@ class Handler extends FlxTypedGroup<Card>
 		// Le sumamoso el riesgo por la actividad
 		riskNaturalDeathPercent += currentEvent.riesgo_porciento / 100;
 		
+		// Y le aplicamos un modificador por depresion y resistencia
+		riskNaturalDeathPercent += _atributes["depresion"] / 500 - _atributes["resistencia"] / 500;
+		
 		// Porcentaje de riesgo por muerte natural (cambia cuadraticamente con la edad)
 		if (Math.random() < (riskNaturalDeathPercent)) {
 			isGoingToDie = true;

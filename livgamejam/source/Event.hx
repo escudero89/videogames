@@ -25,7 +25,7 @@ class Event
 	
 	// Todos los pesos, por defecto, valen 1, al iniciar
 	public var peso:Int = 1;
-	private var _MAX_WEIGHT:Int = 5; // maximo peso posible
+	private var _MAX_WEIGHT:Int = 2; // maximo peso posible
 	
 	// si el numero que sale esta en este rango, esta es el evento elegido
 	public var rango_i:Int = 0; 
@@ -113,7 +113,7 @@ class Event
 		for (key in rpi_atributes.keys()) {
 			weightDifference = rpi_atributes[key];
 			
-			if (atributesPlayer != null) {
+			if (atributesPlayer != null && rpi_atributes[key] > 0) {
 				weightDifference -= atributesPlayer[key];
 			}
 			
