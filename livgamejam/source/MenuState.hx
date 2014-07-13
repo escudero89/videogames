@@ -31,7 +31,8 @@ class MenuState extends FlxState
 		populateEvents();
 		
 		//FlxG.switchState(new PlayState());
-		FlxG.switchState(new OverallState());
+		FlxG.switchState(new SummaryState());
+		//FlxG.switchState(new OverallState());
 	}
 	
 	/**

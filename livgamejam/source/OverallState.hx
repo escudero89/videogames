@@ -64,7 +64,15 @@ class OverallState extends FlxState
 			_txSubTitle.setFormat(_FONT, 64, FlxColor.WHITE, "center");
 			add(_txSubTitle);
 			
-			for 
+			var index2:Int = 0;
+			for (_eventID in _eventsIDs) {
+				// Ponerlos bloques
+				var _posBlockX:Float = ((FlxG.width / 2) - (_WidthBlock / 2)) - 130;
+				// Un bloque abajo del otro:
+				// posicion inicial + altura de la carta + separacion entre cartas
+				var _posBlockY:Float = (_initialPosBlocks + (_HeightBlock + _separationInBlocks) * _index2) * index1;
+				eventBlock(_posBlockX, _posBlockY, _eventID);
+			}
 			
 			_FULLHEIGHT += _initialPosTexts + (((_HeightBlock + _separationInBlocks) * recordPlayer.getEventsIds().length + 50) * (index + 1));
 			
