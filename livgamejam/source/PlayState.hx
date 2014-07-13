@@ -12,6 +12,8 @@ import flixel.util.FlxMath;
 import flixel.FlxCamera;
 import flixel.addons.display.FlxBackdrop;
 
+import flixel.plugin.MouseEventManager;
+
 import Card;
 import Handler;
 import RecordPlayer;
@@ -71,6 +73,10 @@ class PlayState extends FlxState
 	
 	public function setBackground() {
 
+		// We need the MouseEventManager plugin for sprite-mouse-interaction
+		// Important to set this up before createCards()
+		FlxG.plugins.add(new MouseEventManager());
+		
 		_timmy = new Timmy();
 		_recordPlayer = new RecordPlayer();
 		_handler = new Handler(MenuState.eventCollection, _timmy);

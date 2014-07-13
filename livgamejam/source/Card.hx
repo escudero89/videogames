@@ -296,10 +296,10 @@ class Card extends FlxTypedGroup<FlxSprite>
 	
 	override public function destroy()
 	{
-		this.clear();
-		
 		// Make sure that this object is removed from the MouseEventManager for GC
 		MouseEventManager.remove(_template);
+		
+		this.clear();
 		
 		super.destroy();
 	}

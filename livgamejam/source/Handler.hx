@@ -39,8 +39,8 @@ class Handler extends FlxTypedGroup<Card>
 	public var _atributes:Map<String, Int>;
 	
 	private var _experiencePlayer:Int = 0;
-	private var _monthsOldPlayer:Int = 50 * 12;
-	
+	private var _monthsOldPlayer:Int = 13 * 12;
+
 	private var _experienceTitle:FlxText;
 	private var _monthsOldTitle:FlxText;
 	
@@ -167,6 +167,7 @@ class Handler extends FlxTypedGroup<Card>
 			
 			_timmy.moveMagic(magic_id_event, magic);
 			
+			// Esto es solo para flash, cambiar por elapsed
 			Timer.delay(function() { setVisibility(true); }, 5200 );
 		}
 		

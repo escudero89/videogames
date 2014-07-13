@@ -50,9 +50,14 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 	// <=
 	
 	private var _fondoColina:FlxSprite;
+	private var _column:FlxSprite;
 	private var _ladder:FlxSprite;
 	private var _platform:FlxSprite;
 	private var _blockCollection:FlxTypedGroup<FlxSprite>;
+	
+	// Lo requiero para el magic
+	private var _cardIdEvent:String;
+	private var _magic:FlxSprite;
 	
 	public function new() 
 	{
@@ -85,8 +90,16 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 
 		// Escaleras
 		
+		//_ladder = new FlxSprite(0, 720, "assets/images/escaleras.png");
 		_ladder = new FlxSprite(0, 720, "assets/images/escaleras.png");
 		_interfaceBack.add(_ladder);
+		
+		// Columna
+		
+		_column = new FlxSprite(320, 600, "assets/images/columna.png");
+		_column.x -= _column.width / 2;
+		_column.scrollFactor.set(0, 0);
+		_interfaceBack.add(_column);	
 		
 		// Plataforma
 		
@@ -206,27 +219,30 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 	// Hace la magia del movimiento
 	public function moveMagic(cardIdEvento:String, magic:FlxSprite):Void
 	{
+		_cardIdEvent = cardIdEvento;
+		_magic = magic;
+		
 		// Esto no anda :c (el magic se define en Card)
-		if (magic.animation.finished) {
-			magic.animation.play("sphere");	
+		if (_magic.animation.finished) {
+			_magic.animation.play("sphere");	
 		}
 		
-		magic.y -= _currentOffset;
+		_magic.y -= _currentOffset;
 		
 		_interfaceFront.add(magic);
 		
-		FlxTween.tween(magic, { x : 320 - magic.width / 2 , y: _platform.y + _platform.height / 2 }, 3);
-		
+		FlxTween.tween(magic, { x : 320 - _magic.width / 2 , y: _platform.y + _platform.height / 2 }, 3, 
+			{complete:function (tween:FlxTween) {
+				_magic.destroy();
+				_interfaceBack.add(new FlxSprite(245, _currentBlock.y + 37, "assets/images/icons_150/" + _cardIdEvent.toLowerCase() + ".png"));
+				
+				// Esto es para informarle al resto cuanto estamos desplazados
+				_currentOffset += 180;
+			}});
+			
 		// Cambia el color del cielo (lo vamos oscureciendo) al ponerle el fondo mas opaco arriba
 		_nightBackground.alpha = Math.min((_age - 13) / _maxAge, 1); 
 		
-		Timer.delay(function() {
-			magic.destroy();
-			_interfaceBack.add(new FlxSprite(245, _currentBlock.y + 37, "assets/images/icons_150/" + cardIdEvento.toLowerCase() + ".png"));
-			
-			// Esto es para informarle al resto cuanto estamos desplazados
-			_currentOffset += 180;
-		}, 3000);
 	}
 
 	/// FUNCIONES GETS
@@ -262,9 +278,7 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 	
 	override public function destroy():Void
 	{
-		this.forEach(function(group:FlxTypedGroup<FlxSprite>) {
-			group.forEach(function(sprite:FlxSprite) { sprite.destroy(); } );
-			} );
+		this.forEach(function(group:FlxTypedGroup<FlxSprite>) { group.clear(); } );
 			
 		super.destroy();
 	}

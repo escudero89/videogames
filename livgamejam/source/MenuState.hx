@@ -8,6 +8,10 @@ import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxMath;
 
+import flixel.util.FlxColor;
+import flixel.tweens.FlxTween;
+import flixel.plugin.MouseEventManager;
+
 import Event;
 import Translation;
 //import Interface;
@@ -21,6 +25,19 @@ class MenuState extends FlxState
 	public static var eventCollection:Map<String, Event>;
 	public static var riskCollection:Map<String, Translation>;
 	
+	private var _menuFondo:FlxSprite;
+	private var _logo:FlxSprite;
+	private var _logoTween:FlxTween;
+	
+	private var _botones:FlxTypedGroup<FlxSprite>;
+	private var _botonJugar:FlxSprite;
+	private var _botonResultados:FlxSprite;
+	private var _botonCreditos:FlxSprite;
+	
+	private var _botonJugarString:String = "botonJugar";
+	private var _botonResultadosString:String = "botonResultados";
+	private var _botonCreditosString:String = "botonCreditos";
+	
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
@@ -28,9 +45,68 @@ class MenuState extends FlxState
 	{
 		super.create();
 		
+		FlxG.plugins.add(new MouseEventManager());
+		
 		populateEvents();
 		
-		FlxG.switchState(new PlayState());
+		_menuFondo = new FlxSprite(0, 0, "assets/images/menu/menuFondo.png");
+		add(_menuFondo);
+		
+		_logo = new FlxSprite(320, 75, "assets/images/menu/logo.png");
+		_logo.x -= _logo.width / 2 - 2;
+		add(_logo);
+			
+		// >>
+		_botones = new FlxTypedGroup<FlxSprite>();
+		
+		_botonJugar = new FlxSprite(320, 480, "assets/images/menu/" + _botonJugarString + ".png");
+		_botonResultados = new FlxSprite(320, 480 + _botonJugar.height + 10, "assets/images/menu/" + _botonResultadosString + ".png");
+		_botonCreditos = new FlxSprite(320, 480 + (_botonJugar.height + 10) * 2, "assets/images/menu/" + _botonCreditosString + ".png");
+		
+		_botones.add(_botonJugar);
+		_botones.add(_botonResultados);
+		_botones.add(_botonCreditos);
+		
+		_botones.forEach(function(boton:FlxSprite) { boton.x -= boton.width / 2; } ); 
+		
+		add(_botones);
+		
+		// Evento de botones
+		
+		MouseEventManager.add(_botonJugar, 
+			function(sprite:FlxSprite) { // mouse down
+				FlxG.camera.fade(FlxColor.WHITE, 2, false, function() { FlxG.switchState(new PlayState()); } );
+			}, null, 
+			function(sprite:FlxSprite) { // mouse over
+				sprite.loadGraphic("assets/images/menu/" + _botonJugarString + "Hover.png");
+			}, 
+			function(sprite:FlxSprite) { // mouse out
+				sprite.loadGraphic("assets/images/menu/" + _botonJugarString + ".png");
+		});
+		
+		MouseEventManager.add(_botonResultados, 
+			function(sprite:FlxSprite) { // mouse down
+				//FlxG.camera.fade(FlxColor.WHITE, 2, false, function() { FlxG.switchState(new OverallState()); } );
+			}, null, 
+			function(sprite:FlxSprite) { // mouse over
+				sprite.loadGraphic("assets/images/menu/" + _botonResultadosString + "Hover.png");
+			}, 
+			function(sprite:FlxSprite) { // mouse out
+				sprite.loadGraphic("assets/images/menu/" + _botonResultadosString + ".png");
+		});
+		
+		MouseEventManager.add(_botonCreditos, 
+			function(sprite:FlxSprite) { // mouse down
+				//FlxG.camera.fade(FlxColor.WHITE, 2, false, function() { FlxG.switchState(new CreditsState()); } );
+			}, null, 
+			function(sprite:FlxSprite) { // mouse over
+				sprite.loadGraphic("assets/images/menu/" + _botonCreditosString + "Hover.png");
+			}, 
+			function(sprite:FlxSprite) { // mouse out
+				sprite.loadGraphic("assets/images/menu/" + _botonCreditosString + ".png");
+		});
+		
+		//FlxG.switchState(new PlayState());
 		//FlxG.switchState(new SummaryState());
 		//FlxG.switchState(new OverallState());
 	}
@@ -41,6 +117,12 @@ class MenuState extends FlxState
 	 */
 	override public function destroy():Void
 	{
+		_botones.clear();
+		
+		MouseEventManager.remove(_botonJugar);
+		MouseEventManager.remove(_botonResultados);
+		MouseEventManager.remove(_botonCreditos);
+		
 		super.destroy();
 	}
 
@@ -90,14 +172,14 @@ class MenuState extends FlxState
 		riskCollection = new Map<String, Translation>();
 		
 		riskCollection.set('R1', new Translation('Morir en paz.', 'La muerte le llega a todos.'));
-		riskCollection.set('R2', new Translation('Accidente en el escenario', 'Te avisaron que el microfono daba patadas.'));
+		riskCollection.set('R2', new Translation('Accidente en el escenario', 'Te avisaron que el micrófono daba patadas.'));
 		riskCollection.set('R3', new Translation('Hundimiento del barco', '...y vos querías viajar en el Titanic.'));
 		riskCollection.set('R4', new Translation('Depresión por ser engañado', 'Ya no se puede confiar en nadie'));
 		riskCollection.set('R5', new Translation('ACV', 'No tuviste la misma suerte que Carlos Calvo.'));
 		riskCollection.set('R6', new Translation('Paro cardíaco por estrés', 'Si te duele el brazo izquierdo es mala señal.'));
 		riskCollection.set('R7', new Translation('Depresión severa', ' Se verá la depresión en tu cara.'));
 		riskCollection.set('R8', new Translation('Asesinato por herencia', 'Por suerte le dejaste todo al perro.'));
-		riskCollection.set('R9', new Translation('Accidente en el set', 'Ya es tarde para pedir que atornillen bien esa lampara de techo.'));
+		riskCollection.set('R9', new Translation('Accidente en el set', 'Ya es tarde para pedir que atornillen bien esa lámpara de techo.'));
 		riskCollection.set('R10', new Translation('Quedar atrapado en una guerra', '¡Dónde estuviste vacacionando!'));
 		riskCollection.set('R11', new Translation('Morir a lo Lennon', 'Y esta vez no fue Chapman.'));
 		riskCollection.set('R12', new Translation('Depresión por fracaso', 'Se acabaron todas las esperanzas.'));
