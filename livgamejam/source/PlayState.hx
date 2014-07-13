@@ -24,7 +24,8 @@ class PlayState extends FlxState
 	private var _handler:Handler;
 	private var _timmy:Timmy;
 	//private var _dataBase:DataBase;
-	
+	private var atributos:String = "";
+	private var atributosDebugger:FlxText;
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
@@ -55,6 +56,13 @@ class PlayState extends FlxState
 			_handler.destroy();
 			FlxG.resetGame();
 		}
+		
+		atributos = "";
+		for (key in _handler._atributes.keys()) {
+			atributos += key + ": " + _handler._atributes[key] + "\n";
+		}
+	
+		atributosDebugger.text = atributos;
 	}
 	
 	public function setBackground() {
@@ -68,7 +76,10 @@ class PlayState extends FlxState
 		
 		add(_timmy);
 		
-		FlxG.camera.bgColor = FlxColor.CYAN;		
+		FlxG.camera.bgColor = FlxColor.CYAN;
 		
+		atributosDebugger = new FlxText(10, 750, -1, atributos, 17);
+		atributosDebugger.scrollFactor.set(0, 0);
+		add(atributosDebugger);
 	}
 }

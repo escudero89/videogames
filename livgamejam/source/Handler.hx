@@ -34,8 +34,8 @@ class Handler extends FlxTypedGroup<Card>
 	private var _eventCollectionIdsAvailable:Array<String>; // guarda todos los eventos con peso > 0
 	private var _eventCollectionTotalWeight:Int = 0;
 	
-	// Los atributos del protagonista iran aqui
-	private var _atributes:Map<String, Int>;
+	// Los atributos del protagonista iran aqui (transformar luego a privado) @@@TODO
+	public var _atributes:Map<String, Int>;
 	
 	private var _experiencePlayer:Int = 0;
 	private var _monthsOldPlayer:Int = 13 * 12;
@@ -370,5 +370,11 @@ class Handler extends FlxTypedGroup<Card>
 		this.forEach(function(basic:Card) {
 			basic.setAvailability(available);
 		});
+	}
+	
+	override public function destroy():Void
+	{
+		this.forEachExists(function(card:Card) { card.destroy(); } );
+		super.destroy();
 	}
 }
