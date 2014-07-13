@@ -9,6 +9,8 @@ import flixel.util.FlxRect;
 import flixel.util.FlxPoint;
 import haxe.Timer;
 
+import flixel.util.FlxGradient;
+
 /**
  * ...
  * @author 
@@ -24,12 +26,28 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 	private var _flag_izq:Bool;
 	private var _timmy_skin:String;
 	
+	// Quiero tener la edad a mano (en anhos), la maxima edad la uso para interpolar
+	private var _age:Int;
+	private var _maxAge:Int = 100;
+	
 	// para la cabeza y el cuerpo
 	private var _head:FlxSprite;
 	private var _body:FlxSprite;
 	
 	private var _currentOffset:Int = 0;
 	private var _currentBlock:FlxSprite;
+	
+	// Para el cielo =>
+	
+	private var _skyBackground:FlxSprite;
+	private var _nightBackground:FlxSprite;
+	
+	private var _SKY_COLOR_TOP:Int = 0xff61dcff;
+	private var _SKY_COLOR_BOTTOM:Int = 0xffffffff;
+	
+	private var _NIGHT_COLOR_TOP:Int = 0xff000000;
+	private var _NIGHT_COLOR_BOTTOM:Int = 0xff0033b4;
+	// <=
 	
 	private var _fondoColina:FlxSprite;
 	private var _ladder:FlxSprite;
@@ -44,17 +62,27 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 		_interfaceBack = new FlxTypedGroup<FlxSprite>();
 		_flag_choice = true;
 		_flag_izq = false;
-		// colina
+		
+		// creamos el cielo de dia y el de noche, pero este ultimo sin alpha
+		
+		_skyBackground = FlxGradient.createGradientFlxSprite(640, 960, [_SKY_COLOR_TOP, _SKY_COLOR_BOTTOM]);
+		_nightBackground = FlxGradient.createGradientFlxSprite(640, 960, [_NIGHT_COLOR_TOP, _NIGHT_COLOR_BOTTOM]);
+		
+		_skyBackground.scrollFactor.set(0, 0);
+		_nightBackground.scrollFactor.set(0, 0);
+		
+		_nightBackground.alpha = (_age - 13)/_maxAge;
+		
+		_interfaceBack.add(_skyBackground);
+		_interfaceBack.add(_nightBackground);
+		
+		// Y luego la colina
 		
 		_fondoColina = new FlxSprite(0, 1500, "assets/images/colina.png");
 		_fondoColina.y -= _fondoColina.height;
 		
 		_interfaceBack.add(_fondoColina);
-		
-//>>>>>>>> HEAD
-		// Plataforma		
-		_platform = new FlxSprite(142, 500, "assets/images/platform.png");
-//=======
+
 		// Escaleras
 		
 		_ladder = new FlxSprite(0, 720, "assets/images/escaleras.png");
@@ -62,9 +90,7 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 		
 		// Plataforma
 		
-		
 		_platform = new FlxSprite(142, 495, "assets/images/platform.png");
-//>>>>>>> origin/master
 		
 		// Controlamos la camara que siga a la plataforma
 		FlxG.camera.follow(_platform);
@@ -191,6 +217,9 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 		
 		FlxTween.tween(magic, { x : 320 - magic.width / 2 , y: _platform.y + _platform.height / 2 }, 3);
 		
+		// Cambia el color del cielo (lo vamos oscureciendo) al ponerle el fondo mas opaco arriba
+		_nightBackground.alpha = Math.min((_age - 13) / _maxAge, 1); 
+		
 		Timer.delay(function() {
 			magic.destroy();
 			_interfaceBack.add(new FlxSprite(245, _currentBlock.y + 37, "assets/images/icons_150/" + cardIdEvento.toLowerCase() + ".png"));
@@ -215,15 +244,17 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 		return _flag_choice;
 	}
 	
-	public function setAge(_age:Int) {
+	public function setAge(ageMonthly:Int) {
 		
-		if (_age <= 25*12) {
+		_age = Math.floor(ageMonthly / 12);
+		
+		if (_age <= 25) {
 			_timmy_skin = "joven";
 		}
-		if (_age > 25*12 && _age < 65*12) {
+		if (_age > 25 && _age < 65) {
 			_timmy_skin = "adulto";
 		}
-		if(_age > 65*12){
+		if(_age > 65){
 			_timmy_skin = "anciano";
 		}
 		
