@@ -35,6 +35,10 @@ class PlayState extends FlxState
 	private var atributosDebugger:FlxText;
 	
 	private var _musicaFondo:FlxSound;
+	
+	// Contador para saltar turnos automaticamente
+	private var counter:Int = 6;
+	
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
@@ -66,6 +70,15 @@ class PlayState extends FlxState
 	override public function update():Void
 	{
 		super.update();
+		
+		counter -= FlxG.elapsed;
+		if ( _timmy.getChoice()) {
+			counter = 6;
+		}
+		if (counter == 0) {
+			skipHand();
+			counter = 6;
+		}
 		
 		if (_handler._end_of_game) {
 			FlxG.camera.fade(FlxColor.BLACK, 2, false, function() {
@@ -114,5 +127,13 @@ class PlayState extends FlxState
 		atributosDebugger = new FlxText(10, 750, -1, atributos, 17);
 		atributosDebugger.scrollFactor.set(0, 0);
 		add(atributosDebugger);
+	}
+	
+	/** 
+	 * Funcion que elige el evento "Recluirse"
+	*/
+	public function skipHand():Void
+	{
+		
 	}
 }

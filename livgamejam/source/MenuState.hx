@@ -116,7 +116,7 @@ class MenuState extends FlxState
 		
 		MouseEventManager.add(_botonCreditos, 
 			function(sprite:FlxSprite) { // mouse down
-				//FlxG.camera.fade(FlxColor.WHITE, 2, false, function() { FlxG.switchState(new CreditsState()); } );
+				FlxG.camera.fade(FlxColor.WHITE, 2, false, function() { FlxG.switchState(new CreditsState()); } );
 				playSound('menuclick');
 			}, null, 
 			function(sprite:FlxSprite) { // mouse over
