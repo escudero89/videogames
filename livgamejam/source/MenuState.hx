@@ -12,8 +12,11 @@ import flixel.util.FlxColor;
 import flixel.tweens.FlxTween;
 import flixel.plugin.MouseEventManager;
 
+import flixel.system.FlxSound;
+
 import Event;
 import Translation;
+import PathTo;
 //import Interface;
 
 /**
@@ -38,6 +41,8 @@ class MenuState extends FlxState
 	private var _botonResultadosString:String = "botonResultados";
 	private var _botonCreditosString:String = "botonCreditos";
 	
+	private var _musicaFondo:FlxSound;
+	
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
@@ -55,8 +60,17 @@ class MenuState extends FlxState
 		_logo = new FlxSprite(320, 75, "assets/images/menu/logo.png");
 		_logo.x -= _logo.width / 2 - 2;
 		add(_logo);
-			
-		// >>
+		
+		setMenuButtons();
+		
+		_musicaFondo = new FlxSound();
+		_musicaFondo.loadEmbedded(PathTo._MUSIC_BACKGROUND_MENU, true, false);
+		_musicaFondo.play();
+
+	}
+	
+	private function setMenuButtons():Void
+	{
 		_botones = new FlxTypedGroup<FlxSprite>();
 		
 		_botonJugar = new FlxSprite(320, 480, "assets/images/menu/" + _botonJugarString + ".png");
@@ -75,9 +89,12 @@ class MenuState extends FlxState
 		
 		MouseEventManager.add(_botonJugar, 
 			function(sprite:FlxSprite) { // mouse down
+				_musicaFondo.fadeOut(1.5);
 				FlxG.camera.fade(FlxColor.WHITE, 2, false, function() { FlxG.switchState(new PlayState()); } );
+				playSound('menuclick');
 			}, null, 
 			function(sprite:FlxSprite) { // mouse over
+				playSound('menuhover');
 				sprite.loadGraphic("assets/images/menu/" + _botonJugarString + "Hover.png");
 			}, 
 			function(sprite:FlxSprite) { // mouse out
@@ -87,8 +104,10 @@ class MenuState extends FlxState
 		MouseEventManager.add(_botonResultados, 
 			function(sprite:FlxSprite) { // mouse down
 				FlxG.camera.fade(FlxColor.WHITE, 2, false, function() { FlxG.switchState(new OverallState()); } );
+				playSound('menuclick');
 			}, null, 
 			function(sprite:FlxSprite) { // mouse over
+				playSound('menuhover');
 				sprite.loadGraphic("assets/images/menu/" + _botonResultadosString + "Hover.png");
 			}, 
 			function(sprite:FlxSprite) { // mouse out
@@ -98,17 +117,16 @@ class MenuState extends FlxState
 		MouseEventManager.add(_botonCreditos, 
 			function(sprite:FlxSprite) { // mouse down
 				//FlxG.camera.fade(FlxColor.WHITE, 2, false, function() { FlxG.switchState(new CreditsState()); } );
+				playSound('menuclick');
 			}, null, 
 			function(sprite:FlxSprite) { // mouse over
+				playSound('menuhover');
 				sprite.loadGraphic("assets/images/menu/" + _botonCreditosString + "Hover.png");
 			}, 
 			function(sprite:FlxSprite) { // mouse out
 				sprite.loadGraphic("assets/images/menu/" + _botonCreditosString + ".png");
 		});
 		
-		//FlxG.switchState(new PlayState());
-		//FlxG.switchState(new SummaryState());
-		//FlxG.switchState(new OverallState());
 	}
 	
 	/**
@@ -117,6 +135,9 @@ class MenuState extends FlxState
 	 */
 	override public function destroy():Void
 	{
+		_musicaFondo.fadeOut(1);
+		_musicaFondo.stop();
+		
 		_botones.clear();
 		
 		MouseEventManager.remove(_botonJugar);
@@ -133,6 +154,29 @@ class MenuState extends FlxState
 	{
 		super.update();
 	}	
+	
+	public static function playSound(sonido:String):Void
+	{
+		var sound = new FlxSound();
+		var path:String = "";
+		
+		switch(sonido) {
+			case 'card':
+				path = PathTo._SOUND_CARD;
+			case 'deathCard':
+				path = PathTo._SOUND_DEATH_CARD;
+			case 'menuclick':
+				path = PathTo._SOUND_MENU_CLICK;
+			case 'menuhover':
+				path = PathTo._SOUND_MENU_HOVER;
+			default:
+				path = PathTo._SOUND_CARD;
+		}
+		
+		sound.loadEmbedded(path, false, true);
+		sound.play();
+		sound.autoDestroy = true;
+	}
 	
 	// Creara todos los eventos de forma hardcodeada
 	private function populateEvents():Void

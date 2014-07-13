@@ -38,6 +38,8 @@ class Card extends FlxTypedGroup<FlxSprite>
 	private var _IS_DEAD_CARD:Bool = false;
 	private var _IS_MINI:Bool = false;
 	
+	public static var _ICON_DEATH_NAME:String = "rip.png";
+	
 	private var _template_current_path:String;
 	private var _TEMPLATE_PATH:String = "assets/images/template_basic.png";
 	private var _TEMPLATE_PATH_RISK:String = "assets/images/template_risk.png";
@@ -152,18 +154,20 @@ class Card extends FlxTypedGroup<FlxSprite>
 	public function setIcon()
 	{
 		_icono = new FlxSprite();
-		
+
 		_ICON_NAME = _cardEventInfo.id_evento.toLowerCase() + ".png";
+		
+		if (_IS_DEAD_CARD) {
+			_ICON_NAME = _ICON_DEATH_NAME;
+			_icono.color = 0x00CCCCCC;
+		}
+		
 		
 		_icono.loadGraphic(_icon_current_path + _ICON_NAME);
 		
 		if (!_IS_MINI) {
 			_icono.x = _template.x + Math.round(_template.width / 2) - Math.round(_icono.width / 2);
 			_icono.y = _template.y + 22;
-			
-			if (_IS_DEAD_CARD) {
-				_icono.color = 0x00CCCCCC;
-			}
 		} else {
 			_icono.x = _template.x + 5;
 			_icono.y = _template.y + 5;
@@ -203,6 +207,13 @@ class Card extends FlxTypedGroup<FlxSprite>
 	{
 		if (!_IS_MINI && _isAvailable) {
 			_choseCard = true;
+			
+			// Hacemos ruidito de carta
+			if (_IS_DEAD_CARD) {
+				MenuState.playSound('deathCard');
+			} else {
+				MenuState.playSound('card');
+			}			
 		}
 	}
 	
@@ -211,6 +222,10 @@ class Card extends FlxTypedGroup<FlxSprite>
 	private function onMouseOver(sprite:FlxSprite)
 	{
 		if (!_IS_MINI) {
+			if (this.exists) {
+				MenuState.playSound('menuhover');
+			}
+			
 			_txt_title.text = (_txt_title_text != "") ? _txt_title_text : _cardEventInfo.nombre;
 			_txt_stats.text = ' ';
 			

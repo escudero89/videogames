@@ -4,6 +4,7 @@ import flixel.group.FlxTypedGroup;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
@@ -32,6 +33,8 @@ class PlayState extends FlxState
 	//private var _dataBase:DataBase;
 	private var atributos:String = "";
 	private var atributosDebugger:FlxText;
+	
+	private var _musicaFondo:FlxSound;
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
@@ -40,6 +43,10 @@ class PlayState extends FlxState
 		super.create();
 		
 		setBackground();
+		
+		_musicaFondo = new FlxSound();
+		_musicaFondo.loadEmbedded(PathTo._MUSIC_BACKGROUND_PLAYSTATE, true, false);
+		_musicaFondo.play();
 	}
 	
 	/**
@@ -47,7 +54,9 @@ class PlayState extends FlxState
 	 * consider setting all objects this state uses to null to help garbage collection.
 	 */
 	override public function destroy():Void
-	{
+	{		
+		_musicaFondo.stop();
+		
 		super.destroy();
 	}
 
@@ -59,8 +68,11 @@ class PlayState extends FlxState
 		super.update();
 		
 		if (_handler._end_of_game) {
-			FlxG.switchState(new SummaryState());
-			_handler.destroy();
+			FlxG.camera.fade(FlxColor.BLACK, 2, false, function() {
+				_musicaFondo.fadeOut(1.5);
+				FlxG.switchState(new SummaryState());
+				_handler.destroy();
+			});
 		}
 		
 		atributos = "";
@@ -69,6 +81,16 @@ class PlayState extends FlxState
 		}
 	
 		atributosDebugger.text = atributos;
+		
+		// Si tocamos escape
+		if (FlxG.keys.justPressed.ESCAPE) {
+			FlxG.camera.fade(FlxColor.WHITE, 2, false, function() {
+				_musicaFondo.fadeOut(1.5);
+				FlxG.switchState(new MenuState());
+				_handler.destroy();
+			});
+
+		}
 	}
 	
 	public function setBackground() {

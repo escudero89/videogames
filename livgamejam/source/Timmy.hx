@@ -17,6 +17,7 @@ import flixel.util.FlxGradient;
  */
 class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 {
+	public static var _TIME_PLATFORM_MOVEMENT = 3;
 
 	// Un grupo para la parte delantera, y otro para la trasera
 	private var _interfaceFront:FlxTypedGroup<FlxSprite>;
@@ -107,7 +108,7 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 		
 		// Controlamos la camara que siga a la plataforma
 		FlxG.camera.follow(_platform);
-		FlxG.camera.setBounds(0, -20000, 640, 20960);
+		FlxG.camera.setBounds(0, -40000, 640, 40960);
 		var rect = new FlxRect(0, _platform.y, 640, _platform.height);
 		FlxG.camera.deadzone = rect;
 		FlxG.camera.followLerp = 3;
@@ -205,10 +206,10 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 		
 		FlxG.camera.flash(FlxColor.WHITE, 0.1);
 		
-		FlxTween.tween(_fondoColina, { y: (_fondoColina.y - 90) }, 5);
-		FlxTween.tween(_platform, { y: (_platform.y - 180) }, 5);
-		FlxTween.tween(_head, { y: (_head.y - 180) }, 5);
-		FlxTween.tween(_body, { y: (_body.y - 180) }, 5);		
+		FlxTween.tween(_fondoColina, { y: (_fondoColina.y - 90) }, _TIME_PLATFORM_MOVEMENT);
+		FlxTween.tween(_platform, { y: (_platform.y - 180) }, _TIME_PLATFORM_MOVEMENT);
+		FlxTween.tween(_head, { y: (_head.y - 180) }, _TIME_PLATFORM_MOVEMENT);
+		FlxTween.tween(_body, { y: (_body.y - 180) }, _TIME_PLATFORM_MOVEMENT);
 		
 		// Y creamos los bloques, aunque aun no le agregamos el evento
 		_currentBlock = new FlxSprite(230, _platform.y + 100, "assets/images/block.png");

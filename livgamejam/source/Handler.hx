@@ -168,7 +168,7 @@ class Handler extends FlxTypedGroup<Card>
 			_timmy.moveMagic(magic_id_event, magic);
 			
 			// Esto es solo para flash, cambiar por elapsed
-			Timer.delay(function() { setVisibility(true); }, 5200 );
+			Timer.delay(function() { setVisibility(true); }, Timmy._TIME_PLATFORM_MOVEMENT * 1100 );
 		}
 		
 	}

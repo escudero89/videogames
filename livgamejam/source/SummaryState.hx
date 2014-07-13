@@ -3,6 +3,7 @@ import flixel.FlxG;
 import flixel.FlxCamera;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.system.FlxSound;
 import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
 import flixel.text.FlxText;
@@ -18,6 +19,8 @@ import Std.*;
  */
 class SummaryState extends FlxState
 {
+	
+	private var _musicaFondo:FlxSound;
 	
 	public static var _recordPlayer:RecordPlayer = new RecordPlayer();
 	public static var _recordGame:Array<RecordPlayer> = new Array<RecordPlayer>();
@@ -49,20 +52,13 @@ class SummaryState extends FlxState
 		
 		FlxG.plugins.add(new MouseEventManager());
 		
-		//// Para probar sin tener que jugarlo
-		//_recordPlayer = new RecordPlayer();
-		//_recordPlayer.update("E1");
-		//_recordPlayer.update("E9");
-		//_recordPlayer.update("E7");
-		//_recordPlayer.update("E18");
-		//_recordPlayer.update("E12");
-		//_recordPlayer.update("E21");
-		//_recordPlayer.update("E15");
-		//_recordPlayer.update("E15");
-		//_recordPlayer.update("E15");
-		//_recordPlayer.update("E15");
-		//_recordPlayer.update("E15");
-		//_recordPlayer.update("X1");
+		// >>>>>>>>>>>>>> MUSICA
+		
+		_musicaFondo = new FlxSound();
+		_musicaFondo.loadEmbedded(PathTo._MUSIC_BACKGROUND_SAD, true);
+		_musicaFondo.play();
+		
+		// <<<<<<<<<<<<<<
 		
 		_recordPlayer = PlayState._recordPlayer;
 		_recordGame.push(_recordPlayer);
@@ -216,7 +212,7 @@ class SummaryState extends FlxState
 		 
 		if (idRiesgo != null) {
 			add(new FlxSprite(posX, posY, "assets/images/block_risk.png"));
-			iconoBloque.loadGraphic("assets/images/icons_150/e1.png");
+			iconoBloque.loadGraphic("assets/images/icons_150/" + Card._ICON_DEATH_NAME);
 		} else {
 			add(new FlxSprite(posX, posY, "assets/images/block.png"));
 		}
@@ -264,7 +260,12 @@ class SummaryState extends FlxState
 	
 	private function goMenuState():Void
 	{
-		FlxG.switchState(new MenuState());
+		_musicaFondo.fadeOut(1.5);
+		
+		FlxG.camera.fade(FlxColor.BLACK, 2, false, function () {
+			_musicaFondo.stop();
+			FlxG.switchState(new MenuState());
+		});
 	}
 	
 }
