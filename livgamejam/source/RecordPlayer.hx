@@ -14,7 +14,7 @@ class RecordPlayer
 	public function new() 
 	{
 		_eventsIDs = new Array<String>();
-		_monthsOldPlayer = 130*12;//13 años * 12 meses = 156 meses
+		_monthsOldPlayer = 13*12;//13 años * 12 meses = 156 meses
 		_experiencePlayer = 0;
 		_atributes = new Map<String,Int>();
 		_atributes.set("amor", 0);
