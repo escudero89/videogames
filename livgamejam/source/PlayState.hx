@@ -70,7 +70,7 @@ class PlayState extends FlxState
 	override public function update():Void
 	{
 		super.update();
-		
+		/*
 		counter -= FlxG.elapsed;
 		if ( _timmy.getChoice()) {
 			counter = 6;
@@ -79,7 +79,7 @@ class PlayState extends FlxState
 			skipHand();
 			counter = 6;
 		}
-		
+		*/
 		if (_handler._end_of_game) {
 			_musicaFondo.fadeOut(1.5);
 			FlxG.camera.fade(FlxColor.BLACK, 2, false, function() {

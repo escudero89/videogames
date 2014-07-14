@@ -66,8 +66,6 @@ class Card extends FlxTypedGroup<FlxSprite>
 	
 	// Para las strings
 	
-	private static var _STR_FONT:String = "assets/fonts/LondrinaSolid-Regular.ttf";
-	
 	private var _txt_title_text:String = "";
 	
 	private var _txt_title:FlxText;
@@ -180,7 +178,7 @@ class Card extends FlxTypedGroup<FlxSprite>
 	{
 		_txt_title = new FlxText(15 + _template.x, 15 + _template.y, 150, null, 20, true);
 		
-		_txt_title.setFormat(_STR_FONT, 36, FlxColor.WHITE, "center", FlxText.BORDER_OUTLINE, FlxColor.BLACK);
+		_txt_title.setFormat(PathTo._STR_FONT, 36, FlxColor.WHITE, "center", FlxText.BORDER_OUTLINE, FlxColor.BLACK);
 		
 		_txt_title.borderQuality = 1;
 		_txt_title.borderSize = 2;
@@ -190,7 +188,7 @@ class Card extends FlxTypedGroup<FlxSprite>
 	{
 		_txt_stats = new FlxText(15 + _template.x, 180 + _template.y, 150, getStringWithMonthsAndExp(), 20, true);
 		
-		_txt_stats.setFormat(_STR_FONT, 30, 0xd41b1b, "left");
+		_txt_stats.setFormat(PathTo._STR_FONT, 30, 0xd41b1b, "left");
 		
 		var idxStartMonth = 1 + _txt_stats.text.indexOf(_STR_DURATION);
 		var idxStartExperience = 1 + _txt_stats.text.indexOf(_STR_EXPERIENCE);

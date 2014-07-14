@@ -13,6 +13,8 @@ import flixel.plugin.MouseEventManager;
 
 import Std.*;
 
+import PathTo;
+
 /**
  * ...
  * @author ...
@@ -25,7 +27,6 @@ class SummaryState extends FlxState
 	public static var _recordPlayer:RecordPlayer = new RecordPlayer();
 	public static var _recordGame:Array<RecordPlayer> = new Array<RecordPlayer>();
 	
-	private var _FONT:String = "assets/fonts/LondrinaSolid-Regular.ttf";
 	private var _TITLE:String = "Sumario";
 	//private var _SUBTITLE:String = "El camino recorrido";
 	private var _AGE:Int;
@@ -74,19 +75,19 @@ class SummaryState extends FlxState
 		FlxG.camera.bgColor = 0xff171200;
 		
 		var _txTitle:FlxText = new FlxText(0, 0, FlxG.width, _TITLE);
-		_txTitle.setFormat(_FONT, 128, FlxColor.WHITE, "center");
+		_txTitle.setFormat(PathTo._STR_FONT, 128, FlxColor.WHITE, "center");
 		add(_txTitle);
 		
 		//var _txSubTitle:FlxText = new FlxText(0, _txTitle.size, FlxG.width, _SUBTITLE);
-		//_txSubTitle.setFormat(_FONT, 64, FlxColor.WHITE, "center");
+		//_txSubTitle.setFormat(PathTo._STR_FONT, 64, FlxColor.WHITE, "center");
 		//add(_txSubTitle);
 		
 		var _txAge:FlxText = new FlxText(0, 240, FlxG.width, "Edad: "+_AGE+" años");
-		_txAge.setFormat(_FONT, 32, FlxColor.WHITE, "center");
+		_txAge.setFormat(PathTo._STR_FONT, 32, FlxColor.WHITE, "center");
 		add(_txAge);
 		
 		var _txExp:FlxText = new FlxText(0, 280, FlxG.width, "Exp.: "+_EXP+" puntos");
-		_txExp.setFormat(_FONT, 32, FlxColor.WHITE, "center");
+		_txExp.setFormat(PathTo._STR_FONT, 32, FlxColor.WHITE, "center");
 		add(_txExp);
 		
 		// Dibujar los bloques y textos de los eventos anteriores
@@ -185,10 +186,10 @@ class SummaryState extends FlxState
 			var _posTextsX:Float = _posBlockX + widthBlock + 10;
 			var _posTextsY:Float = _posBlockY + 40;
 			var _txEventName:FlxText = new FlxText(_posTextsX, _posTextsY, FlxG.width - _posTextsX, _eventName);
-			_txEventName.setFormat(_FONT, 32, FlxColor.WHITE, "left");
+			_txEventName.setFormat(PathTo._STR_FONT, 32, FlxColor.WHITE, "left");
 			add(_txEventName);
 			var _txEventDescription:FlxText = new FlxText(_posTextsX, _posTextsY + 70, FlxG.width - _posTextsX, _eventDescription);
-			_txEventDescription.setFormat(_FONT, 26, FlxColor.WHITE, "left");
+			_txEventDescription.setFormat(PathTo._STR_FONT, 26, FlxColor.WHITE, "left");
 			add(_txEventDescription);
 			
 			_index -= 1;
@@ -252,7 +253,7 @@ class SummaryState extends FlxState
 			add(_timeLineMarker);
 			var _txTLFontSize:Int = 16;
 			var _txTimeLineMarker:FlxText = new FlxText(0, _posMarkerY - (_txTLFontSize / 2), _posMarkerX, "" + _timeLineYear + " años");
-			_txTimeLineMarker.setFormat(_FONT, _txTLFontSize, FlxColor.WHITE, "center");
+			_txTimeLineMarker.setFormat(PathTo._STR_FONT, _txTLFontSize, FlxColor.WHITE, "center");
 			add(_txTimeLineMarker);
 			_timeLineYear += 1;
 		}
