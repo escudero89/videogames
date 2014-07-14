@@ -89,7 +89,19 @@ class PlayState extends FlxState
 			_handler.passTurn();
 			counter = 6;
 		}
+				
+		atributos = "";
+		for (key in _handler._atributes.keys()) {
+			atributos += key + ": " + _handler._atributes[key] + "\n";
+		}
+	
+		atributosDebugger.text = atributos;
+				
+		ageDisplay.text = PathTo._TEXT_DURATION + ":  " + _handler.getTimmyAge();
+		expDisplay.text = PathTo._TEXT_EXPERIENCE + ":  " + _handler.getTimmyExp();
+	
 		
+		/// CAMBIOS DE ESTADO
 		if (_handler._end_of_game) {
 			_musicaFondo.fadeOut(4);
 			_handler.destroy();
@@ -99,13 +111,6 @@ class PlayState extends FlxState
 			});
 		}
 		
-		atributos = "";
-		for (key in _handler._atributes.keys()) {
-			atributos += key + ": " + _handler._atributes[key] + "\n";
-		}
-	
-		atributosDebugger.text = atributos;
-		
 		// Si tocamos escape
 		if (FlxG.keys.justPressed.ESCAPE) {
 			_musicaFondo.fadeOut(1.5);
@@ -114,11 +119,7 @@ class PlayState extends FlxState
 				FlxG.switchState(new MenuState());
 				_handler.destroy();
 			});
-
 		}
-		
-		ageDisplay.text = PathTo._TEXT_DURATION + ":  " + _handler.getTimmyAge();
-		expDisplay.text = PathTo._TEXT_EXPERIENCE + ":  " + _handler.getTimmyExp();
 		
 	}
 	
@@ -144,22 +145,10 @@ class PlayState extends FlxState
 		atributosDebugger.scrollFactor.set(0, 0);
 		//add(atributosDebugger);
 		
+		putExpAndAge();
+		
 		//var fondoTexto = new FlxSprite(30, 800, "assets/images/
 		
-		ageDisplay = new FlxText(35, 825, 0, PathTo._TEXT_DURATION + ":\t" + 0);
-		ageDisplay.setFormat(PathTo._STR_FONT, 40, PathTo._COLOR_DURATION_DARK, null, FlxText.BORDER_OUTLINE, FlxColor.BLACK);
-		ageDisplay.addFormat(new FlxTextFormat(PathTo._COLOR_DURATION, false, false, FlxColor.BLACK, PathTo._TEXT_DURATION.length + 1, 100));
-		ageDisplay.borderSize = 2;
-		ageDisplay.scrollFactor.set(0, 0);
-		add(ageDisplay);
-		
-		expDisplay = new FlxText(35, 870, 0, PathTo._TEXT_EXPERIENCE + ":\t" + 0);
-		expDisplay.setFormat(PathTo._STR_FONT, 40, PathTo._COLOR_EXPERIENCE_DARK, null, FlxText.BORDER_OUTLINE, FlxColor.BLACK);
-		expDisplay.addFormat(new FlxTextFormat(PathTo._COLOR_EXPERIENCE, false, false, FlxColor.BLACK, PathTo._TEXT_EXPERIENCE.length + 1, 100));
-		expDisplay.borderSize = 2;
-		expDisplay.scrollFactor.set(0, 0);
-		add(expDisplay);
-	
 		txPassTurn = new FlxText(25, 404, -1, "Pasar turno");
 		txPassTurn.setFormat(_FONT, 32, FlxColor.WHITE);
 		txPassTurn.scrollFactor.set(0, 0);
@@ -173,6 +162,23 @@ class PlayState extends FlxState
 		txSeg.scrollFactor.set(0, 0);
 		add(txSeg);
 		
+	}
+	
+	public function putExpAndAge():Void
+	{
+		ageDisplay = new FlxText(35, 825, 0, PathTo._TEXT_DURATION + ":\t" + 0);
+		ageDisplay.setFormat(PathTo._STR_FONT, 40, PathTo._COLOR_DURATION_DARK, null, FlxText.BORDER_OUTLINE, FlxColor.BLACK);
+		ageDisplay.addFormat(new FlxTextFormat(PathTo._COLOR_DURATION, false, false, FlxColor.BLACK, PathTo._TEXT_DURATION.length + 1, 100));
+		ageDisplay.borderSize = 2;
+		ageDisplay.scrollFactor.set(0, 0);
+		add(ageDisplay);
+		
+		expDisplay = new FlxText(35, 870, 0, PathTo._TEXT_EXPERIENCE + ":\t" + 0);
+		expDisplay.setFormat(PathTo._STR_FONT, 40, PathTo._COLOR_EXPERIENCE_DARK, null, FlxText.BORDER_OUTLINE, FlxColor.BLACK);
+		expDisplay.addFormat(new FlxTextFormat(PathTo._COLOR_EXPERIENCE, false, false, FlxColor.BLACK, PathTo._TEXT_EXPERIENCE.length + 1, 100));
+		expDisplay.borderSize = 2;
+		expDisplay.scrollFactor.set(0, 0);
+		add(expDisplay);
 	}
 	
 	/** 
