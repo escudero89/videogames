@@ -37,17 +37,26 @@ class PlayState extends FlxState
 	private var atributosDebugger:FlxText;
 	private var expDisplay:FlxText;
 	private var ageDisplay:FlxText;
+	private var _MaxTime:Float = 10;
+	
 	
 	private var _musicaFondo:FlxSound;
 	
 	// Contador para saltar turnos automaticamente
+<<<<<<< HEAD
 	private var minTIme:Float = 6;
+=======
+>>>>>>> 9bcf82fb6dc21e8e2c66f70b7054ef1e2ba0aa73
 	private var counter:Float;
 	private var txPassTurn:FlxText;
 	private var txNumber:FlxText;
 	private var txSeg:FlxText;
 	
+<<<<<<< HEAD
 	private var _closeButton:FlxButton;
+=======
+	private var _txPassTurnText:String = "Recluírse en...";
+>>>>>>> 9bcf82fb6dc21e8e2c66f70b7054ef1e2ba0aa73
 
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -81,9 +90,12 @@ class PlayState extends FlxState
 	{
 		super.update();
 
+		_MaxTime = Math.max(Math.min(Math.round((0.0091 * _handler.getTimmyAge() - 0.7572) * _handler.getTimmyAge() + 18.281), 10), 3);
+		
 		counter -= FlxG.elapsed;
 		txNumber.text = "" + Math.ceil(counter);
 		
+<<<<<<< HEAD
 		txNumber.set_visible(_timmy.getChoice());
 		txSeg.set_visible(_timmy.getChoice());
 		txPassTurn.set_visible(_timmy.getChoice());
@@ -91,10 +103,18 @@ class PlayState extends FlxState
 		if ( !_timmy.getChoice()) {
 			counter = minTIme;
 			txNumber.set_visible(false);
+=======
+		if ( _timmy.getChoice()) {
+			counter = _MaxTime;
+>>>>>>> 9bcf82fb6dc21e8e2c66f70b7054ef1e2ba0aa73
 		}
 		if (Math.floor(counter) == -1) {
 			_handler.passTurn();
+<<<<<<< HEAD
 			counter = minTIme;
+=======
+			counter = _MaxTime;
+>>>>>>> 9bcf82fb6dc21e8e2c66f70b7054ef1e2ba0aa73
 		}
 				
 		atributos = "";
@@ -156,20 +176,31 @@ class PlayState extends FlxState
 		
 		//var fondoTexto = new FlxSprite(30, 800, "assets/images/
 		
-		txPassTurn = new FlxText(25, 404, -1, "Pasar turno");
-		txPassTurn.setFormat(_FONT, 32, FlxColor.WHITE);
+		txPassTurn = new FlxText(25, 404, -1, _txPassTurnText);
+		txPassTurn.setFormat(_FONT, 32, FlxColor.WHITE, "left", FlxText.BORDER_OUTLINE, FlxColor.BLACK);
+		txPassTurn.borderSize = 2;
 		txPassTurn.scrollFactor.set(0, 0);
 		add(txPassTurn);
+<<<<<<< HEAD
 		counter = minTIme;
 		txNumber = new FlxText(96, 443, -1, "" + Math.ceil(counter));
 		txNumber.setFormat(_FONT, 44, FlxColor.WHITE);
+=======
+		
+		txNumber = new FlxText(96, 448, -1, "" + Math.ceil(counter));
+		txNumber.setFormat(_FONT, 54, 0xffff5050, "left", FlxText.BORDER_OUTLINE, FlxColor.BLACK);
+		txNumber.borderSize = 2;
+>>>>>>> 9bcf82fb6dc21e8e2c66f70b7054ef1e2ba0aa73
 		txNumber.scrollFactor.set(0, 0);
 		add(txNumber);
-		txSeg = new FlxText(126, 462, -1, "seg.");
-		txSeg.setFormat(_FONT, 32, FlxColor.WHITE);
+		
+		txSeg = new FlxText(129, 467, -1, "seg");
+		txSeg.setFormat(_FONT, 32, 0xffffcb2c, "left", FlxText.BORDER_OUTLINE, FlxColor.BLACK);
+		txSeg.borderSize = 2;
 		txSeg.scrollFactor.set(0, 0);
 		add(txSeg);
 		
+<<<<<<< HEAD
 		
 		// Crear boton para salir del State
 		var _closeButtonWidth:Int = 50;
@@ -178,6 +209,9 @@ class PlayState extends FlxState
 		_closeButton.loadGraphic("assets/images/util/btnClose.png");
 		add(_closeButton);
 		
+=======
+		counter  = _MaxTime;
+>>>>>>> 9bcf82fb6dc21e8e2c66f70b7054ef1e2ba0aa73
 	}
 	
 	public function putExpAndAge():Void
