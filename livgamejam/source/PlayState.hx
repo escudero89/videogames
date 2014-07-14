@@ -110,7 +110,7 @@ class PlayState extends FlxState
 		}
 		
 		expDisplay.text = "EXP: " + _handler.getTimmyExp();
-		ageDisplay.text = "AGE: " + _handler.getTimmyAge();
+		ageDisplay.text = "EDAD: " + _handler.getTimmyAge();
 		
 	}
 	
@@ -141,7 +141,7 @@ class PlayState extends FlxState
 		expDisplay.scrollFactor.set(0, 0);
 		add(expDisplay);
 		
-		ageDisplay = new FlxText(12, 870, 0, "AGE: " + 0);
+		ageDisplay = new FlxText(12, 870, 0, "EDAD: " + 0);
 		ageDisplay.setFormat("assets/fonts/LondrinaSolid-Regular.ttf", 40, FlxColor.BLACK);
 		ageDisplay.scrollFactor.set(0, 0);
 		add(ageDisplay);
