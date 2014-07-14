@@ -51,7 +51,7 @@ class PlayState extends FlxState
 	private var _txSeg:FlxText;
 	
 	private var _closeButton:FlxButton;
-	private var _txPassTurnText:String = "Recluírse en...";
+	private var _txPassTurnText:String = "Recluirse en...";
 
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -170,12 +170,12 @@ class PlayState extends FlxState
 		
 		_counter = _minTime;
 		_txNumber = new FlxText(96, 448, -1, "" + Math.ceil(_counter));
-		_txNumber.setFormat(_FONT, 54, 0xffff5050, "left", FlxText.BORDER_OUTLINE, FlxColor.BLACK);
+		_txNumber.setFormat(_FONT, 54, 0xffff5050, "right", FlxText.BORDER_OUTLINE, FlxColor.BLACK);
 		_txNumber.borderSize = 2;
 		_txNumber.scrollFactor.set(0, 0);
 		add(_txNumber);
 		
-		_txSeg = new FlxText(129, 467, -1, "seg");
+		_txSeg = new FlxText(134, 467, -1, "seg");
 		_txSeg.setFormat(_FONT, 32, 0xffffcb2c, "left", FlxText.BORDER_OUTLINE, FlxColor.BLACK);
 		_txSeg.borderSize = 2;
 		_txSeg.scrollFactor.set(0, 0);

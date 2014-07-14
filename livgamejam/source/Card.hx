@@ -229,7 +229,7 @@ class Card extends FlxTypedGroup<FlxSprite>
 	
 	private function onMouseDown(sprite:FlxSprite)
 	{
-		if ((!_IS_MINI && _isAvailable) || (_IS_PASS_TURN && _IS_MINI)) {
+		if (!_IS_MINI && _isAvailable) {
 			_choseCard = true;
 			
 			// Hacemos ruidito de carta
@@ -242,6 +242,10 @@ class Card extends FlxTypedGroup<FlxSprite>
 					MenuState.playSound('card');
 				}
 			}			
+		}
+		
+		if (_IS_PASS_TURN) {
+			MenuState.playSound("accessDenied");
 		}
 	}
 	

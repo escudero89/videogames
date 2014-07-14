@@ -18,7 +18,6 @@ class TutorialState extends FlxState
 {
 	
 	private var _musicaFondo:FlxSound;
-	private var _TITLE:String = "Tutorial";
 	private var _botonSkip:FlxSprite;
 	
 	override public function create():Void
@@ -28,14 +27,22 @@ class TutorialState extends FlxState
 		FlxG.plugins.add(new MouseEventManager());
 		
 		_musicaFondo = new FlxSound();
-		_musicaFondo.loadEmbedded(PathTo._MUSIC_BACKGROUND_PLAYSTATE, true, false);
+		_musicaFondo.loadEmbedded(PathTo._MUSIC_BACKGROUND_CREDITS, true, false);
 		_musicaFondo.play();
 		
-		var _fondoTuto:FlxSprite = new FlxSprite(0, 0, "assets/images/fondoTutorial.png");
+		var _fondoTuto:FlxSprite = new FlxSprite(0, 0, "assets/images/TutorialState.png");
 		add(_fondoTuto);
 		
-		var _txTitle:FlxText = new FlxText(0, 0, FlxG.width, _TITLE);
-		_txTitle.setFormat(PathTo._STR_FONT, 100, FlxColor.WHITE, "center", FlxText.BORDER_OUTLINE, FlxColor.BLACK);
+		
+		var _txPrologo:FlxText = new FlxText(0, 30, FlxG.width, "Prólogo");
+		_txPrologo.setFormat(PathTo._STR_FONT, PathTo._SIZE_TITLE, FlxColor.WHITE, "center", FlxText.BORDER_OUTLINE, FlxColor.BLACK);
+		_txPrologo.borderSize = 3;
+		add(_txPrologo);
+		
+		var _txTitle:FlxText = new FlxText(15, 180, FlxG.width - 15, PathTo._TUTORIAL_TEXT.join("\n\n"));
+		_txTitle.setFormat(PathTo._STR_FONT, 36, FlxColor.WHITE, "center", FlxText.BORDER_OUTLINE, FlxColor.BLACK);
+		_txTitle.addFormat(new FlxTextFormat(PathTo._COLOR_EXPERIENCE, false, false, FlxColor.BLACK, 0, PathTo._TUTORIAL_TEXT[0].length));
+		//_txTitle.addFormat(new FlxTextFormat(PathTo._COLOR_DURATION, false, false, FlxColor.BLACK, PathTo._TUTORIAL_TEXT[0].length, PathTo._TUTORIAL_TEXT[0].length + PathTo._TUTORIAL_TEXT[1].length));
 		_txTitle.borderSize = 3;
 		add(_txTitle);
 		

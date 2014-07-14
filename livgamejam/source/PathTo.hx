@@ -45,9 +45,16 @@ class PathTo
 		  "- Cello and Piano -\n- Delikatne Drzewo -\n- Stone Way li -\n- Very Sad Cello I -",
 		  "Gracias por jugar",
 		  "Life Choices (2014)",
-		  
 		];
 
+	public static var _TUTORIAL_TEXT:Array<String> = 
+		[  '"Para seguir con vida, basta con seguir en la vida, es decir, estar en movimiento, evolucionar." - Laurent Gounelle',
+		   'Avanza tomando decisiones, y apila los bloques que conformarán el camino de tu vida.',
+		   'Pero ten cuidado, la depresión se acumula y los accidentes ocurren.',
+		   'Ante la duda, puedes decidir encerrarte en tú soledad, aunque a un precio oculto...'];
+
+		
+		
 	public function new() 
 	{
 		
