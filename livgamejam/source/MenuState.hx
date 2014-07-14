@@ -121,7 +121,7 @@ class MenuState extends FlxState
 			}, null, 
 			function(sprite:FlxSprite) { // mouse over
 				playSound('menuhover');
-				if (OverallState._recordGame.length > 0) {
+				if (SummaryState._recordGame.length > 0) {
 					sprite.loadGraphic("assets/images/menu/" + _botonResultadosString + "Hover.png");	
 				} else {
 					sprite.loadGraphic("assets/images/menu/" + _botonResultadosString + "HoverDenied.png");
