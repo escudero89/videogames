@@ -117,7 +117,7 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 		
 		// Resto del cuerpo
 		
-		_head = new FlxSprite(250, 380);
+		_head = new FlxSprite(250, 385);// 380);
 		_body = new FlxSprite(265, 480);
 		
 		_head.loadGraphic("assets/images/timmy/cabezas.png", true, 150);
@@ -155,6 +155,10 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 	override public function update():Void
 	{
 		super.update();
+		
+		if (_timmy_skin == "anciano") {
+			_head.y = _body.y-90;
+		}
 		
 		if (((_valor_ref_old - 20) >= _body.y) && _flag_choice == false) {
 			_body.flipX = false;
