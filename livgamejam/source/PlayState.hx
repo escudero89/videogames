@@ -168,7 +168,7 @@ class PlayState extends FlxState
 		
 		_counter = _minTime;
 		_txNumber = new FlxText(96, 448, -1, "" + Math.ceil(_counter));
-		_txNumber.setFormat(_FONT, 54, 0xffff5050, "right", FlxText.BORDER_OUTLINE, FlxColor.BLACK);
+		_txNumber.setFormat(_FONT, 54, 0xffff5050, "center", FlxText.BORDER_OUTLINE, FlxColor.BLACK);
 		_txNumber.borderSize = 2;
 		_txNumber.scrollFactor.set(0, 0);
 		add(_txNumber);

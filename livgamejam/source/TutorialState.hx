@@ -39,7 +39,7 @@ class TutorialState extends FlxState
 		_txPrologo.borderSize = 3;
 		add(_txPrologo);
 		
-		var _txTitle:FlxText = new FlxText(15, 180, FlxG.width - 15, PathTo._TUTORIAL_TEXT.join("\n\n"));
+		var _txTitle:FlxText = new FlxText(30, 180, FlxG.width - 60, PathTo._TUTORIAL_TEXT.join("\n\n"));
 		_txTitle.setFormat(PathTo._STR_FONT, 36, FlxColor.WHITE, "center", FlxText.BORDER_OUTLINE, FlxColor.BLACK);
 		_txTitle.addFormat(new FlxTextFormat(PathTo._COLOR_EXPERIENCE, false, false, FlxColor.BLACK, 0, PathTo._TUTORIAL_TEXT[0].length));
 		//_txTitle.addFormat(new FlxTextFormat(PathTo._COLOR_DURATION, false, false, FlxColor.BLACK, PathTo._TUTORIAL_TEXT[0].length, PathTo._TUTORIAL_TEXT[0].length + PathTo._TUTORIAL_TEXT[1].length));

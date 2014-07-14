@@ -90,8 +90,14 @@ class MenuState extends FlxState
 		MouseEventManager.add(_botonJugar, 
 			function(sprite:FlxSprite) { // mouse down
 				_musicaFondo.fadeOut(1.5);
-				//FlxG.camera.fade(FlxColor.WHITE, 2, false, function() { FlxG.switchState(new PlayState()); } );
-				FlxG.camera.fade(FlxColor.WHITE, 2, false, function() { FlxG.switchState(new TutorialState()); } );
+
+				// Solo cargamos prologo si es la priemra vez
+				if (SummaryState._recordGame.length > 0) {
+					FlxG.camera.fade(FlxColor.WHITE, 2, false, function() { FlxG.switchState(new PlayState()); } );
+				} else {
+					FlxG.camera.fade(FlxColor.WHITE, 2, false, function() { FlxG.switchState(new TutorialState()); } );
+				}
+				
 				playSound('menuclick');
 			}, null, 
 			function(sprite:FlxSprite) { // mouse over
@@ -105,13 +111,12 @@ class MenuState extends FlxState
 		MouseEventManager.add(_botonResultados, 
 			function(sprite:FlxSprite) { // mouse down
 				// Solo si hay records
-				if (OverallState._recordGame.length > 0) {
+				if (SummaryState._recordGame.length > 0) {
 					_musicaFondo.fadeOut(1.5);
 					FlxG.camera.fade(FlxColor.WHITE, 2, false, function() { FlxG.switchState(new OverallState()); } );
 					playSound('menuclick');
 				} else {
 					playSound('accessDenied');
-					//FlxTween.angle(_botonResultados, 0, 10, 1);
 				}
 			}, null, 
 			function(sprite:FlxSprite) { // mouse over
