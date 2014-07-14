@@ -271,10 +271,10 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 		
 		_age = Math.floor(ageMonthly / 12);
 		
-		if (_age <= 25) {
+		if (_age <= 40) {
 			_timmy_skin = "joven";
 		}
-		if (_age > 25 && _age < 65) {
+		if (_age > 40 && _age < 65) {
 			_timmy_skin = "adulto";
 		}
 		if(_age > 65){
