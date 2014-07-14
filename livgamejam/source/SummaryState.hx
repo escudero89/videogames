@@ -75,7 +75,8 @@ class SummaryState extends FlxState
 		FlxG.camera.bgColor = 0xff171200;
 		
 		var _txTitle:FlxText = new FlxText(0, 0, FlxG.width, _TITLE);
-		_txTitle.setFormat(PathTo._STR_FONT, 128, FlxColor.WHITE, "center");
+		_txTitle.setFormat(PathTo._STR_FONT, 128, FlxColor.WHITE, "center", FlxText.BORDER_OUTLINE, FlxColor.BLACK);
+		_txTitle.borderSize = 3;
 		add(_txTitle);
 		
 		//var _txSubTitle:FlxText = new FlxText(0, _txTitle.size, FlxG.width, _SUBTITLE);
@@ -83,11 +84,13 @@ class SummaryState extends FlxState
 		//add(_txSubTitle);
 		
 		var _txAge:FlxText = new FlxText(0, 240, FlxG.width, "Edad: "+_AGE+" años");
-		_txAge.setFormat(PathTo._STR_FONT, 32, FlxColor.WHITE, "center");
+		_txAge.setFormat(PathTo._STR_FONT, 32, FlxColor.WHITE, "center", FlxText.BORDER_OUTLINE, FlxColor.BLACK);
+		_txAge.borderSize = 2;
 		add(_txAge);
 		
-		var _txExp:FlxText = new FlxText(0, 280, FlxG.width, "Exp.: "+_EXP+" puntos");
-		_txExp.setFormat(PathTo._STR_FONT, 32, FlxColor.WHITE, "center");
+		var _txExp:FlxText = new FlxText(0, 280, FlxG.width, "Experiencia: "+_EXP+" puntos");
+		_txExp.setFormat(PathTo._STR_FONT, 32, FlxColor.WHITE, "center", FlxText.BORDER_OUTLINE, FlxColor.BLACK);
+		_txExp.borderSize = 2;
 		add(_txExp);
 		
 		// Dibujar los bloques y textos de los eventos anteriores
@@ -185,11 +188,16 @@ class SummaryState extends FlxState
 			// Centrado en la pantalla en x
 			var _posTextsX:Float = _posBlockX + widthBlock + 10;
 			var _posTextsY:Float = _posBlockY + 40;
+			
 			var _txEventName:FlxText = new FlxText(_posTextsX, _posTextsY, FlxG.width - _posTextsX, _eventName);
-			_txEventName.setFormat(PathTo._STR_FONT, 32, FlxColor.WHITE, "left");
+			_txEventName.setFormat(PathTo._STR_FONT, 32, FlxColor.WHITE, "left", FlxText.BORDER_OUTLINE, 0xff444444);
+			_txEventName.borderSize = 2;
+			_txEventName.alpha = 0.9;
 			add(_txEventName);
+			
 			var _txEventDescription:FlxText = new FlxText(_posTextsX, _posTextsY + 70, FlxG.width - _posTextsX, _eventDescription);
 			_txEventDescription.setFormat(PathTo._STR_FONT, 26, FlxColor.WHITE, "left");
+			_txEventName.alpha = 0.9;
 			add(_txEventDescription);
 			
 			_index -= 1;

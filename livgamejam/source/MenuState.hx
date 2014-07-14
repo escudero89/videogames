@@ -103,7 +103,6 @@ class MenuState extends FlxState
 		
 		MouseEventManager.add(_botonResultados, 
 			function(sprite:FlxSprite) { // mouse down
-				_botones.set_active(false);
 				_musicaFondo.fadeOut(1.5);
 				FlxG.camera.fade(FlxColor.WHITE, 2, false, function() { FlxG.switchState(new OverallState()); } );
 				playSound('menuclick');
