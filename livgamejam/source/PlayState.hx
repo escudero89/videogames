@@ -192,14 +192,14 @@ class PlayState extends FlxState
 	
 	public function putExpAndAge():Void
 	{
-		ageDisplay = new FlxText(35, 825, 0, PathTo._TEXT_DURATION + ":\t" + 0);
+		ageDisplay = new FlxText(35, 825, 0, PathTo._TEXT_DURATION + ":  " + _handler.getTimmyAge());
 		ageDisplay.setFormat(PathTo._STR_FONT, 40, PathTo._COLOR_DURATION_DARK, null, FlxText.BORDER_OUTLINE, FlxColor.BLACK);
 		ageDisplay.addFormat(new FlxTextFormat(PathTo._COLOR_DURATION, false, false, FlxColor.BLACK, PathTo._TEXT_DURATION.length + 1, 100));
 		ageDisplay.borderSize = 2;
 		ageDisplay.scrollFactor.set(0, 0);
 		add(ageDisplay);
 		
-		expDisplay = new FlxText(35, 870, 0, PathTo._TEXT_EXPERIENCE + ":\t" + 0);
+		expDisplay = new FlxText(35, 870, 0, PathTo._TEXT_EXPERIENCE + ":  " + _handler.getTimmyExp());
 		expDisplay.setFormat(PathTo._STR_FONT, 40, PathTo._COLOR_EXPERIENCE_DARK, null, FlxText.BORDER_OUTLINE, FlxColor.BLACK);
 		expDisplay.addFormat(new FlxTextFormat(PathTo._COLOR_EXPERIENCE, false, false, FlxColor.BLACK, PathTo._TEXT_EXPERIENCE.length + 1, 100));
 		expDisplay.borderSize = 2;
