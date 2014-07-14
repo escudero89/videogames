@@ -37,7 +37,7 @@ class PlayState extends FlxState
 	private var atributosDebugger:FlxText;
 	private var expDisplay:FlxText;
 	private var ageDisplay:FlxText;
-	private var _MaxTime:Float = 10;
+	private var _MaxTime:Float = 9;
 	
 	
 	private var _musicaFondo:FlxSound;
@@ -81,16 +81,16 @@ class PlayState extends FlxState
 	override public function update():Void
 	{
 		super.update();
-
-		_MaxTime = Math.max(Math.min(Math.round((0.0091 * _handler.getTimmyAge() - 0.7572) * _handler.getTimmyAge() + 18.281), 10), 3);
 		
 		counter -= FlxG.elapsed;
 		txNumber.text = "" + Math.ceil(counter);
 		txNumber.update();
 		
 		if ( _timmy.getChoice()) {
+			_MaxTime = Math.max(Math.min(Math.round((0.0091 * _handler.getTimmyAge() - 0.7572) * _handler.getTimmyAge() + 18.281), 9), 3);
 			counter = _MaxTime;
 		}
+		
 		if (Math.floor(counter) == 0) {
 			_handler.passTurn();
 			counter = _MaxTime;

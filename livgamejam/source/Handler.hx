@@ -284,7 +284,6 @@ class Handler extends FlxTypedGroup<Card>
 		passTurn.setPassTurn(true);
 		add(_cardCurrentCollection.add(passTurn));
 		
-		
 	}
 	
 	// Calcula las tres proximas cartas a tocar desde el mismo estado de vida

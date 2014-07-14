@@ -355,9 +355,10 @@ class Card extends FlxTypedGroup<FlxSprite>
 		return retorno;
 	}
 	
+	// Siempre le damos el camino del icono grande
 	public function getPathIcon():String
 	{
-		return _icon_current_path + _ICON_NAME;
+		return _ICON_PATH + _ICON_NAME;
 	}
 	
 	/// DESTROY
