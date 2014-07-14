@@ -41,7 +41,7 @@ class PlayState extends FlxState
 	private var _musicaFondo:FlxSound;
 	
 	// Contador para saltar turnos automaticamente
-	private var _minTime:Float = 15;
+	private var _maxTime:Float = 15;
  	
 	private var _counter:Float;
 	private var _txPassTurn:FlxText;
@@ -50,6 +50,7 @@ class PlayState extends FlxState
 	
 	private var _closeButton:FlxButton;
 	private var _txPassTurnText:String = "Recluirse en...";
+	private var mostrarInfoTurno:Bool = true;
 
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -86,19 +87,20 @@ class PlayState extends FlxState
 		_counter -= FlxG.elapsed;
 		_txNumber.text = "" + Math.ceil(_counter);
 		
-		_txNumber.set_visible(_timmy.getChoice());
-		_txSeg.set_visible(_timmy.getChoice());
-		_txPassTurn.set_visible(_timmy.getChoice());
+		mostrarInfoTurno = (_timmy.getChoice() && !_handler._end_of_game);
+		
+		_txNumber.set_visible(mostrarInfoTurno);
+		_txSeg.set_visible(mostrarInfoTurno);
+		_txPassTurn.set_visible(mostrarInfoTurno);
 		
 		if ( !_timmy.getChoice()) {
 			//_minTime = Math.max(Math.min(Math.round((0.0091 * _handler.getTimmyAge() - 0.7572) * _handler.getTimmyAge() + 18.281), 9), 3);
-			_counter = _minTime;
-			_txNumber.set_visible(false);
+			_counter = _maxTime;
 		}
 
 		if (Math.floor(_counter) == -1) {
 			_handler.passTurn();
-			_counter = _minTime;
+			_counter = _maxTime;
 		}
 				
 		atributos = "";
@@ -166,14 +168,14 @@ class PlayState extends FlxState
 		_txPassTurn.scrollFactor.set(0, 0);
 		add(_txPassTurn);
 		
-		_counter = _minTime;
+		_counter = _maxTime;
 		_txNumber = new FlxText(96, 448, -1, "" + Math.ceil(_counter));
 		_txNumber.setFormat(_FONT, 54, 0xffff5050, "center", FlxText.BORDER_OUTLINE, FlxColor.BLACK);
 		_txNumber.borderSize = 2;
 		_txNumber.scrollFactor.set(0, 0);
 		add(_txNumber);
 		
-		_txSeg = new FlxText(134, 467, -1, "seg");
+		_txSeg = new FlxText(144, 467, -1, "seg");
 		_txSeg.setFormat(_FONT, 32, 0xffffcb2c, "left", FlxText.BORDER_OUTLINE, FlxColor.BLACK);
 		_txSeg.borderSize = 2;
 		_txSeg.scrollFactor.set(0, 0);

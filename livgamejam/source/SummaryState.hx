@@ -8,6 +8,7 @@ import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
 import flixel.text.FlxText;
 import flixel.util.FlxPoint;
+import flixel.util.FlxSave;
 
 import flixel.plugin.MouseEventManager;
 
@@ -23,6 +24,7 @@ class SummaryState extends FlxState
 {
 	
 	private var _musicaFondo:FlxSound;
+	private var _saveGame:FlxSave;
 	
 	public static var _recordPlayer:RecordPlayer = new RecordPlayer();
 	public static var _recordGame:Array<RecordPlayer> = new Array<RecordPlayer>();
@@ -61,8 +63,25 @@ class SummaryState extends FlxState
 		
 		// <<<<<<<<<<<<<<
 		
+		
 		_recordPlayer = PlayState._recordPlayer;
+		
+		//_saveGame.bind("recordGames");
+		//
+		//if (_saveGame.data.recordGame != null)
+		//{
+			//_recordGame = _saveGame.data.recordGame;
+		//}
+		//else
+		//{
+			//_recordGame = new Array<RecordPlayer>();
+		//}
+		
 		_recordGame.push(_recordPlayer);
+		
+		//_saveGame.data.recordGame = _recordGame;
+		//_saveGame.flush();
+		
 		
 		// setear valores generales
 		_AGE = _recordPlayer.getAgeInYears();
