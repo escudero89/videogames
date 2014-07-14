@@ -8,6 +8,7 @@ import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
 import flixel.text.FlxText;
 import flixel.util.FlxPoint;
+import flixel.util.FlxSave;
 
 /**
  * ...
@@ -15,6 +16,8 @@ import flixel.util.FlxPoint;
  */
 class OverallState extends FlxState
 {
+	
+	//public static var _saveGame:FlxSave;
 	public static var _recordGame:Array<RecordPlayer> = new Array<RecordPlayer>();
 	
 	private var _TITLE:String = "Vidas Pasadas";
@@ -37,6 +40,16 @@ class OverallState extends FlxState
 	{
 		
 		super.create();
+		
+		//_saveGame.bind("recordGames");
+		//if (_saveGame.data.recordGame != null)
+		//{
+			//_recordGame = _saveGame.data.recordGame;
+		//}
+		//else
+		//{
+			//_recordGame = new Array<RecordPlayer>();
+		//}
 		
 		_recordGame = SummaryState._recordGame;
 		
