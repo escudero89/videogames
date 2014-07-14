@@ -91,11 +91,11 @@ class PlayState extends FlxState
 		}
 		
 		if (_handler._end_of_game) {
-			_musicaFondo.fadeOut(1.5);
-			FlxG.camera.fade(FlxColor.BLACK, 2, false, function() {
+			_musicaFondo.fadeOut(4);
+			_handler.destroy();
+			FlxG.camera.fade(FlxColor.BLACK, 5, false, function() {
 				_musicaFondo.stop();
 				FlxG.switchState(new SummaryState());
-				_handler.destroy();
 			});
 		}
 		

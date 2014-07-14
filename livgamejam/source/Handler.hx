@@ -39,7 +39,7 @@ class Handler extends FlxTypedGroup<Card>
 	public var _atributes:Map<String, Int>;
 	
 	private var _experiencePlayer:Int = 0;
-	private var _monthsOldPlayer:Int = 13 * 12;
+	private var _monthsOldPlayer:Int = 130 * 12;
 
 	private var _experienceTitle:FlxText;
 	private var _monthsOldTitle:FlxText;
