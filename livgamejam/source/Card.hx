@@ -40,7 +40,7 @@ class Card extends FlxTypedGroup<FlxSprite>
 	private var _IS_MINI:Bool = false;
 	
 	private var _IS_GOLDEN:Bool = false; // con cierta probabilidad
-	private var _IS_GOLDEN_PROBABILITY:Float = 0.6; // con cierta probabilidad
+	private var _IS_GOLDEN_PROBABILITY:Float = 0.02; // con cierta probabilidad
 	private var _EXP_GOLDEN_MULTIPLIER:Float = 10;
 	
 	public static var _ICON_DEATH_NAME:String = "rip.png";
