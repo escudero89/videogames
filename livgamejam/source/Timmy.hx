@@ -182,9 +182,9 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 	// Esta funcion se llama cada vez que se elige una nueva carta
 	// Como argumento se le pasa el valor 1, 2, o 3, dependiendo la posicion de la carta (izq, centro y der respectivamente)
 	// Y el ID_EVENTO de la carta elegida, para poder acceder a MenuState.eventCollection[cardIdEvento] y tomar el evento adecuado
-	public function newChoice(choseCard:Int, cardIdEvento:String) {
+	public function newChoice(choseCard:Int, cardIdEvento:String, isDeadCard:Bool = false, isGoldenCard:Bool = false) {
 		updateMoves(choseCard,_body.y);
-		updateBackground(cardIdEvento);
+		updateBackground(cardIdEvento, isDeadCard, isGoldenCard);
 	}
 	
 	//Actualiza movimientos de timmy
@@ -205,7 +205,7 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 	}
 	
 	// Actualiza el fondo
-	private function updateBackground(cardIdEvento:String):Void
+	private function updateBackground(cardIdEvento:String, isDeadCard:Bool, isGoldenCard:Bool):Void
 	{
 		
 		FlxG.camera.flash(FlxColor.WHITE, 0.1);
@@ -216,13 +216,15 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 		FlxTween.tween(_body, { y: (_body.y - 180) }, _TIME_PLATFORM_MOVEMENT);
 		
 		// Y creamos los bloques, aunque aun no le agregamos el evento
-		_currentBlock = new FlxSprite(230, _platform.y + 100, "assets/images/block.png");
+		var pathBlock = (isDeadCard) ? "block_risk" : ((isGoldenCard) ? "block_golden" : "block");
+		
+		_currentBlock = new FlxSprite(230, _platform.y + 100, "assets/images/" + pathBlock + ".png");
 		_interfaceBack.add(_currentBlock);
 
 	}
 	
 	// Hace la magia del movimiento
-	public function moveMagic(cardIdEvento:String, magic:FlxSprite):Void
+	public function moveMagic(cardIdEvento:String, magic:FlxSprite, pathIcon:String):Void
 	{
 		_cardIdEvent = cardIdEvento;
 		_magic = magic;
@@ -239,7 +241,7 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 		FlxTween.tween(magic, { x : 320 - _magic.width / 2 , y: _platform.y + _platform.height / 2 }, 3, 
 			{complete:function (tween:FlxTween) {
 				_magic.destroy();
-				_interfaceBack.add(new FlxSprite(245, _currentBlock.y + 37, "assets/images/icons_150/" + _cardIdEvent.toLowerCase() + ".png"));
+				_interfaceBack.add(new FlxSprite(245, _currentBlock.y + 37, pathIcon));
 				
 				// Esto es para informarle al resto cuanto estamos desplazados
 				_currentOffset += 180;

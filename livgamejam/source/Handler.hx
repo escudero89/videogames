@@ -35,11 +35,11 @@ class Handler extends FlxTypedGroup<Card>
 	private var _eventCollectionIdsAvailable:Array<String>; // guarda todos los eventos con peso > 0
 	private var _eventCollectionTotalWeight:Int = 0;	
 	
-	// Los atributos del protagonista iran aqui (transformar luego a privado) @@@TODO
+	// Los atributos del protagonista iran aqui
 	public var _atributes:Map<String, Int>;
 	
-	private var _experiencePlayer:Int = 0;
-	private var _monthsOldPlayer:Int = 50 * 12;
+	private var _experiencePlayer:Int;
+	private var _monthsOldPlayer:Int;
 
 	private var _experienceTitle:FlxText;
 	private var _monthsOldTitle:FlxText;
@@ -112,8 +112,10 @@ class Handler extends FlxTypedGroup<Card>
 		
 		if (card.getChosedCard() && !_magic_activated) {
 			
+			var goldenMultiplier = card.getGoldenMultiplier();
+			
 			// Agregamos el evento al record
-			PlayState._recordPlayer.update(card.getIdEvent());
+			PlayState._recordPlayer.update(card.getIdEvent(), goldenMultiplier);
 			
 			// Revisamos que no sea una carta de muerte
 			if (card.getDeadStatus()) {
@@ -124,7 +126,8 @@ class Handler extends FlxTypedGroup<Card>
 			var atributesChoseCard = _eventCollection[card.getIdEvent()].c_atributes;
 			
 			for (keyAtribute in atributesChoseCard.keys()) {
-				_atributes[keyAtribute] += atributesChoseCard[keyAtribute];
+
+				_atributes[keyAtribute] += Math.round(atributesChoseCard[keyAtribute] * goldenMultiplier);
 				
 				// Y le resto uno a todos si no es negativo (el paso del tiempo)
 				if (_atributes[keyAtribute] > 0 && atributesChoseCard[keyAtribute] == 0) {
@@ -136,13 +139,13 @@ class Handler extends FlxTypedGroup<Card>
 			}	
 
 			// Actualizamos los valores de experiencia y meses de vida respectivamente
-			_experiencePlayer += _eventCollection[card.getIdEvent()].experiencia;
-			_monthsOldPlayer += _eventCollection[card.getIdEvent()].duracion;
+			_experiencePlayer = PlayState._recordPlayer._experiencePlayer;
+			_monthsOldPlayer = PlayState._recordPlayer._monthsOldPlayer;
 			
 			// Actualizamos los pesos
 			updateEventsWeight();
 			
-			_timmy.newChoice(card.getPositionGallery(), card.getIdEvent());
+			_timmy.newChoice(card.getPositionGallery(), card.getIdEvent(), card.getDeadStatus(), card.getGoldenStatus());
 			_timmy.setAge(_monthsOldPlayer);
 
 			// Generamos un efecto copado que destruye la carta al terminar
@@ -165,7 +168,7 @@ class Handler extends FlxTypedGroup<Card>
 		if (_magic_activated == true) {
 			_magic_activated = false;
 			
-			_timmy.moveMagic(magic_id_event, magic);
+			_timmy.moveMagic(magic_id_event, magic, card.getPathIcon());
 			
 			// Esto es solo para flash, cambiar por elapsed
 			Timer.delay(function() { setVisibility(true); }, Timmy._TIME_PLATFORM_MOVEMENT * 1100 );

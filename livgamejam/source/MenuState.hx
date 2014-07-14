@@ -165,6 +165,8 @@ class MenuState extends FlxState
 		switch(sonido) {
 			case 'card':
 				path = PathTo._SOUND_CARD;
+			case 'goldenCard':
+				path = PathTo._SOUND_GOLDEN_CARD;
 			case 'deathCard':
 				path = PathTo._SOUND_DEATH_CARD;
 			case 'menuclick':

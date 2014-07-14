@@ -40,7 +40,8 @@ class Card extends FlxTypedGroup<FlxSprite>
 	private var _IS_MINI:Bool = false;
 	
 	private var _IS_GOLDEN:Bool = false; // con cierta probabilidad
-	private var _IS_GOLDEN_PROBABILITY:Float= 0.6; // con cierta probabilidad
+	private var _IS_GOLDEN_PROBABILITY:Float = 0.6; // con cierta probabilidad
+	private var _EXP_GOLDEN_MULTIPLIER:Float = 10;
 	
 	public static var _ICON_DEATH_NAME:String = "rip.png";
 	
@@ -120,7 +121,11 @@ class Card extends FlxTypedGroup<FlxSprite>
 		
 		// Si no es mini ni dead card, probamos a ver si es golden
 		if (!_IS_MINI && !_IS_DEAD_CARD && Math.random() < _IS_GOLDEN_PROBABILITY) {
-			//_template_current_path
+			_template_current_path = _TEMPLATE_PATH_GOLDEN;
+			
+			// Multiplica la experiencia (y los atributos que contribuye tambien, pero en handler)
+			_experience *= Math.round(_EXP_GOLDEN_MULTIPLIER);
+			
 			_IS_GOLDEN = true;
 		}
 		
@@ -231,7 +236,11 @@ class Card extends FlxTypedGroup<FlxSprite>
 			if (_IS_DEAD_CARD) {
 				MenuState.playSound('deathCard');
 			} else {
-				MenuState.playSound('card');
+				if (_IS_GOLDEN) {
+					MenuState.playSound('goldenCard');
+				} else {
+					MenuState.playSound('card');
+				}
 			}			
 		}
 	}
@@ -294,7 +303,7 @@ class Card extends FlxTypedGroup<FlxSprite>
 	{
 		var monthAndExp:String = '';
 		monthAndExp += '+' + _cardEventInfo.duracion + _STR_DURATION + '\n';
-		monthAndExp += '+' + _cardEventInfo.experiencia + _STR_EXPERIENCE;
+		monthAndExp += '+' + _experience + _STR_EXPERIENCE;
 		
 		return monthAndExp;
 	}
@@ -324,6 +333,27 @@ class Card extends FlxTypedGroup<FlxSprite>
 	public function getDeadStatus():Bool
 	{
 		return _IS_DEAD_CARD;
+	}
+	
+	public function getGoldenStatus():Bool
+	{
+		return _IS_GOLDEN;
+	}
+	
+	public function getGoldenMultiplier():Float
+	{
+		var retorno:Float = 1;
+		
+		if (_IS_GOLDEN) {
+			retorno = 1 + _EXP_GOLDEN_MULTIPLIER / 10.0;
+		}
+		
+		return retorno;
+	}
+	
+	public function getPathIcon():String
+	{
+		return _icon_current_path + _ICON_NAME;
 	}
 	
 	/// DESTROY
