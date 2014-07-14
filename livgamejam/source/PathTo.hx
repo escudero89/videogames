@@ -17,6 +17,7 @@ class PathTo
 	
 	public static var _SOUND_MENU_CLICK:String = "assets/sounds/menuclick.mp3";
 	public static var _SOUND_MENU_HOVER:String = "assets/sounds/tup.mp3";
+	public static var _SOUND_ACCESS_DENIED:String = "assets/sounds/accessDenied.mp3";
 	
 	public static var _SOUND_CARD:String = "assets/sounds/card.mp3";
 	public static var _SOUND_GOLDEN_CARD:String = "assets/sounds/goldenCard.mp3";

@@ -14,7 +14,7 @@ class RecordPlayer
 	public function new() 
 	{
 		_eventsIDs = new Array<String>();
-		_monthsOldPlayer = 50*12;//13 años * 12 meses = 156 meses
+		_monthsOldPlayer = 130*12;//13 años * 12 meses = 156 meses
 		_experiencePlayer = 0;
 		_atributes = new Map<String,Int>();
 		_atributes.set("amor", 0);
@@ -31,7 +31,7 @@ class RecordPlayer
 	{
 		_eventsIDs.push(_eventId);
 		_monthsOldPlayer += MenuState.eventCollection[_eventId].duracion;
-		_experiencePlayer += MenuState.eventCollection[_eventId].experiencia * Math.round(goldenMultiplier * 10 - 10);
+		_experiencePlayer += MenuState.eventCollection[_eventId].experiencia * ((goldenMultiplier > 1) ? Math.round((goldenMultiplier - 1) * 10) : 1);
 		
 		var atribute:Int;
 		

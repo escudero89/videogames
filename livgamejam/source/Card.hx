@@ -119,8 +119,8 @@ class Card extends FlxTypedGroup<FlxSprite>
 			_txt_title_text = MenuState.riskCollection[_cardEventInfo.id_riesgo].content["nombre"];
 		}
 		
-		// Si no es mini ni dead card, probamos a ver si es golden
-		if (!_IS_MINI && !_IS_DEAD_CARD && Math.random() < _IS_GOLDEN_PROBABILITY) {
+		// Si no es mini ni dead card ni pass turn card, probamos a ver si es golden
+		if (!_IS_MINI && !_IS_DEAD_CARD && !_IS_PASS_TURN && Math.random() < _IS_GOLDEN_PROBABILITY) {
 			_template_current_path = _TEMPLATE_PATH_GOLDEN;
 			
 			// Multiplica la experiencia (y los atributos que contribuye tambien, pero en handler)

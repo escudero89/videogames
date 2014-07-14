@@ -103,13 +103,23 @@ class MenuState extends FlxState
 		
 		MouseEventManager.add(_botonResultados, 
 			function(sprite:FlxSprite) { // mouse down
-				_musicaFondo.fadeOut(1.5);
-				FlxG.camera.fade(FlxColor.WHITE, 2, false, function() { FlxG.switchState(new OverallState()); } );
-				playSound('menuclick');
+				// Solo si hay records
+				if (OverallState._recordGame.length > 0) {
+					_musicaFondo.fadeOut(1.5);
+					FlxG.camera.fade(FlxColor.WHITE, 2, false, function() { FlxG.switchState(new OverallState()); } );
+					playSound('menuclick');
+				} else {
+					playSound('accessDenied');
+					//FlxTween.angle(_botonResultados, 0, 10, 1);
+				}
 			}, null, 
 			function(sprite:FlxSprite) { // mouse over
 				playSound('menuhover');
-				sprite.loadGraphic("assets/images/menu/" + _botonResultadosString + "Hover.png");
+				if (OverallState._recordGame.length > 0) {
+					sprite.loadGraphic("assets/images/menu/" + _botonResultadosString + "Hover.png");	
+				} else {
+					sprite.loadGraphic("assets/images/menu/" + _botonResultadosString + "HoverDenied.png");
+				}
 			}, 
 			function(sprite:FlxSprite) { // mouse out
 				sprite.loadGraphic("assets/images/menu/" + _botonResultadosString + ".png");
@@ -173,6 +183,8 @@ class MenuState extends FlxState
 				path = PathTo._SOUND_MENU_CLICK;
 			case 'menuhover':
 				path = PathTo._SOUND_MENU_HOVER;
+			case 'accessDenied':
+				path = PathTo._SOUND_ACCESS_DENIED;
 			default:
 				path = PathTo._SOUND_CARD;
 		}
@@ -187,7 +199,7 @@ class MenuState extends FlxState
 	{
 		eventCollection = new Map<String, Event>();
 		
-		eventCollection.set('X1', new Event('X1','Recluirse','La soledad a la larga no hace bien.',220,12,0,0,0,0,0,0,0,0,0,'R1',0,0,5,0,0,0,0,0));
+		eventCollection.set('X1', new Event('X1','Recluirse','La soledad es enriquecedora en su justa medida.',220,12,0,0,0,0,0,0,0,0,0,'R1',0,0,5,0,0,0,0,0));
 		eventCollection.set('E1', new Event('E1','Hacerse notar','Entre tantas máscaras sociales.',70,12,0,0,0,0,0,0,0,0,0,'R1',0,0,0,0,5,0,0,0));
 		eventCollection.set('E2', new Event('E2','Dedicarse a las artes','Alguien tiene que hacerlo.',70,12,0,0,0,0,0,0,0,0,0,'R1',0,5,0,0,0,0,0,0));
 		eventCollection.set('E3', new Event('E3','Pasear','La vida es más preciosa vista desde otros lados.',70,12,0,0,0,0,0,0,0,0,0,'R1',0,0,0,0,0,0,0,5));
