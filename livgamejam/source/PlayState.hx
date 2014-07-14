@@ -41,10 +41,13 @@ class PlayState extends FlxState
 	private var _musicaFondo:FlxSound;
 	
 	// Contador para saltar turnos automaticamente
-	private var counter:Float = 6;
+	private var minTIme:Float = 6;
+	private var counter:Float;
 	private var txPassTurn:FlxText;
 	private var txNumber:FlxText;
 	private var txSeg:FlxText;
+	
+	private var _closeButton:FlxButton;
 
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -80,14 +83,18 @@ class PlayState extends FlxState
 
 		counter -= FlxG.elapsed;
 		txNumber.text = "" + Math.ceil(counter);
-		txNumber.update();
 		
-		if ( _timmy.getChoice()) {
-			counter = 6;
+		txNumber.set_visible(_timmy.getChoice());
+		txSeg.set_visible(_timmy.getChoice());
+		txPassTurn.set_visible(_timmy.getChoice());
+		
+		if ( !_timmy.getChoice()) {
+			counter = minTIme;
+			txNumber.set_visible(false);
 		}
-		if (Math.floor(counter) == 0) {
+		if (Math.floor(counter) == -1) {
 			_handler.passTurn();
-			counter = 6;
+			counter = minTIme;
 		}
 				
 		atributos = "";
@@ -153,6 +160,7 @@ class PlayState extends FlxState
 		txPassTurn.setFormat(_FONT, 32, FlxColor.WHITE);
 		txPassTurn.scrollFactor.set(0, 0);
 		add(txPassTurn);
+		counter = minTIme;
 		txNumber = new FlxText(96, 443, -1, "" + Math.ceil(counter));
 		txNumber.setFormat(_FONT, 44, FlxColor.WHITE);
 		txNumber.scrollFactor.set(0, 0);
@@ -161,6 +169,14 @@ class PlayState extends FlxState
 		txSeg.setFormat(_FONT, 32, FlxColor.WHITE);
 		txSeg.scrollFactor.set(0, 0);
 		add(txSeg);
+		
+		
+		// Crear boton para salir del State
+		var _closeButtonWidth:Int = 50;
+		var _closeButtonHeight:Int = 50;
+		_closeButton = new FlxButton(FlxG.width - _closeButtonWidth, 0, "", goMenuState);
+		_closeButton.loadGraphic("assets/images/util/btnClose.png");
+		add(_closeButton);
 		
 	}
 	
@@ -181,11 +197,13 @@ class PlayState extends FlxState
 		add(expDisplay);
 	}
 	
-	/** 
-	 * Funcion que elige el evento "Recluirse"
-	*/
-	public function skipHand():Void
+	private function goMenuState():Void
 	{
+		_musicaFondo.fadeOut(1.5);
 		
+		FlxG.camera.fade(FlxColor.BLACK, 2, false, function () {
+			_musicaFondo.stop();
+			FlxG.switchState(new MenuState());
+		});
 	}
 }
