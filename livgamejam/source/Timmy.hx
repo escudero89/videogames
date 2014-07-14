@@ -117,8 +117,8 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 		
 		// Resto del cuerpo
 		
-		_head = new FlxSprite(250, 385);// 380);
-		_body = new FlxSprite(265, 480);
+		_head = new FlxSprite(246, 385);// 380);
+		_body = new FlxSprite(261, 480);
 		
 		_head.loadGraphic("assets/images/timmy/cabezas.png", true, 150);
 		_body.loadGraphic("assets/images/timmy/cuerpos.png", true, 141);//142);
@@ -261,7 +261,7 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 		return _interfaceFront;
 	}
 		
-	public function getEsaBandera() {
+	public function getChoice() {
 		return _flag_choice;
 	}
 	

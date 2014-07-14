@@ -36,6 +36,7 @@ class Card extends FlxTypedGroup<FlxSprite>
 	
 	// Banderas para cartas especiales
 	private var _IS_DEAD_CARD:Bool = false;
+	private var _IS_PASS_TURN:Bool = false;
 	private var _IS_MINI:Bool = false;
 	
 	private var _IS_GOLDEN:Bool = false; // con cierta probabilidad
@@ -208,12 +209,22 @@ class Card extends FlxTypedGroup<FlxSprite>
 		_txt_stats.addFormat(new FlxTextFormat(PathTo._COLOR_EXPERIENCE, false, false, null, idxStartMonth + _STR_DURATION.length, idxStartExperience));
 		_txt_stats.addFormat(new FlxTextFormat(PathTo._COLOR_EXPERIENCE_DARK, false, false, null, idxStartExperience, _txt_stats.text.length));
 	}
+	
+	public function setPassTurn(_passTurn:Bool):Void
+	{
+		_IS_PASS_TURN = _passTurn;
+	}
+	
+	public function choseCard():Void
+	{
+		_choseCard = true;
+	}
 
 	// Para el control del mouse en la carta
 	
 	private function onMouseDown(sprite:FlxSprite)
 	{
-		if (!_IS_MINI && _isAvailable) {
+		if ((!_IS_MINI && _isAvailable) || (_IS_PASS_TURN && _IS_MINI)) {
 			_choseCard = true;
 			
 			// Hacemos ruidito de carta
