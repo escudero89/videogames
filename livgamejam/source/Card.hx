@@ -38,10 +38,14 @@ class Card extends FlxTypedGroup<FlxSprite>
 	private var _IS_DEAD_CARD:Bool = false;
 	private var _IS_MINI:Bool = false;
 	
+	private var _IS_GOLDEN:Bool = false; // con cierta probabilidad
+	private var _IS_GOLDEN_PROBABILITY:Float= 0.6; // con cierta probabilidad
+	
 	public static var _ICON_DEATH_NAME:String = "rip.png";
 	
 	private var _template_current_path:String;
 	private var _TEMPLATE_PATH:String = "assets/images/template_basic.png";
+	private var _TEMPLATE_PATH_GOLDEN:String = "assets/images/template_golden.png";
 	private var _TEMPLATE_PATH_RISK:String = "assets/images/template_risk.png";
 	private var _TEMPLATE_MINI_PATH:String = "assets/images/template_mini_basic.png";
 	
@@ -111,6 +115,12 @@ class Card extends FlxTypedGroup<FlxSprite>
 			
 			// Reemplazo el nombre por el riesgo concretado del suceso
 			_txt_title_text = MenuState.riskCollection[_cardEventInfo.id_riesgo].content["nombre"];
+		}
+		
+		// Si no es mini ni dead card, probamos a ver si es golden
+		if (!_IS_MINI && !_IS_DEAD_CARD && Math.random() < _IS_GOLDEN_PROBABILITY) {
+			//_template_current_path
+			_IS_GOLDEN = true;
 		}
 		
 		_template = new FlxSprite(posCard.x, posCard.y);
