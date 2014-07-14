@@ -25,6 +25,8 @@ import RecordPlayer;
 class PlayState extends FlxState
 {
 	
+	private var _FONT:String = "assets/fonts/LondrinaSolid-Regular.ttf";
+	
 	private var _handler:Handler;
 	private var _timmy:Timmy;
 	
@@ -39,8 +41,11 @@ class PlayState extends FlxState
 	private var _musicaFondo:FlxSound;
 	
 	// Contador para saltar turnos automaticamente
-	private var counter:Int = 6;
-	
+	private var counter:Float = 6;
+	private var txPassTurn:FlxText;
+	private var txNumber:FlxText;
+	private var txSeg:FlxText;
+
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
@@ -72,16 +77,19 @@ class PlayState extends FlxState
 	override public function update():Void
 	{
 		super.update();
-		/*
+
 		counter -= FlxG.elapsed;
+		txNumber.text = "" + Math.ceil(counter);
+		txNumber.update();
+		
 		if ( _timmy.getChoice()) {
 			counter = 6;
 		}
-		if (counter == 0) {
-			skipHand();
+		if (Math.floor(counter) == 0) {
+			_handler.passTurn();
 			counter = 6;
 		}
-		*/
+		
 		if (_handler._end_of_game) {
 			_musicaFondo.fadeOut(1.5);
 			FlxG.camera.fade(FlxColor.BLACK, 2, false, function() {
@@ -137,14 +145,27 @@ class PlayState extends FlxState
 		//add(atributosDebugger);
 		
 		expDisplay = new FlxText(12, 825, 0, "EXP: " + 0);
-		expDisplay.setFormat("assets/fonts/LondrinaSolid-Regular.ttf", 40, FlxColor.BLACK);
+		expDisplay.setFormat(_FONT, 40, FlxColor.BLACK);
 		expDisplay.scrollFactor.set(0, 0);
 		add(expDisplay);
 		
 		ageDisplay = new FlxText(12, 870, 0, "AGE: " + 0);
-		ageDisplay.setFormat("assets/fonts/LondrinaSolid-Regular.ttf", 40, FlxColor.BLACK);
+		ageDisplay.setFormat(_FONT, 40, FlxColor.BLACK);
 		ageDisplay.scrollFactor.set(0, 0);
 		add(ageDisplay);
+		
+		txPassTurn = new FlxText(25, 404, -1, "Pasar turno");
+		txPassTurn.setFormat(_FONT, 32, FlxColor.WHITE);
+		txPassTurn.scrollFactor.set(0, 0);
+		add(txPassTurn);
+		txNumber = new FlxText(96, 443, -1, "" + Math.ceil(counter));
+		txNumber.setFormat(_FONT, 44, FlxColor.WHITE);
+		txNumber.scrollFactor.set(0, 0);
+		add(txNumber);
+		txSeg = new FlxText(126, 462, -1, "seg.");
+		txSeg.setFormat(_FONT, 32, FlxColor.WHITE);
+		txSeg.scrollFactor.set(0, 0);
+		add(txSeg);
 		
 	}
 	
