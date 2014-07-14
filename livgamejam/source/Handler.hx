@@ -398,6 +398,16 @@ class Handler extends FlxTypedGroup<Card>
 		});
 	}
 	
+	public function getTimmyAge():Float
+	{
+		return _monthsOldPlayer / 12;
+	}
+	
+	public function getTimmyExp():Float
+	{
+		return _experiencePlayer;
+	}
+	
 	override public function destroy():Void
 	{
 		this.clear();
