@@ -90,7 +90,8 @@ class MenuState extends FlxState
 		MouseEventManager.add(_botonJugar, 
 			function(sprite:FlxSprite) { // mouse down
 				_musicaFondo.fadeOut(1.5);
-				FlxG.camera.fade(FlxColor.WHITE, 2, false, function() { FlxG.switchState(new PlayState()); } );
+				//FlxG.camera.fade(FlxColor.WHITE, 2, false, function() { FlxG.switchState(new PlayState()); } );
+				FlxG.camera.fade(FlxColor.WHITE, 2, false, function() { FlxG.switchState(new TutorialState()); } );
 				playSound('menuclick');
 			}, null, 
 			function(sprite:FlxSprite) { // mouse over
