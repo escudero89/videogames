@@ -192,7 +192,7 @@ class PlayState extends FlxState
 	
 	public function putExpAndAge():Void
 	{
-		ageDisplay = new FlxText(35, 825, 0, PathTo._TEXT_DURATION + ":  " + _handler.getTimmyAge());
+		ageDisplay = new FlxText(35, 825, 0, PathTo._TEXT_DURATION + ":  " + 13);
 		ageDisplay.setFormat(PathTo._STR_FONT, 40, PathTo._COLOR_DURATION_DARK, null, FlxText.BORDER_OUTLINE, FlxColor.BLACK);
 		ageDisplay.addFormat(new FlxTextFormat(PathTo._COLOR_DURATION, false, false, FlxColor.BLACK, PathTo._TEXT_DURATION.length + 1, 100));
 		ageDisplay.borderSize = 2;
