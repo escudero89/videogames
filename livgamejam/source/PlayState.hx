@@ -33,6 +33,8 @@ class PlayState extends FlxState
 	//private var _dataBase:DataBase;
 	private var atributos:String = "";
 	private var atributosDebugger:FlxText;
+	private var expDisplay:FlxText;
+	private var ageDisplay:FlxText;
 	
 	private var _musicaFondo:FlxSound;
 	
@@ -106,6 +108,10 @@ class PlayState extends FlxState
 			});
 
 		}
+		
+		expDisplay.text = "EXP: " + _handler.getTimmyExp();
+		ageDisplay.text = "AGE: " + _handler.getTimmyAge();
+		
 	}
 	
 	public function setBackground() {
@@ -128,7 +134,18 @@ class PlayState extends FlxState
 		
 		atributosDebugger = new FlxText(10, 750, -1, atributos, 17);
 		atributosDebugger.scrollFactor.set(0, 0);
-		add(atributosDebugger);
+		//add(atributosDebugger);
+		
+		expDisplay = new FlxText(12, 825, 0, "EXP: " + 0);
+		expDisplay.setFormat("assets/fonts/LondrinaSolid-Regular.ttf", 40, FlxColor.BLACK);
+		expDisplay.scrollFactor.set(0, 0);
+		add(expDisplay);
+		
+		ageDisplay = new FlxText(12, 870, 0, "AGE: " + 0);
+		ageDisplay.setFormat("assets/fonts/LondrinaSolid-Regular.ttf", 40, FlxColor.BLACK);
+		ageDisplay.scrollFactor.set(0, 0);
+		add(ageDisplay);
+		
 	}
 	
 	/** 
