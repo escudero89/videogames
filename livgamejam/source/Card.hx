@@ -193,10 +193,10 @@ class Card extends FlxTypedGroup<FlxSprite>
 		var idxStartMonth = 1 + _txt_stats.text.indexOf(_STR_DURATION);
 		var idxStartExperience = 1 + _txt_stats.text.indexOf(_STR_EXPERIENCE);
 		
-		_txt_stats.addFormat(new FlxTextFormat(0xd41b1b, false, false, null, 1, idxStartMonth));
-		_txt_stats.addFormat(new FlxTextFormat(0x9e0b0b, false, false, null, idxStartMonth, idxStartMonth + _STR_DURATION.length));
-		_txt_stats.addFormat(new FlxTextFormat(0x278bd1, false, false, null, idxStartMonth + _STR_DURATION.length, idxStartExperience));
-		_txt_stats.addFormat(new FlxTextFormat(0x114f7a, false, false, null, idxStartExperience, _txt_stats.text.length));
+		_txt_stats.addFormat(new FlxTextFormat(PathTo._COLOR_DURATION, false, false, null, 1, idxStartMonth));
+		_txt_stats.addFormat(new FlxTextFormat(PathTo._COLOR_DURATION_DARK, false, false, null, idxStartMonth, idxStartMonth + _STR_DURATION.length));
+		_txt_stats.addFormat(new FlxTextFormat(PathTo._COLOR_EXPERIENCE, false, false, null, idxStartMonth + _STR_DURATION.length, idxStartExperience));
+		_txt_stats.addFormat(new FlxTextFormat(PathTo._COLOR_EXPERIENCE_DARK, false, false, null, idxStartExperience, _txt_stats.text.length));
 	}
 
 	// Para el control del mouse en la carta

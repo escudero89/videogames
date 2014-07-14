@@ -6,6 +6,14 @@ package ;
  */
 class PathTo
 {
+
+	public static var _TEXT_DURATION:String = "Edad";
+	public static var _COLOR_DURATION:Int = 0xd41b1b;
+	public static var _COLOR_DURATION_DARK:Int = 0x9e0b0b;
+
+	public static var _TEXT_EXPERIENCE:String = "Experiencia";
+	public static var _COLOR_EXPERIENCE:Int = 0x278bd1;
+	public static var _COLOR_EXPERIENCE_DARK:Int = 0x114f7a;
 	
 	public static var _SOUND_MENU_CLICK:String = "assets/sounds/menuclick.mp3";
 	public static var _SOUND_MENU_HOVER:String = "assets/sounds/tup.mp3";
