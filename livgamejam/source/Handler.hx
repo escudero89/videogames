@@ -280,7 +280,7 @@ class Handler extends FlxTypedGroup<Card>
 		}
 		
 		// Agregar la carta de pasar turno
-		var passTurn:Card = new Card(MenuState.eventCollection.get("X1"), new FlxPoint(27, 435), 0, true);
+		var passTurn:Card = new Card(MenuState.eventCollection.get("X1"), new FlxPoint(27, 450), 0, true);
 		passTurn.setPassTurn(true);
 		add(_cardCurrentCollection.add(passTurn));
 		

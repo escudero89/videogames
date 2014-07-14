@@ -261,7 +261,11 @@ class Card extends FlxTypedGroup<FlxSprite>
 				_template.color = FlxColor.BLACK;
 			}
 		} else {
-			_template.color = FlxColor.GOLDEN;
+			if (_IS_PASS_TURN) {
+				_template.color = FlxColor.RED;	
+			} else {
+				_template.color = FlxColor.GOLDEN;	
+			}
 		}
 	}
 	

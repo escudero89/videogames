@@ -45,6 +45,8 @@ class PlayState extends FlxState
 	private var txPassTurn:FlxText;
 	private var txNumber:FlxText;
 	private var txSeg:FlxText;
+	
+	private var _txPassTurnText:String = "Recluírse en...";
 
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -149,16 +151,21 @@ class PlayState extends FlxState
 		
 		//var fondoTexto = new FlxSprite(30, 800, "assets/images/
 		
-		txPassTurn = new FlxText(25, 404, -1, "Pasar turno");
-		txPassTurn.setFormat(_FONT, 32, FlxColor.WHITE);
+		txPassTurn = new FlxText(25, 404, -1, _txPassTurnText);
+		txPassTurn.setFormat(_FONT, 32, FlxColor.WHITE, "left", FlxText.BORDER_OUTLINE, FlxColor.BLACK);
+		txPassTurn.borderSize = 2;
 		txPassTurn.scrollFactor.set(0, 0);
 		add(txPassTurn);
-		txNumber = new FlxText(96, 443, -1, "" + Math.ceil(counter));
-		txNumber.setFormat(_FONT, 44, FlxColor.WHITE);
+		
+		txNumber = new FlxText(96, 448, -1, "" + Math.ceil(counter));
+		txNumber.setFormat(_FONT, 54, 0xffff5050, "left", FlxText.BORDER_OUTLINE, FlxColor.BLACK);
+		txNumber.borderSize = 2;
 		txNumber.scrollFactor.set(0, 0);
 		add(txNumber);
-		txSeg = new FlxText(126, 462, -1, "seg.");
-		txSeg.setFormat(_FONT, 32, FlxColor.WHITE);
+		
+		txSeg = new FlxText(129, 467, -1, "seg");
+		txSeg.setFormat(_FONT, 32, 0xffffcb2c, "left", FlxText.BORDER_OUTLINE, FlxColor.BLACK);
+		txSeg.borderSize = 2;
 		txSeg.scrollFactor.set(0, 0);
 		add(txSeg);
 		
