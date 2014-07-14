@@ -276,6 +276,11 @@ class Handler extends FlxTypedGroup<Card>
 			}
 		}
 		
+		// Agregar la carta de pasar turno
+		var passTurn:Card = new Card(MenuState.eventCollection.get("X1"), new FlxPoint(27, 435), 0, true);
+		passTurn.setPassTurn(true);
+		add(_cardCurrentCollection.add(passTurn));
+		
 		
 	}
 	
@@ -406,6 +411,17 @@ class Handler extends FlxTypedGroup<Card>
 	public function getTimmyExp():Float
 	{
 		return _experiencePlayer;
+	}
+	
+	public function passTurn():Void
+	{
+		for (card in _cardCurrentCollection.iterator())
+		{
+			if (card.getIdEvent() == "X1")
+			{
+				card.choseCard();
+			}
+		}
 	}
 	
 	override public function destroy():Void

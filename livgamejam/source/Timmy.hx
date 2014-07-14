@@ -261,7 +261,7 @@ class Timmy extends FlxTypedGroup<FlxTypedGroup<FlxSprite> >
 		return _interfaceFront;
 	}
 		
-	public function getEsaBandera() {
+	public function getChoice() {
 		return _flag_choice;
 	}
 	
