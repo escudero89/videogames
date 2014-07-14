@@ -36,14 +36,12 @@ class PlayState extends FlxState
 	private var atributos:String = "";
 	private var atributosDebugger:FlxText;
 	private var expDisplay:FlxText;
-	private var ageDisplay:FlxText;
-	private var _MaxTime:Float = 9;
-	
+	private var ageDisplay:FlxText;	
 	
 	private var _musicaFondo:FlxSound;
 	
 	// Contador para saltar turnos automaticamente
-	private var _minTime:Float = 9;
+	private var _minTime:Float = 15;
  	
 	private var _counter:Float;
 	private var _txPassTurn:FlxText;
@@ -93,7 +91,7 @@ class PlayState extends FlxState
 		_txPassTurn.set_visible(_timmy.getChoice());
 		
 		if ( !_timmy.getChoice()) {
-			_minTime = Math.max(Math.min(Math.round((0.0091 * _handler.getTimmyAge() - 0.7572) * _handler.getTimmyAge() + 18.281), 9), 3);
+			//_minTime = Math.max(Math.min(Math.round((0.0091 * _handler.getTimmyAge() - 0.7572) * _handler.getTimmyAge() + 18.281), 9), 3);
 			_counter = _minTime;
 			_txNumber.set_visible(false);
 		}
