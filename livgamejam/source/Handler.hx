@@ -91,6 +91,7 @@ class Handler extends FlxTypedGroup<Card>
 		getNewHand();
 		setAvailability();
 		
+		_monthsOldPlayer = PlayState._recordPlayer._monthsOldPlayer;
 	}
 	
 	// Llamamos esta funcion cada frame
