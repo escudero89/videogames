@@ -43,11 +43,14 @@ class PlayState extends FlxState
 	private var _musicaFondo:FlxSound;
 	
 	// Contador para saltar turnos automaticamente
-	private var counter:Float;
-	private var txPassTurn:FlxText;
-	private var txNumber:FlxText;
-	private var txSeg:FlxText;
+	private var _minTime:Float = 9;
+ 	
+	private var _counter:Float;
+	private var _txPassTurn:FlxText;
+	private var _txNumber:FlxText;
+	private var _txSeg:FlxText;
 	
+	private var _closeButton:FlxButton;
 	private var _txPassTurnText:String = "Recluírse en...";
 
 	/**
@@ -82,18 +85,22 @@ class PlayState extends FlxState
 	{
 		super.update();
 		
-		counter -= FlxG.elapsed;
-		txNumber.text = "" + Math.ceil(counter);
-		txNumber.update();
+		_counter -= FlxG.elapsed;
+		_txNumber.text = "" + Math.ceil(_counter);
 		
-		if ( _timmy.getChoice()) {
-			_MaxTime = Math.max(Math.min(Math.round((0.0091 * _handler.getTimmyAge() - 0.7572) * _handler.getTimmyAge() + 18.281), 9), 3);
-			counter = _MaxTime;
+		_txNumber.set_visible(_timmy.getChoice());
+		_txSeg.set_visible(_timmy.getChoice());
+		_txPassTurn.set_visible(_timmy.getChoice());
+		
+		if ( !_timmy.getChoice()) {
+			_minTime = Math.max(Math.min(Math.round((0.0091 * _handler.getTimmyAge() - 0.7572) * _handler.getTimmyAge() + 18.281), 9), 3);
+			_counter = _minTime;
+			_txNumber.set_visible(false);
 		}
-		
-		if (Math.floor(counter) == 0) {
+
+		if (Math.floor(_counter) == -1) {
 			_handler.passTurn();
-			counter = _MaxTime;
+			_counter = _minTime;
 		}
 				
 		atributos = "";
@@ -155,25 +162,32 @@ class PlayState extends FlxState
 		
 		//var fondoTexto = new FlxSprite(30, 800, "assets/images/
 		
-		txPassTurn = new FlxText(25, 404, -1, _txPassTurnText);
-		txPassTurn.setFormat(_FONT, 32, FlxColor.WHITE, "left", FlxText.BORDER_OUTLINE, FlxColor.BLACK);
-		txPassTurn.borderSize = 2;
-		txPassTurn.scrollFactor.set(0, 0);
-		add(txPassTurn);
+		_txPassTurn = new FlxText(25, 404, -1, _txPassTurnText);
+		_txPassTurn.setFormat(_FONT, 32, FlxColor.WHITE, "left", FlxText.BORDER_OUTLINE, FlxColor.BLACK);
+		_txPassTurn.borderSize = 2;
+		_txPassTurn.scrollFactor.set(0, 0);
+		add(_txPassTurn);
 		
-		txNumber = new FlxText(96, 448, -1, "" + Math.ceil(counter));
-		txNumber.setFormat(_FONT, 54, 0xffff5050, "left", FlxText.BORDER_OUTLINE, FlxColor.BLACK);
-		txNumber.borderSize = 2;
-		txNumber.scrollFactor.set(0, 0);
-		add(txNumber);
+		_counter = _minTime;
+		_txNumber = new FlxText(96, 448, -1, "" + Math.ceil(_counter));
+		_txNumber.setFormat(_FONT, 54, 0xffff5050, "left", FlxText.BORDER_OUTLINE, FlxColor.BLACK);
+		_txNumber.borderSize = 2;
+		_txNumber.scrollFactor.set(0, 0);
+		add(_txNumber);
 		
-		txSeg = new FlxText(129, 467, -1, "seg");
-		txSeg.setFormat(_FONT, 32, 0xffffcb2c, "left", FlxText.BORDER_OUTLINE, FlxColor.BLACK);
-		txSeg.borderSize = 2;
-		txSeg.scrollFactor.set(0, 0);
-		add(txSeg);
+		_txSeg = new FlxText(129, 467, -1, "seg");
+		_txSeg.setFormat(_FONT, 32, 0xffffcb2c, "left", FlxText.BORDER_OUTLINE, FlxColor.BLACK);
+		_txSeg.borderSize = 2;
+		_txSeg.scrollFactor.set(0, 0);
+		add(_txSeg);
 		
-		counter  = _MaxTime;
+		// Crear boton para salir del State
+		var _closeButtonWidth:Int = 50;
+		var _closeButtonHeight:Int = 50;
+		_closeButton = new FlxButton(FlxG.width - _closeButtonWidth, 0, "", goMenuState);
+		_closeButton.loadGraphic("assets/images/util/btnClose.png");
+		add(_closeButton);
+		
 	}
 	
 	public function putExpAndAge():Void
@@ -193,11 +207,13 @@ class PlayState extends FlxState
 		add(expDisplay);
 	}
 	
-	/** 
-	 * Funcion que elige el evento "Recluirse"
-	*/
-	public function skipHand():Void
+	private function goMenuState():Void
 	{
+		_musicaFondo.fadeOut(1.5);
 		
+		FlxG.camera.fade(FlxColor.BLACK, 2, false, function () {
+			_musicaFondo.stop();
+			FlxG.switchState(new MenuState());
+		});
 	}
 }

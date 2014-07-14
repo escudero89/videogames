@@ -75,7 +75,7 @@ class SummaryState extends FlxState
 		FlxG.camera.bgColor = 0xff171200;
 		
 		var _txTitle:FlxText = new FlxText(0, 0, FlxG.width, _TITLE);
-		_txTitle.setFormat(PathTo._STR_FONT, 128, FlxColor.WHITE, "center", FlxText.BORDER_OUTLINE, FlxColor.BLACK);
+		_txTitle.setFormat(PathTo._STR_FONT, PathTo._SIZE_TITLE, FlxColor.WHITE, "center", FlxText.BORDER_OUTLINE, FlxColor.BLACK);
 		_txTitle.borderSize = 3;
 		add(_txTitle);
 		
@@ -110,6 +110,12 @@ class SummaryState extends FlxState
 		
 		// Setear los limites de la camara, para que le scroll no se salga de "pantalla"
 		_FULLHEIGHT = _heightEvents + _initialPosBlocks + 50;
+		
+		if (_FULLHEIGHT < FlxG.height)
+		{
+			_FULLHEIGHT = FlxG.height;
+		}
+		
 		FlxG.camera.setBounds(0, 0, FlxG.width, _FULLHEIGHT);
 		
 	}

@@ -17,7 +17,6 @@ class OverallState extends FlxState
 {
 	public static var _recordGame:Array<RecordPlayer> = new Array<RecordPlayer>();
 	
-	private var _FONT:String = "assets/fonts/LondrinaSolid-Regular.ttf";
 	private var _TITLE:String = "Vidas Pasadas";
 	
 	private var _HeightBlock:Int = 202;
@@ -45,7 +44,9 @@ class OverallState extends FlxState
 		add(_fondoColina);
 		
 		var _txTitle:FlxText = new FlxText(0, 0, FlxG.width, _TITLE);
-		_txTitle.setFormat(_FONT, 96, FlxColor.WHITE, "center");
+		_txTitle.setFormat(PathTo._STR_FONT, PathTo._SIZE_TITLE, FlxColor.WHITE, "center", FlxText.BORDER_OUTLINE, 0xff513700);
+		_txTitle.borderSize = 3;
+		_txTitle.alpha = 0.9;
 		add(_txTitle);
 		
 		// Setear la posicion inicial de la lista de bloques y textos actuales
@@ -74,7 +75,9 @@ class OverallState extends FlxState
 			
 			var _posSubTitleY:Int = _currentPosText;
 			var _txSubTitle:FlxText = new FlxText(0, _posSubTitleY, FlxG.width, "Vida " + (index1+1) + " (" + _exp + " pts.):");
-			_txSubTitle.setFormat(_FONT, 64, FlxColor.WHITE, "center");
+			_txSubTitle.setFormat(PathTo._STR_FONT, 56, FlxColor.WHITE, "center", FlxText.BORDER_OUTLINE, 0xff513700);
+			_txSubTitle.borderSize = 3;
+			_txSubTitle.alpha = 0.9;
 			add(_txSubTitle);
 			
 			_FULLHEIGHT += Math.floor(_txSubTitle.size) + _heightEvents + 100;
@@ -91,6 +94,11 @@ class OverallState extends FlxState
 		_closeButton = new FlxButton(FlxG.width - _closeButtonWidth, 0, "", goMenuState);
 		_closeButton.loadGraphic("assets/images/util/btnClose.png");
 		add(_closeButton);
+		
+		if (_FULLHEIGHT < FlxG.height)
+		{
+			_FULLHEIGHT = FlxG.height;
+		}
 		
 		// Setear los limites de la camara, para que le scroll no se salga de "pantalla"
 		FlxG.camera.focusOn(new FlxPoint(0, 0));
@@ -176,11 +184,16 @@ class OverallState extends FlxState
 			// Centrado en la pantalla en x
 			var _posTextsX:Float = _posBlockX + widthBlock + 10;
 			var _posTextsY:Float = _posBlockY + 40;
+			
 			var _txEventName:FlxText = new FlxText(_posTextsX, _posTextsY, FlxG.width - _posTextsX, _eventName);
-			_txEventName.setFormat(_FONT, 32, FlxColor.WHITE, "left");
+			_txEventName.setFormat(PathTo._STR_FONT, 32, FlxColor.WHITE, "left", FlxText.BORDER_OUTLINE, 0xff444444);
+			_txEventName.borderSize = 2;
+			_txEventName.alpha = 0.9;
 			add(_txEventName);
+			
 			var _txEventDescription:FlxText = new FlxText(_posTextsX, _posTextsY + 70, FlxG.width - _posTextsX, _eventDescription);
-			_txEventDescription.setFormat(_FONT, 26, FlxColor.WHITE, "left");
+			_txEventDescription.setFormat(PathTo._STR_FONT, 26, FlxColor.WHITE, "left");
+			_txEventName.alpha = 0.9;
 			add(_txEventDescription);
 			
 			_index -= 1;
@@ -204,7 +217,7 @@ class OverallState extends FlxState
 		 
 		if (idRiesgo != null) {
 			add(new FlxSprite(posX, posY, "assets/images/block_risk.png"));
-			iconoBloque.loadGraphic("assets/images/icons_150/e1.png");
+			iconoBloque.loadGraphic("assets/images/icons_150/" + Card._ICON_DEATH_NAME);
 		} else {
 			add(new FlxSprite(posX, posY, "assets/images/block.png"));
 		}
@@ -244,7 +257,7 @@ class OverallState extends FlxState
 			add(_timeLineMarker);
 			var _txTLFontSize:Int = 16;
 			var _txTimeLineMarker:FlxText = new FlxText(0, _posMarkerY - (_txTLFontSize / 2), _posMarkerX, "" + _timeLineYear + " años");
-			_txTimeLineMarker.setFormat(_FONT, _txTLFontSize, FlxColor.WHITE, "center");
+			_txTimeLineMarker.setFormat(PathTo._STR_FONT, _txTLFontSize, FlxColor.WHITE, "center");
 			add(_txTimeLineMarker);
 			_timeLineYear += 1;
 		}
