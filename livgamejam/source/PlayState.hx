@@ -87,18 +87,18 @@ class PlayState extends FlxState
 		_counter -= FlxG.elapsed;
 		_txNumber.text = "" + Math.ceil(_counter);
 		
-		mostrarInfoTurno = (_timmy.getChoice() && !_handler._end_of_game);
+		mostrarInfoTurno = (_timmy.getChoice() && !_handler.esFin());
 		
 		_txNumber.set_visible(mostrarInfoTurno);
 		_txSeg.set_visible(mostrarInfoTurno);
 		_txPassTurn.set_visible(mostrarInfoTurno);
 		
-		if ( !_timmy.getChoice()) {
+		if ( !mostrarInfoTurno) {
 			//_minTime = Math.max(Math.min(Math.round((0.0091 * _handler.getTimmyAge() - 0.7572) * _handler.getTimmyAge() + 18.281), 9), 3);
 			_counter = _maxTime;
 		}
 
-		if (Math.floor(_counter) == -1) {
+		if (Math.floor(_counter) == 0) {
 			_handler.passTurn();
 			_counter = _maxTime;
 		}
@@ -192,7 +192,7 @@ class PlayState extends FlxState
 	
 	public function putExpAndAge():Void
 	{
-		ageDisplay = new FlxText(35, 825, 0, PathTo._TEXT_DURATION + ":  " + 13);
+		ageDisplay = new FlxText(35, 825, 0, PathTo._TEXT_DURATION + ":  " + _handler.getTimmyAge());
 		ageDisplay.setFormat(PathTo._STR_FONT, 40, PathTo._COLOR_DURATION_DARK, null, FlxText.BORDER_OUTLINE, FlxColor.BLACK);
 		ageDisplay.addFormat(new FlxTextFormat(PathTo._COLOR_DURATION, false, false, FlxColor.BLACK, PathTo._TEXT_DURATION.length + 1, 100));
 		ageDisplay.borderSize = 2;

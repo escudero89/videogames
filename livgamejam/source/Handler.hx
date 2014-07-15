@@ -416,6 +416,11 @@ class Handler extends FlxTypedGroup<Card>
 		return _experiencePlayer;
 	}
 	
+	public function esFin():Bool
+	{
+		return (_cardCurrentCollection.length <= 1) || _end_of_game;
+	}
+	
 	public function passTurn():Void
 	{
 		for (card in _cardCurrentCollection.iterator())
